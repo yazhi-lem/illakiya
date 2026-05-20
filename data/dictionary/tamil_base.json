@@ -1,0 +1,5620 @@
+{
+  "version": "2.0",
+  "name": "Illakiya Tamil Dictionary",
+  "description": "Comprehensive Tamil dictionary: base words + Sangam literature + modern + tech + colloquial",
+  "sources": [
+    "Swadesh list",
+    "Common Tamil",
+    "Project Madurai Sangam corpus",
+    "Modern Tamil",
+    "Tanglish"
+  ],
+  "word_count": 836,
+  "words": [
+    {
+      "tamil": "நான்",
+      "translit": "naan",
+      "en": "I",
+      "freq": 100
+    },
+    {
+      "tamil": "நீ",
+      "translit": "nee",
+      "en": "you",
+      "freq": 95
+    },
+    {
+      "tamil": "இது",
+      "translit": "idu",
+      "en": "this",
+      "freq": 95
+    },
+    {
+      "tamil": "இல்லை",
+      "translit": "illai",
+      "en": "no/not",
+      "freq": 95
+    },
+    {
+      "tamil": "ஆம்",
+      "translit": "aam",
+      "en": "yes",
+      "freq": 95
+    },
+    {
+      "tamil": "தமிழ்",
+      "translit": "thamizh",
+      "en": "Tamil",
+      "freq": 95
+    },
+    {
+      "tamil": "ஒரு",
+      "translit": "oru",
+      "en": "one",
+      "freq": 95
+    },
+    {
+      "tamil": "இரண்டு",
+      "translit": "irandu",
+      "en": "two",
+      "freq": 95
+    },
+    {
+      "tamil": "தமிழ்",
+      "translit": "thamizh",
+      "en": "Tamil language",
+      "freq": 95
+    },
+    {
+      "tamil": "வணக்கம்",
+      "translit": "vanakkam",
+      "en": "greetings",
+      "freq": 95
+    },
+    {
+      "tamil": "வணக்கம்",
+      "translit": "vanakkam",
+      "en": "hello",
+      "freq": 95
+    },
+    {
+      "tamil": "என்",
+      "translit": "en",
+      "en": "my",
+      "freq": 95,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "அவன்",
+      "translit": "avan",
+      "en": "he",
+      "freq": 90
+    },
+    {
+      "tamil": "அவள்",
+      "translit": "aval",
+      "en": "she",
+      "freq": 90
+    },
+    {
+      "tamil": "அந்த",
+      "translit": "andha",
+      "en": "that",
+      "freq": 90
+    },
+    {
+      "tamil": "என்ன",
+      "translit": "enna",
+      "en": "what",
+      "freq": 90
+    },
+    {
+      "tamil": "சிறந்த",
+      "translit": "sirantha",
+      "en": "good",
+      "freq": 90
+    },
+    {
+      "tamil": "நல்ல",
+      "translit": "nalla",
+      "en": "good",
+      "freq": 90
+    },
+    {
+      "tamil": "இன்று",
+      "translit": "indru",
+      "en": "today",
+      "freq": 90
+    },
+    {
+      "tamil": "இப்போது",
+      "translit": "eppothu",
+      "en": "now",
+      "freq": 90
+    },
+    {
+      "tamil": "மூன்று",
+      "translit": "moondru",
+      "en": "three",
+      "freq": 90
+    },
+    {
+      "tamil": "நான்கு",
+      "translit": "naangu",
+      "en": "four",
+      "freq": 90
+    },
+    {
+      "tamil": "ஐந்து",
+      "translit": "aindu",
+      "en": "five",
+      "freq": 90
+    },
+    {
+      "tamil": "பத்து",
+      "translit": "pathu",
+      "en": "ten",
+      "freq": 90
+    },
+    {
+      "tamil": "தண்ணீர்",
+      "translit": "thanneer",
+      "en": "water",
+      "freq": 90
+    },
+    {
+      "tamil": "வர",
+      "translit": "vara",
+      "en": "come",
+      "freq": 90
+    },
+    {
+      "tamil": "போ",
+      "translit": "po",
+      "en": "go",
+      "freq": 90
+    },
+    {
+      "tamil": "காதல்",
+      "translit": "kaadhal",
+      "en": "love",
+      "freq": 90
+    },
+    {
+      "tamil": "அம்மா",
+      "translit": "ammaa",
+      "en": "mom",
+      "freq": 90
+    },
+    {
+      "tamil": "அப்பா",
+      "translit": "appaa",
+      "en": "dad",
+      "freq": 90
+    },
+    {
+      "tamil": "நன்றி",
+      "translit": "nandri",
+      "en": "thank you",
+      "freq": 90
+    },
+    {
+      "tamil": "சரி",
+      "translit": "sari",
+      "en": "ok/okay",
+      "freq": 90
+    },
+    {
+      "tamil": "இருக்கு",
+      "translit": "irukku",
+      "en": "there is",
+      "freq": 90
+    },
+    {
+      "tamil": "போ",
+      "translit": "po",
+      "en": "go",
+      "freq": 90
+    },
+    {
+      "tamil": "வா",
+      "translit": "vaa",
+      "en": "come",
+      "freq": 90
+    },
+    {
+      "tamil": "வாழ்க்கை",
+      "translit": "vaazhkkai",
+      "en": "life",
+      "freq": 90,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "மக்கள்",
+      "translit": "makkal",
+      "en": "people",
+      "freq": 90,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "செய்",
+      "translit": "sei",
+      "en": "do",
+      "freq": 90,
+      "category": "verbs"
+    },
+    {
+      "tamil": "சொல்",
+      "translit": "sol",
+      "en": "say/tell",
+      "freq": 90,
+      "category": "verbs"
+    },
+    {
+      "tamil": "வேண்டும்",
+      "translit": "vendum",
+      "en": "need/must",
+      "freq": 90,
+      "category": "verbs"
+    },
+    {
+      "tamil": "அவர்",
+      "translit": "avar",
+      "en": "he/she (respectful)",
+      "freq": 90,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "தான்",
+      "translit": "thaan",
+      "en": "self/oneself",
+      "freq": 90,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "நாம்",
+      "translit": "naam",
+      "en": "we (inclusive)",
+      "freq": 90,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "உன்",
+      "translit": "un",
+      "en": "your (informal)",
+      "freq": 90,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "ஆனால்",
+      "translit": "aanaal",
+      "en": "but",
+      "freq": 90,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "அது",
+      "translit": "adu",
+      "en": "it",
+      "freq": 85
+    },
+    {
+      "tamil": "எங்கே",
+      "translit": "enge",
+      "en": "where",
+      "freq": 85
+    },
+    {
+      "tamil": "எப்படி",
+      "translit": "eppadi",
+      "en": "how",
+      "freq": 85
+    },
+    {
+      "tamil": "யார்",
+      "translit": "yaar",
+      "en": "who",
+      "freq": 85
+    },
+    {
+      "tamil": "இல்ல",
+      "translit": "illa",
+      "en": "none",
+      "freq": 85
+    },
+    {
+      "tamil": "அழகான",
+      "translit": "azhagan",
+      "en": "beautiful",
+      "freq": 85
+    },
+    {
+      "tamil": "நேற்று",
+      "translit": "netru",
+      "en": "yesterday",
+      "freq": 85
+    },
+    {
+      "tamil": "நாளை",
+      "translit": "nalai",
+      "en": "tomorrow",
+      "freq": 85
+    },
+    {
+      "tamil": "ஆறு",
+      "translit": "aru",
+      "en": "six",
+      "freq": 85
+    },
+    {
+      "tamil": "ஏழு",
+      "translit": "ezhu",
+      "en": "seven",
+      "freq": 85
+    },
+    {
+      "tamil": "எட்டு",
+      "translit": "ettu",
+      "en": "eight",
+      "freq": 85
+    },
+    {
+      "tamil": "ஒன்பது",
+      "translit": "onpathu",
+      "en": "nine",
+      "freq": 85
+    },
+    {
+      "tamil": "வீடு",
+      "translit": "veedu",
+      "en": "house",
+      "freq": 85
+    },
+    {
+      "tamil": "பணம்",
+      "translit": "panam",
+      "en": "money",
+      "freq": 85
+    },
+    {
+      "tamil": "கொடுக்க",
+      "translit": "kodukka",
+      "en": "give",
+      "freq": 85
+    },
+    {
+      "tamil": "சாப்பிட",
+      "translit": "saappida",
+      "en": "eat",
+      "freq": 85
+    },
+    {
+      "tamil": "குடும்பம்",
+      "translit": "kudumbam",
+      "en": "family",
+      "freq": 85
+    },
+    {
+      "tamil": "தந்தை",
+      "translit": "thanDai",
+      "en": "father",
+      "freq": 85
+    },
+    {
+      "tamil": "தாய்",
+      "translit": "thaai",
+      "en": "mother",
+      "freq": 85
+    },
+    {
+      "tamil": "மன்னிப்பு",
+      "translit": "mannippu",
+      "en": "sorry",
+      "freq": 85
+    },
+    {
+      "tamil": "நேரம்",
+      "translit": "neram",
+      "en": "time",
+      "freq": 85
+    },
+    {
+      "tamil": "நாள்",
+      "translit": "naal",
+      "en": "day",
+      "freq": 85
+    },
+    {
+      "tamil": "பேச",
+      "translit": "pesa",
+      "en": "speak/talk",
+      "freq": 85
+    },
+    {
+      "tamil": "பார்",
+      "translit": "paar",
+      "en": "see",
+      "freq": 85
+    },
+    {
+      "tamil": "தர",
+      "translit": "dhara",
+      "en": "give",
+      "freq": 85
+    },
+    {
+      "tamil": "இரு",
+      "translit": "iru",
+      "en": "stay/be",
+      "freq": 85
+    },
+    {
+      "tamil": "சாப்பிடு",
+      "translit": "saappidu",
+      "en": "eat",
+      "freq": 85
+    },
+    {
+      "tamil": "குறிஞ்சி",
+      "translit": "kurinji",
+      "en": "mountain region (Sangam)",
+      "freq": 85,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "முல்லை",
+      "translit": "mullai",
+      "en": "forest region (Sangam)",
+      "freq": 85,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "நெய்தல்",
+      "translit": "neythal",
+      "en": "coastal region (Sangam)",
+      "freq": 85,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "பாலை",
+      "translit": "paalai",
+      "en": "desert region (Sangam)",
+      "freq": 85,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "மருதம்",
+      "translit": "marutham",
+      "en": "farmland region (Sangam)",
+      "freq": 85,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "கல்வி",
+      "translit": "kalvi",
+      "en": "education",
+      "freq": 85,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "வெற்றி",
+      "translit": "vetri",
+      "en": "victory/success",
+      "freq": 85,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "நம்பிக்கை",
+      "translit": "nambikkai",
+      "en": "hope/trust",
+      "freq": 85,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "கோயில்",
+      "translit": "kovil",
+      "en": "temple",
+      "freq": 85,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "பள்ளி",
+      "translit": "palli",
+      "en": "school",
+      "freq": 85,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "ஆசிரியர்",
+      "translit": "aasiriyar",
+      "en": "teacher",
+      "freq": 85,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "மாணவர்",
+      "translit": "maanavar",
+      "en": "student",
+      "freq": 85,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "முடியும்",
+      "translit": "mudiyum",
+      "en": "can/possible",
+      "freq": 85,
+      "category": "verbs"
+    },
+    {
+      "tamil": "இருக்கிறது",
+      "translit": "irukkiRathu",
+      "en": "there is/exists",
+      "freq": 85,
+      "category": "verbs"
+    },
+    {
+      "tamil": "தெரியும்",
+      "translit": "theriyum",
+      "en": "is known/visible",
+      "freq": 85,
+      "category": "verbs"
+    },
+    {
+      "tamil": "வரும்",
+      "translit": "varum",
+      "en": "will come",
+      "freq": 85,
+      "category": "verbs"
+    },
+    {
+      "tamil": "பண்ணு",
+      "translit": "pannu",
+      "en": "do (colloquial)",
+      "freq": 85,
+      "category": "verbs"
+    },
+    {
+      "tamil": "வேண்டாம்",
+      "translit": "vendaam",
+      "en": "don't want/no need",
+      "freq": 85,
+      "category": "verbs"
+    },
+    {
+      "tamil": "என்னாச்சு",
+      "translit": "ennachu",
+      "en": "what happened",
+      "freq": 85,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "சும்மா",
+      "translit": "summaa",
+      "en": "just/casually",
+      "freq": 85,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "டா",
+      "translit": "daa",
+      "en": "informal address (male)",
+      "freq": 85,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "ஓகே",
+      "translit": "okay",
+      "en": "okay (borrowed)",
+      "freq": 85,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "செம்ம",
+      "translit": "semma",
+      "en": "awesome/super",
+      "freq": 85,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "சூப்பர்",
+      "translit": "super",
+      "en": "super (borrowed)",
+      "freq": 85,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "கண்",
+      "translit": "kan",
+      "en": "eye",
+      "freq": 85,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "கை",
+      "translit": "kai",
+      "en": "hand",
+      "freq": 85,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "இவர்",
+      "translit": "ivar",
+      "en": "this person (respectful)",
+      "freq": 85,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "மட்டும்",
+      "translit": "mattum",
+      "en": "only",
+      "freq": 85,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "போது",
+      "translit": "pothu",
+      "en": "when/time",
+      "freq": 85,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "போல",
+      "translit": "pola",
+      "en": "like/as",
+      "freq": 85,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "கொண்ட",
+      "translit": "konda",
+      "en": "having/taken",
+      "freq": 85,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "பொருள்",
+      "translit": "porul",
+      "en": "wealth/meaning",
+      "freq": 85,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "நாங்கள்",
+      "translit": "naangal",
+      "en": "we",
+      "freq": 80
+    },
+    {
+      "tamil": "நீங்கள்",
+      "translit": "neengal",
+      "en": "you (pl)",
+      "freq": 80
+    },
+    {
+      "tamil": "எப்போது",
+      "translit": "eppothu",
+      "en": "when",
+      "freq": 80
+    },
+    {
+      "tamil": "தமிழன்",
+      "translit": "thamizhan",
+      "en": "Tamil person",
+      "freq": 80
+    },
+    {
+      "tamil": "வருகிறேன்",
+      "translit": "varugiren",
+      "en": "I come",
+      "freq": 80
+    },
+    {
+      "tamil": "போகிறேன்",
+      "translit": "pogiren",
+      "en": "I go",
+      "freq": 80
+    },
+    {
+      "tamil": "செய்கிறேன்",
+      "translit": "seygiren",
+      "en": "I do",
+      "freq": 80
+    },
+    {
+      "tamil": "தேவை",
+      "translit": "devai",
+      "en": "need",
+      "freq": 80
+    },
+    {
+      "tamil": "மிகவும்",
+      "translit": "migavum",
+      "en": "very",
+      "freq": 80
+    },
+    {
+      "tamil": "மோசமான",
+      "translit": "mosaman",
+      "en": "bad",
+      "freq": 80
+    },
+    {
+      "tamil": "பகல்",
+      "translit": "pagal",
+      "en": "day",
+      "freq": 80
+    },
+    {
+      "tamil": "மரம்",
+      "translit": "maram",
+      "en": "tree",
+      "freq": 80
+    },
+    {
+      "tamil": "தீ",
+      "translit": "thee",
+      "en": "fire",
+      "freq": 80
+    },
+    {
+      "tamil": "மனம்",
+      "translit": "manam",
+      "en": "mind",
+      "freq": 80
+    },
+    {
+      "tamil": "உள்ளம்",
+      "translit": "ullam",
+      "en": "heart",
+      "freq": 80
+    },
+    {
+      "tamil": "மகிழ்ச்சி",
+      "translit": "maghizchi",
+      "en": "happiness",
+      "freq": 80
+    },
+    {
+      "tamil": "வேலை",
+      "translit": "velai",
+      "en": "job/work",
+      "freq": 80
+    },
+    {
+      "tamil": "வாங்கு",
+      "translit": "vaangku",
+      "en": "buy",
+      "freq": 80
+    },
+    {
+      "tamil": "குடி",
+      "translit": "kudi",
+      "en": "drink",
+      "freq": 80
+    },
+    {
+      "tamil": "படிக்க",
+      "translit": "padikka",
+      "en": "read",
+      "freq": 80
+    },
+    {
+      "tamil": "எழுத",
+      "translit": "ezhuda",
+      "en": "write",
+      "freq": 80
+    },
+    {
+      "tamil": "மகன்",
+      "translit": "magan",
+      "en": "son",
+      "freq": 80
+    },
+    {
+      "tamil": "மகள்",
+      "translit": "magal",
+      "en": "daughter",
+      "freq": 80
+    },
+    {
+      "tamil": "பிள்ளை",
+      "translit": "pillai",
+      "en": "child",
+      "freq": 80
+    },
+    {
+      "tamil": "பெண்",
+      "translit": "pen",
+      "en": "woman",
+      "freq": 80
+    },
+    {
+      "tamil": "ஆண்",
+      "translit": "aan",
+      "en": "man",
+      "freq": 80
+    },
+    {
+      "tamil": "பரவாயில்லை",
+      "translit": "paravayilla",
+      "en": "it's okay",
+      "freq": 80
+    },
+    {
+      "tamil": "எல்லாமே",
+      "translit": "ellame",
+      "en": "all",
+      "freq": 80
+    },
+    {
+      "tamil": "முதல்",
+      "translit": "mudal",
+      "en": "first",
+      "freq": 80
+    },
+    {
+      "tamil": "இடம்",
+      "translit": "idam",
+      "en": "place",
+      "freq": 80
+    },
+    {
+      "tamil": "மணி",
+      "translit": "mani",
+      "en": "hour/clock",
+      "freq": 80
+    },
+    {
+      "tamil": "வருடம்",
+      "translit": "varudam",
+      "en": "year",
+      "freq": 80
+    },
+    {
+      "tamil": "ஊர்",
+      "translit": "oor",
+      "en": "town",
+      "freq": 80
+    },
+    {
+      "tamil": "ரூபாய்",
+      "translit": "roopai",
+      "en": "rupee",
+      "freq": 80
+    },
+    {
+      "tamil": "கைபேசி",
+      "translit": "kaipesi",
+      "en": "mobile",
+      "freq": 80
+    },
+    {
+      "tamil": "செய்தி",
+      "translit": "seithi",
+      "en": "news",
+      "freq": 80
+    },
+    {
+      "tamil": "இசை",
+      "translit": "isai",
+      "en": "music",
+      "freq": 80
+    },
+    {
+      "tamil": "பாடல்",
+      "translit": "paadal",
+      "en": "song",
+      "freq": 80
+    },
+    {
+      "tamil": "உணவு",
+      "translit": "unavu",
+      "en": "food",
+      "freq": 80
+    },
+    {
+      "tamil": "வேலைக்கு",
+      "translit": "velaikku",
+      "en": "to work",
+      "freq": 80
+    },
+    {
+      "tamil": "வீட்டுக்கு",
+      "translit": "veettukku",
+      "en": "to home",
+      "freq": 80
+    },
+    {
+      "tamil": "தொடக்க",
+      "translit": "thodag",
+      "en": "start",
+      "freq": 80
+    },
+    {
+      "tamil": "கூட",
+      "translit": "kooda",
+      "en": "together/with",
+      "freq": 80
+    },
+    {
+      "tamil": "புதிய",
+      "translit": "pudiya",
+      "en": "new",
+      "freq": 80
+    },
+    {
+      "tamil": "சரியான",
+      "translit": "sariyana",
+      "en": "correct",
+      "freq": 80
+    },
+    {
+      "tamil": "முக்கிய",
+      "translit": "mukkiya",
+      "en": "important",
+      "freq": 80
+    },
+    {
+      "tamil": "உதவி",
+      "translit": "udhavi",
+      "en": "help",
+      "freq": 80
+    },
+    {
+      "tamil": "வழி",
+      "translit": "zhi",
+      "en": "way/method",
+      "freq": 80
+    },
+    {
+      "tamil": "கேள்",
+      "translit": "kela",
+      "en": "listen",
+      "freq": 80
+    },
+    {
+      "tamil": "வாங்க",
+      "translit": "vaanga",
+      "en": "take",
+      "freq": 80
+    },
+    {
+      "tamil": "நில்",
+      "translit": "nil",
+      "en": "wait",
+      "freq": 80
+    },
+    {
+      "tamil": "குடி",
+      "translit": "kudi",
+      "en": "drink",
+      "freq": 80
+    },
+    {
+      "tamil": "விடு",
+      "translit": "vidu",
+      "en": "leave/drop",
+      "freq": 80
+    },
+    {
+      "tamil": "எடு",
+      "translit": "edu",
+      "en": "take/lift",
+      "freq": 80
+    },
+    {
+      "tamil": "திணை",
+      "translit": "tinai",
+      "en": "landscape/genre (Sangam)",
+      "freq": 80,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "துறை",
+      "translit": "turai",
+      "en": "theme/sub-genre",
+      "freq": 80,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "தோழி",
+      "translit": "thozhi",
+      "en": "female friend/confidante",
+      "freq": 80,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "மாலை",
+      "translit": "maalai",
+      "en": "evening/garland",
+      "freq": 80,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "யானை",
+      "translit": "yaanai",
+      "en": "elephant",
+      "freq": 80,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "பாட்டு",
+      "translit": "paattu",
+      "en": "song/poem",
+      "freq": 80,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "திறமை",
+      "translit": "thiramai",
+      "en": "skill/talent",
+      "freq": 80,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "உழைப்பு",
+      "translit": "uzhaippu",
+      "en": "hard work",
+      "freq": 80,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "அனுபவம்",
+      "translit": "anubavam",
+      "en": "experience",
+      "freq": 80,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "கனவு",
+      "translit": "kanavu",
+      "en": "dream",
+      "freq": 80,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "சுதந்திரம்",
+      "translit": "suthanthiram",
+      "en": "freedom/independence",
+      "freq": 80,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "நீதி",
+      "translit": "neethi",
+      "en": "justice",
+      "freq": 80,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "சமூகம்",
+      "translit": "samuugam",
+      "en": "society",
+      "freq": 80,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "பண்பாடு",
+      "translit": "panbaadu",
+      "en": "culture",
+      "freq": 80,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "திருவிழா",
+      "translit": "thiruvizhaa",
+      "en": "festival",
+      "freq": 80,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "மருத்துவர்",
+      "translit": "maruthuvar",
+      "en": "doctor",
+      "freq": 80,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "கல்லூரி",
+      "translit": "kalloori",
+      "en": "college",
+      "freq": 80,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "தொழில்நுட்பம்",
+      "translit": "thozhilnutpam",
+      "en": "technology",
+      "freq": 80,
+      "category": "tech"
+    },
+    {
+      "tamil": "செயலி",
+      "translit": "seyali",
+      "en": "app/application",
+      "freq": 80,
+      "category": "tech"
+    },
+    {
+      "tamil": "திரை",
+      "translit": "thirai",
+      "en": "screen",
+      "freq": 80,
+      "category": "tech"
+    },
+    {
+      "tamil": "படம்",
+      "translit": "padam",
+      "en": "image/photo",
+      "freq": 80,
+      "category": "tech"
+    },
+    {
+      "tamil": "தெரிகிறது",
+      "translit": "therikirathu",
+      "en": "is known",
+      "freq": 80,
+      "category": "verbs"
+    },
+    {
+      "tamil": "புரிகிறது",
+      "translit": "purikirathu",
+      "en": "is understood",
+      "freq": 80,
+      "category": "verbs"
+    },
+    {
+      "tamil": "பார்க்கிறேன்",
+      "translit": "paarkiren",
+      "en": "I see/look",
+      "freq": 80,
+      "category": "verbs"
+    },
+    {
+      "tamil": "கேட்கிறேன்",
+      "translit": "ketkiren",
+      "en": "I ask/listen",
+      "freq": 80,
+      "category": "verbs"
+    },
+    {
+      "tamil": "பிடிக்கும்",
+      "translit": "pidikkum",
+      "en": "will like",
+      "freq": 80,
+      "category": "verbs"
+    },
+    {
+      "tamil": "போகும்",
+      "translit": "pokum",
+      "en": "will go",
+      "freq": 80,
+      "category": "verbs"
+    },
+    {
+      "tamil": "செய்வேன்",
+      "translit": "seiven",
+      "en": "I will do",
+      "freq": 80,
+      "category": "verbs"
+    },
+    {
+      "tamil": "மச்சான்",
+      "translit": "machaan",
+      "en": "buddy/bro",
+      "freq": 80,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "டி",
+      "translit": "di",
+      "en": "informal address (female)",
+      "freq": 80,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "தாங்க்ஸ்",
+      "translit": "thanks",
+      "en": "thanks (borrowed)",
+      "freq": 80,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "சாரி",
+      "translit": "sorry",
+      "en": "sorry (borrowed)",
+      "freq": 80,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "கலக்கல்",
+      "translit": "kalakkal",
+      "en": "fantastic/rocking",
+      "freq": 80,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "வாட்ஸ்அப்",
+      "translit": "whatsapp",
+      "en": "WhatsApp",
+      "freq": 80,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "ஆன்லைன்",
+      "translit": "online",
+      "en": "online",
+      "freq": 80,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "தலை",
+      "translit": "thalai",
+      "en": "head",
+      "freq": 80,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "வாய்",
+      "translit": "vaai",
+      "en": "mouth",
+      "freq": 80,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "கால்",
+      "translit": "kaal",
+      "en": "leg/foot",
+      "freq": 80,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "இதயம்",
+      "translit": "ithayam",
+      "en": "heart (organ)",
+      "freq": 80,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "நிலா",
+      "translit": "nilaa",
+      "en": "moon",
+      "freq": 80,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "பூமி",
+      "translit": "bhoomi",
+      "en": "earth",
+      "freq": 80,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "எவர்",
+      "translit": "evar",
+      "en": "who (respectful)",
+      "freq": 80,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "ஏனெனில்",
+      "translit": "enenil",
+      "en": "because",
+      "freq": 80,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "அதனால்",
+      "translit": "athanaal",
+      "en": "therefore",
+      "freq": 80,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "பிறகு",
+      "translit": "piragu",
+      "en": "after",
+      "freq": 80,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "முன்பு",
+      "translit": "munbu",
+      "en": "before",
+      "freq": 80,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "மீது",
+      "translit": "meethu",
+      "en": "on/upon",
+      "freq": 80,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "உடன்",
+      "translit": "udan",
+      "en": "with/immediately",
+      "freq": 80,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "இல்லாமல்",
+      "translit": "illaamal",
+      "en": "without",
+      "freq": 80,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "தன்ன",
+      "translit": "thanna",
+      "en": "his/her own",
+      "freq": 80,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "அன்ன",
+      "translit": "anna",
+      "en": "like/similar to",
+      "freq": 80,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "செல்வம்",
+      "translit": "selvam",
+      "en": "wealth",
+      "freq": 80,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "அறம்",
+      "translit": "aram",
+      "en": "virtue/dharma",
+      "freq": 80,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "இன்பம்",
+      "translit": "inbam",
+      "en": "pleasure/joy",
+      "freq": 80,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "அவர்கள்",
+      "translit": "avarkal",
+      "en": "they",
+      "freq": 75
+    },
+    {
+      "tamil": "இரவு",
+      "translit": "iravu",
+      "en": "night",
+      "freq": 75
+    },
+    {
+      "tamil": "மலை",
+      "translit": "malai",
+      "en": "mountain",
+      "freq": 75
+    },
+    {
+      "tamil": "கடல்",
+      "translit": "kadal",
+      "en": "sea",
+      "freq": 75
+    },
+    {
+      "tamil": "மழை",
+      "translit": "mazhai",
+      "en": "rain",
+      "freq": 75
+    },
+    {
+      "tamil": "வானம்",
+      "translit": "vaanam",
+      "en": "sky",
+      "freq": 75
+    },
+    {
+      "tamil": "நடக்க",
+      "translit": "nadagka",
+      "en": "walk",
+      "freq": 75
+    },
+    {
+      "tamil": "ஓட",
+      "translit": "oda",
+      "en": "run",
+      "freq": 75
+    },
+    {
+      "tamil": "மனிதன்",
+      "translit": "manithan",
+      "en": "human",
+      "freq": 75
+    },
+    {
+      "tamil": "எங்கள்",
+      "translit": "engal",
+      "en": "our",
+      "freq": 75
+    },
+    {
+      "tamil": "உங்கள்",
+      "translit": "ungal",
+      "en": "your",
+      "freq": 75
+    },
+    {
+      "tamil": "அனைத்தும்",
+      "translit": "anaiththum",
+      "en": "everything",
+      "freq": 75
+    },
+    {
+      "tamil": "ஏதாவது",
+      "translit": "ethaavathu",
+      "en": "something",
+      "freq": 75
+    },
+    {
+      "tamil": "ஒன்றுமில்லை",
+      "translit": "onrumilla",
+      "en": "nothing",
+      "freq": 75
+    },
+    {
+      "tamil": "கடைசி",
+      "translit": "kadaisi",
+      "en": "last",
+      "freq": 75
+    },
+    {
+      "tamil": "முன்",
+      "translit": "mun",
+      "en": "front/before",
+      "freq": 75
+    },
+    {
+      "tamil": "பின்",
+      "translit": "pin",
+      "en": "back/after",
+      "freq": 75
+    },
+    {
+      "tamil": "மேல்",
+      "translit": "mel",
+      "en": "top/above",
+      "freq": 75
+    },
+    {
+      "tamil": "உள்",
+      "translit": "ul",
+      "en": "inside",
+      "freq": 75
+    },
+    {
+      "tamil": "வாரம்",
+      "translit": "varam",
+      "en": "week",
+      "freq": 75
+    },
+    {
+      "tamil": "மாதம்",
+      "translit": "maadham",
+      "en": "month",
+      "freq": 75
+    },
+    {
+      "tamil": "இந்தி",
+      "translit": "hindi",
+      "en": "Hindi",
+      "freq": 75
+    },
+    {
+      "tamil": "ஆங்கிலம்",
+      "translit": "aagkilam",
+      "en": "English",
+      "freq": 75
+    },
+    {
+      "tamil": "தேசம்",
+      "translit": "desam",
+      "en": "country",
+      "freq": 75
+    },
+    {
+      "tamil": "கணினி",
+      "translit": "ganini",
+      "en": "computer",
+      "freq": 75
+    },
+    {
+      "tamil": "இணையம்",
+      "translit": "inaiyam",
+      "en": "internet",
+      "freq": 75
+    },
+    {
+      "tamil": "திரைப்படம்",
+      "translit": "thiraippatam",
+      "en": "movie",
+      "freq": 75
+    },
+    {
+      "tamil": "விளையாட்டு",
+      "translit": "vilaiaattu",
+      "en": "game/sport",
+      "freq": 75
+    },
+    {
+      "tamil": "மகிழுந்து",
+      "translit": "maghizhundu",
+      "en": "car",
+      "freq": 75
+    },
+    {
+      "tamil": "சூரியன்",
+      "translit": "sooriyan",
+      "en": "sun",
+      "freq": 75
+    },
+    {
+      "tamil": "அரிசி",
+      "translit": "arisi",
+      "en": "rice",
+      "freq": 75
+    },
+    {
+      "tamil": "சாதம்",
+      "translit": "saadam",
+      "en": "cooked rice",
+      "freq": 75
+    },
+    {
+      "tamil": "பழம்",
+      "translit": "pazham",
+      "en": "fruit",
+      "freq": 75
+    },
+    {
+      "tamil": "தீபாவளி",
+      "translit": "deepavali",
+      "en": "Diwali",
+      "freq": 75
+    },
+    {
+      "tamil": "புத்தாண்டு",
+      "translit": "putthaandu",
+      "en": "New Year",
+      "freq": 75
+    },
+    {
+      "tamil": "பொங்கல்",
+      "translit": "pongal",
+      "en": "Pongal",
+      "freq": 75
+    },
+    {
+      "tamil": "இதெல்லாம்",
+      "translit": "ithellam",
+      "en": "all this",
+      "freq": 75
+    },
+    {
+      "tamil": "அதெல்லாம்",
+      "translit": "athellam",
+      "en": "all that",
+      "freq": 75
+    },
+    {
+      "tamil": "ஏதோ",
+      "translit": "etho",
+      "en": "something",
+      "freq": 75
+    },
+    {
+      "tamil": "இலக்கு",
+      "translit": "ilkku",
+      "en": "number",
+      "freq": 75
+    },
+    {
+      "tamil": "நிறுத்த",
+      "translit": "nirutha",
+      "en": "stop",
+      "freq": 75
+    },
+    {
+      "tamil": "முடித்த",
+      "translit": "mudiththa",
+      "en": "finished",
+      "freq": 75
+    },
+    {
+      "tamil": "ஆகிவிட்ட",
+      "translit": "aagivitta",
+      "en": "became",
+      "freq": 75
+    },
+    {
+      "tamil": "ஆக்க",
+      "translit": "aagka",
+      "en": "make/create",
+      "freq": 75
+    },
+    {
+      "tamil": "தனி",
+      "translit": "thani",
+      "en": "alone",
+      "freq": 75
+    },
+    {
+      "tamil": "வேகமான",
+      "translit": "vegaman",
+      "en": "fast",
+      "freq": 75
+    },
+    {
+      "tamil": "எளிதான",
+      "translit": "elidhan",
+      "en": "easy",
+      "freq": 75
+    },
+    {
+      "tamil": "முழு",
+      "translit": "muzhu",
+      "en": "full/complete",
+      "freq": 75
+    },
+    {
+      "tamil": "தவறான",
+      "translit": "thavaran",
+      "en": "wrong",
+      "freq": 75
+    },
+    {
+      "tamil": "உண்மையான",
+      "translit": "unmaiyana",
+      "en": "true/real",
+      "freq": 75
+    },
+    {
+      "tamil": "இலவசம்",
+      "translit": "ilavasam",
+      "en": "free",
+      "freq": 75
+    },
+    {
+      "tamil": "இலவச",
+      "translit": "ilavasa",
+      "en": "free",
+      "freq": 75
+    },
+    {
+      "tamil": "வேண்டிய",
+      "translit": "ventiya",
+      "en": "necessary",
+      "freq": 75
+    },
+    {
+      "tamil": "தேவையான",
+      "translit": "devaiyana",
+      "en": "needed",
+      "freq": 75
+    },
+    {
+      "tamil": "சேர்க்க",
+      "translit": "serkka",
+      "en": "to add",
+      "freq": 75
+    },
+    {
+      "tamil": "கண்டுபிடி",
+      "translit": "kandupidi",
+      "en": "find/discover",
+      "freq": 75
+    },
+    {
+      "tamil": "கூப்பிட",
+      "translit": "koopid",
+      "en": "call",
+      "freq": 75
+    },
+    {
+      "tamil": "தூங்க",
+      "translit": "thunga",
+      "en": "sleep",
+      "freq": 75
+    },
+    {
+      "tamil": "எழு",
+      "translit": "ezhu",
+      "en": "get up",
+      "freq": 75
+    },
+    {
+      "tamil": "சிரி",
+      "translit": "siri",
+      "en": "laugh",
+      "freq": 75
+    },
+    {
+      "tamil": "நட",
+      "translit": "nada",
+      "en": "walk",
+      "freq": 75
+    },
+    {
+      "tamil": "ஓடு",
+      "translit": "odu",
+      "en": "run",
+      "freq": 75
+    },
+    {
+      "tamil": "பிடி",
+      "translit": "pidi",
+      "en": "hold/grab",
+      "freq": 75
+    },
+    {
+      "tamil": "தலைவி",
+      "translit": "thalavi",
+      "en": "heroine",
+      "freq": 75,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "தலைவன்",
+      "translit": "thalavan",
+      "en": "hero",
+      "freq": 75,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "வாழி",
+      "translit": "vaazhi",
+      "en": "may you prosper (blessing)",
+      "freq": 75,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "வண்ணம்",
+      "translit": "vannam",
+      "en": "color/style",
+      "freq": 75,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "பயிற்சி",
+      "translit": "payirchi",
+      "en": "training/practice",
+      "freq": 75,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "தோல்வி",
+      "translit": "tholvi",
+      "en": "defeat/failure",
+      "freq": 75,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "அரசாங்கம்",
+      "translit": "arasaangam",
+      "en": "government",
+      "freq": 75,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "சட்டம்",
+      "translit": "sattam",
+      "en": "law",
+      "freq": 75,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "மரபு",
+      "translit": "marabu",
+      "en": "tradition",
+      "freq": 75,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "மருத்துவம்",
+      "translit": "maruthuvam",
+      "en": "medicine",
+      "freq": 75,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "மென்பொருள்",
+      "translit": "menporul",
+      "en": "software",
+      "freq": 75,
+      "category": "tech"
+    },
+    {
+      "tamil": "இணையதளம்",
+      "translit": "inaiyathalam",
+      "en": "website",
+      "freq": 75,
+      "category": "tech"
+    },
+    {
+      "tamil": "தரவு",
+      "translit": "tharavu",
+      "en": "data",
+      "freq": 75,
+      "category": "tech"
+    },
+    {
+      "tamil": "விசைப்பலகை",
+      "translit": "visaippalagai",
+      "en": "keyboard",
+      "freq": 75,
+      "category": "tech"
+    },
+    {
+      "tamil": "கடவுச்சொல்",
+      "translit": "kadavuchol",
+      "en": "password",
+      "freq": 75,
+      "category": "tech"
+    },
+    {
+      "tamil": "பதிவிறக்கம்",
+      "translit": "pathivirakkam",
+      "en": "download",
+      "freq": 75,
+      "category": "tech"
+    },
+    {
+      "tamil": "சமூகவலை",
+      "translit": "samuugavalai",
+      "en": "social network",
+      "freq": 75,
+      "category": "tech"
+    },
+    {
+      "tamil": "ஒளிப்படம்",
+      "translit": "olippadam",
+      "en": "video",
+      "freq": 75,
+      "category": "tech"
+    },
+    {
+      "tamil": "ஆகிறது",
+      "translit": "aakiRathu",
+      "en": "becomes",
+      "freq": 75,
+      "category": "verbs"
+    },
+    {
+      "tamil": "படிக்கிறேன்",
+      "translit": "padikkiren",
+      "en": "I read/study",
+      "freq": 75,
+      "category": "verbs"
+    },
+    {
+      "tamil": "எழுதுகிறேன்",
+      "translit": "ezhuthukiren",
+      "en": "I write",
+      "freq": 75,
+      "category": "verbs"
+    },
+    {
+      "tamil": "நினைக்கிறேன்",
+      "translit": "ninaikkiren",
+      "en": "I think",
+      "freq": 75,
+      "category": "verbs"
+    },
+    {
+      "tamil": "கிடைக்கும்",
+      "translit": "kidaikkum",
+      "en": "will be available",
+      "freq": 75,
+      "category": "verbs"
+    },
+    {
+      "tamil": "நடக்கும்",
+      "translit": "nadakkum",
+      "en": "will happen",
+      "freq": 75,
+      "category": "verbs"
+    },
+    {
+      "tamil": "ப்ரோ",
+      "translit": "bro",
+      "en": "bro (borrowed)",
+      "freq": 75,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "கூல்",
+      "translit": "cool",
+      "en": "cool (borrowed)",
+      "freq": 75,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "மொக்கை",
+      "translit": "mokkai",
+      "en": "boring/lame joke",
+      "freq": 75,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "இன்ஸ்டா",
+      "translit": "insta",
+      "en": "Instagram",
+      "freq": 75,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "யூடியூப்",
+      "translit": "youtube",
+      "en": "YouTube",
+      "freq": 75,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "காது",
+      "translit": "kaathu",
+      "en": "ear",
+      "freq": 75,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "மேகம்",
+      "translit": "megam",
+      "en": "cloud",
+      "freq": 75,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "வானவில்",
+      "translit": "vaanvil",
+      "en": "rainbow",
+      "freq": 75,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "ஆகாயம்",
+      "translit": "aakaayam",
+      "en": "sky",
+      "freq": 75,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "கோடை",
+      "translit": "kodai",
+      "en": "summer",
+      "freq": 75,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "குளிர்",
+      "translit": "kulir",
+      "en": "winter/cold",
+      "freq": 75,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "தாமரை",
+      "translit": "thaamarai",
+      "en": "lotus",
+      "freq": 75,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "ரோஜா",
+      "translit": "roja",
+      "en": "rose",
+      "freq": 75,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "ஆகவே",
+      "translit": "aagave",
+      "en": "hence",
+      "freq": 75,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "கீழே",
+      "translit": "keezhe",
+      "en": "below/under",
+      "freq": 75,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "மேலே",
+      "translit": "mele",
+      "en": "above/over",
+      "freq": 75,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "கூற்று",
+      "translit": "kootru",
+      "en": "dialogue/speech",
+      "freq": 75,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "ஆயினும்",
+      "translit": "aayinum",
+      "en": "even though",
+      "freq": 75,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "நின்",
+      "translit": "nin",
+      "en": "your (poetic)",
+      "freq": 75,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "கரிய",
+      "translit": "kariya",
+      "en": "black",
+      "freq": 70
+    },
+    {
+      "tamil": "வெள்ளை",
+      "translit": "vettai",
+      "en": "white",
+      "freq": 70
+    },
+    {
+      "tamil": "சிவப்பு",
+      "translit": "sivappu",
+      "en": "red",
+      "freq": 70
+    },
+    {
+      "tamil": "பச்சை",
+      "translit": "pachai",
+      "en": "green",
+      "freq": 70
+    },
+    {
+      "tamil": "காடு",
+      "translit": "kaadu",
+      "en": "forest",
+      "freq": 70
+    },
+    {
+      "tamil": "நதி",
+      "translit": "nadi",
+      "en": "river",
+      "freq": 70
+    },
+    {
+      "tamil": "காற்று",
+      "translit": "kaatru",
+      "en": "wind",
+      "freq": 70
+    },
+    {
+      "tamil": "துக்கம்",
+      "translit": "thuggam",
+      "en": "sadness",
+      "freq": 70
+    },
+    {
+      "tamil": "கடை",
+      "translit": "kadai",
+      "en": "shop",
+      "freq": 70
+    },
+    {
+      "tamil": "நாய்",
+      "translit": "naay",
+      "en": "dog",
+      "freq": 70
+    },
+    {
+      "tamil": "பூனை",
+      "translit": "poona",
+      "en": "cat",
+      "freq": 70
+    },
+    {
+      "tamil": "குதிரை",
+      "translit": "kuthirai",
+      "en": "horse",
+      "freq": 70
+    },
+    {
+      "tamil": "மீன்",
+      "translit": "meen",
+      "en": "fish",
+      "freq": 70
+    },
+    {
+      "tamil": "பறவை",
+      "translit": "paravai",
+      "en": "bird",
+      "freq": 70
+    },
+    {
+      "tamil": "அவர்கள்",
+      "translit": "avarkal",
+      "en": "their",
+      "freq": 70
+    },
+    {
+      "tamil": "கீழ்",
+      "translit": "keel",
+      "en": "bottom/below",
+      "freq": 70
+    },
+    {
+      "tamil": "வெளி",
+      "translit": "veli",
+      "en": "outside",
+      "freq": 70
+    },
+    {
+      "tamil": "அருகில்",
+      "translit": "arukil",
+      "en": "near",
+      "freq": 70
+    },
+    {
+      "tamil": "தூரம்",
+      "translit": "tooram",
+      "en": "far",
+      "freq": 70
+    },
+    {
+      "tamil": "நகரம்",
+      "translit": "nagaram",
+      "en": "city",
+      "freq": 70
+    },
+    {
+      "tamil": "மின்னஞ்சல்",
+      "translit": "minnanjal",
+      "en": "email",
+      "freq": 70
+    },
+    {
+      "tamil": "விமானம்",
+      "translit": "vimaanam",
+      "en": "airplane",
+      "freq": 70
+    },
+    {
+      "tamil": "தொடர்வண்டி",
+      "translit": "thodarvandi",
+      "en": "train",
+      "freq": 70
+    },
+    {
+      "tamil": "சாலை",
+      "translit": "salai",
+      "en": "road",
+      "freq": 70
+    },
+    {
+      "tamil": "நிலவம்",
+      "translit": "nilavam",
+      "en": "moon",
+      "freq": 70
+    },
+    {
+      "tamil": "விண்மீன்",
+      "translit": "vinmeen",
+      "en": "star",
+      "freq": 70
+    },
+    {
+      "tamil": "கல்",
+      "translit": "kal",
+      "en": "stone",
+      "freq": 70
+    },
+    {
+      "tamil": "மண்",
+      "translit": "man",
+      "en": "soil",
+      "freq": 70
+    },
+    {
+      "tamil": "தங்கம்",
+      "translit": "thangam",
+      "en": "gold",
+      "freq": 70
+    },
+    {
+      "tamil": "தோசை",
+      "translit": "dosai",
+      "en": "dosa",
+      "freq": 70
+    },
+    {
+      "tamil": "இட்லி",
+      "translit": "idli",
+      "en": "idli",
+      "freq": 70
+    },
+    {
+      "tamil": "பால்",
+      "translit": "paal",
+      "en": "milk",
+      "freq": 70
+    },
+    {
+      "tamil": "காய்",
+      "translit": "kaai",
+      "en": "vegetable",
+      "freq": 70
+    },
+    {
+      "tamil": "ஆத்திசூடி",
+      "translit": "aattisoodi",
+      "en": "Tamil new year",
+      "freq": 70
+    },
+    {
+      "tamil": "விடுமுறை",
+      "translit": "vidumurai",
+      "en": "holiday",
+      "freq": 70
+    },
+    {
+      "tamil": "இப்பக்கம்",
+      "translit": "eppagam",
+      "en": "this side",
+      "freq": 70
+    },
+    {
+      "tamil": "அப்பக்கம்",
+      "translit": "appagam",
+      "en": "that side",
+      "freq": 70
+    },
+    {
+      "tamil": "எதுவோ",
+      "translit": "ethuvo",
+      "en": "whatever",
+      "freq": 70
+    },
+    {
+      "tamil": "கூடல்",
+      "translit": "koodal",
+      "en": "join",
+      "freq": 70
+    },
+    {
+      "tamil": "குறை",
+      "translit": "kurai",
+      "en": "less",
+      "freq": 70
+    },
+    {
+      "tamil": "வலுவான",
+      "translit": "valuvan",
+      "en": "strong",
+      "freq": 70
+    },
+    {
+      "tamil": "மெதுவான",
+      "translit": "methuvan",
+      "en": "slow",
+      "freq": 70
+    },
+    {
+      "tamil": "கடினமான",
+      "translit": "kadinaman",
+      "en": "difficult",
+      "freq": 70
+    },
+    {
+      "tamil": "சாதாரண",
+      "translit": "sadharana",
+      "en": "common/normal",
+      "freq": 70
+    },
+    {
+      "tamil": "பழைய",
+      "translit": "palaya",
+      "en": "old",
+      "freq": 70
+    },
+    {
+      "tamil": "பொய்யான",
+      "translit": "poyyan",
+      "en": "false",
+      "freq": 70
+    },
+    {
+      "tamil": "கட்டணம்",
+      "translit": "kattinam",
+      "en": "fee/charge",
+      "freq": 70
+    },
+    {
+      "tamil": "அவசிய",
+      "translit": "avasaya",
+      "en": "urgent",
+      "freq": 70
+    },
+    {
+      "tamil": "பந்து",
+      "translit": "pandhu",
+      "en": "friend/bond",
+      "freq": 70
+    },
+    {
+      "tamil": "தடுக்க",
+      "translit": "thadukka",
+      "en": "prevent",
+      "freq": 70
+    },
+    {
+      "tamil": "அனுமதி",
+      "translit": "anumathi",
+      "en": "permission",
+      "freq": 70
+    },
+    {
+      "tamil": "திறந்த",
+      "translit": "thirandh",
+      "en": "open",
+      "freq": 70
+    },
+    {
+      "tamil": "நீக்க",
+      "translit": "neekka",
+      "en": "remove",
+      "freq": 70
+    },
+    {
+      "tamil": "அழ",
+      "translit": "azha",
+      "en": "cry",
+      "freq": 70
+    },
+    {
+      "tamil": "பரிசில்",
+      "translit": "parisil",
+      "en": "gift/reward",
+      "freq": 70,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "கூந்தல்",
+      "translit": "koonthal",
+      "en": "hair/tresses",
+      "freq": 70,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "வாகை",
+      "translit": "vaagai",
+      "en": "victory",
+      "freq": 70,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "நாடன்",
+      "translit": "naadan",
+      "en": "man of the land",
+      "freq": 70,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "ஜனநாயகம்",
+      "translit": "jananaayagam",
+      "en": "democracy",
+      "freq": 70,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "மசூதி",
+      "translit": "masoodhi",
+      "en": "mosque",
+      "freq": 70,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "தேவாலயம்",
+      "translit": "devaalayam",
+      "en": "church",
+      "freq": 70,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "பல்கலைக்கழகம்",
+      "translit": "palkalaikkalaham",
+      "en": "university",
+      "freq": 70,
+      "category": "modern_daily"
+    },
+    {
+      "tamil": "வன்பொருள்",
+      "translit": "vanporul",
+      "en": "hardware",
+      "freq": 70,
+      "category": "tech"
+    },
+    {
+      "tamil": "பதிவேற்றம்",
+      "translit": "pathivetram",
+      "en": "upload",
+      "freq": 70,
+      "category": "tech"
+    },
+    {
+      "tamil": "நிரல்",
+      "translit": "niral",
+      "en": "code/program",
+      "freq": 70,
+      "category": "tech"
+    },
+    {
+      "tamil": "செயற்கை",
+      "translit": "seyarkai",
+      "en": "artificial",
+      "freq": 70,
+      "category": "tech"
+    },
+    {
+      "tamil": "நுண்ணறிவு",
+      "translit": "nunnarrivu",
+      "en": "intelligence (AI)",
+      "freq": 70,
+      "category": "tech"
+    },
+    {
+      "tamil": "பேஸ்புக்",
+      "translit": "facebook",
+      "en": "Facebook",
+      "freq": 70,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "ஆஃப்லைன்",
+      "translit": "offline",
+      "en": "offline",
+      "freq": 70,
+      "category": "tanglish_colloquial"
+    },
+    {
+      "tamil": "மூக்கு",
+      "translit": "mookku",
+      "en": "nose",
+      "freq": 70,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "இரத்தம்",
+      "translit": "iratham",
+      "en": "blood",
+      "freq": 70,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "மின்னல்",
+      "translit": "minnal",
+      "en": "lightning",
+      "freq": 70,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "இடி",
+      "translit": "idi",
+      "en": "thunder",
+      "freq": 70,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "மணல்",
+      "translit": "manal",
+      "en": "sand",
+      "freq": 70,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "அருவி",
+      "translit": "aruvi",
+      "en": "waterfall",
+      "freq": 70,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "மல்லிகை",
+      "translit": "mallikai",
+      "en": "jasmine",
+      "freq": 70,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "இடையில்",
+      "translit": "idaiyil",
+      "en": "in between",
+      "freq": 70,
+      "category": "grammar_particles"
+    },
+    {
+      "tamil": "மன்ற",
+      "translit": "mandra",
+      "en": "indeed/surely",
+      "freq": 70,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "ஒழுகு",
+      "translit": "ozhugu",
+      "en": "flow/conduct",
+      "freq": 70,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "யானே",
+      "translit": "yaane",
+      "en": "I (emphatic)",
+      "freq": 70,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "மகளிர்",
+      "translit": "magalir",
+      "en": "women (literary)",
+      "freq": 70,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "சோழன்",
+      "translit": "sozhan",
+      "en": "Chola king",
+      "freq": 70,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "பாண்டியன்",
+      "translit": "paandiyan",
+      "en": "Pandya king",
+      "freq": 70,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "சேரன்",
+      "translit": "seran",
+      "en": "Chera king",
+      "freq": 70,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "வேந்தன்",
+      "translit": "venthan",
+      "en": "king/ruler",
+      "freq": 70,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "பரிபாடல்",
+      "translit": "paraipaaatala",
+      "en": "",
+      "freq": 70,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பாடப்பட்டோன்",
+      "translit": "paaatapapatataoona",
+      "en": "",
+      "freq": 70,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "திரட்டு",
+      "translit": "thairatatau",
+      "en": "",
+      "freq": 70,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மஞ்சள்",
+      "translit": "manjal",
+      "en": "yellow",
+      "freq": 65
+    },
+    {
+      "tamil": "தோட்டம்",
+      "translit": "thoattam",
+      "en": "garden",
+      "freq": 65
+    },
+    {
+      "tamil": "வெள்ளி",
+      "translit": "velli",
+      "en": "silver",
+      "freq": 65
+    },
+    {
+      "tamil": "விருந்து",
+      "translit": "virunthu",
+      "en": "feast",
+      "freq": 65
+    },
+    {
+      "tamil": "பிரிதல்",
+      "translit": "piridhal",
+      "en": "separate",
+      "freq": 65
+    },
+    {
+      "tamil": "வளர்",
+      "translit": "valar",
+      "en": "grow",
+      "freq": 65
+    },
+    {
+      "tamil": "காலி",
+      "translit": "kaali",
+      "en": "empty",
+      "freq": 65
+    },
+    {
+      "tamil": "எதிரி",
+      "translit": "ethiri",
+      "en": "enemy",
+      "freq": 65
+    },
+    {
+      "tamil": "தடை",
+      "translit": "adai",
+      "en": "obstacle",
+      "freq": 65
+    },
+    {
+      "tamil": "அடைப்ப",
+      "translit": "adaippa",
+      "en": "closed",
+      "freq": 65
+    },
+    {
+      "tamil": "கபிலர்",
+      "translit": "kapilar",
+      "en": "poet Kapilar",
+      "freq": 65,
+      "category": "sangam_literary"
+    },
+    {
+      "tamil": "எலும்பு",
+      "translit": "elumbu",
+      "en": "bone",
+      "freq": 65,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "ஓடை",
+      "translit": "odai",
+      "en": "stream",
+      "freq": 65,
+      "category": "body_nature"
+    },
+    {
+      "tamil": "கொல்லோ",
+      "translit": "kollo",
+      "en": "wonder if (rhetorical)",
+      "freq": 65,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "பாடியவர்",
+      "translit": "paadiyavar",
+      "en": "the one who sang",
+      "freq": 65,
+      "category": "corpus_frequent"
+    },
+    {
+      "tamil": "அழி",
+      "translit": "azhi",
+      "en": "destroy",
+      "freq": 60
+    },
+    {
+      "tamil": "பலவீனமான",
+      "translit": "palaveenan",
+      "en": "weak",
+      "freq": 60
+    },
+    {
+      "tamil": "அரிதான",
+      "translit": "arithan",
+      "en": "rare",
+      "freq": 60
+    },
+    {
+      "tamil": "அருகாமை",
+      "translit": "arukamai",
+      "en": "absence",
+      "freq": 60
+    },
+    {
+      "tamil": "குதி",
+      "translit": "kudi",
+      "en": "jump",
+      "freq": 60
+    },
+    {
+      "tamil": "பாடாண்",
+      "translit": "paaataaana",
+      "en": "",
+      "freq": 55,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பெயர்",
+      "translit": "paeyara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "காஞ்சி",
+      "translit": "kaaanyasai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அம்ம",
+      "translit": "amama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பொதுவியல்",
+      "translit": "paothauvaiyala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "யன்ன",
+      "translit": "yanana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தூக்கு",
+      "translit": "thaookakau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "செந்தூக்கு",
+      "translit": "saenathaookakau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பெரும",
+      "translit": "paerauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆயின்",
+      "translit": "aayaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நீர்",
+      "translit": "naeera",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வந்த",
+      "translit": "vanatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "காலை",
+      "translit": "kaaalaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சென்ற",
+      "translit": "saenara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அணி",
+      "translit": "anai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தானே",
+      "translit": "thaaanaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கிழார்",
+      "translit": "kaizhaaara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நீயே",
+      "translit": "naeeyaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அல்லது",
+      "translit": "alalathau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கொண்டு",
+      "translit": "kaonatau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "என்று",
+      "translit": "enarau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சிறப்பின்",
+      "translit": "sairapapaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஔவையார்",
+      "translit": "auvaaiyaaara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தானை",
+      "translit": "thaaanaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மார்பின்",
+      "translit": "maaarapaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சிறப்பு",
+      "translit": "sairapapau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "குறிப்பு",
+      "translit": "kauraipapau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "புனல்",
+      "translit": "paunala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வையை",
+      "translit": "vaaiyaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தும்பை",
+      "translit": "thaumapaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கையறுநிலை",
+      "translit": "kaaiyaraunailaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மருங்கின்",
+      "translit": "maraungakaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நோக்கி",
+      "translit": "naookakai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "காதலர்",
+      "translit": "kaaathalara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பாடாண்பாட்டு",
+      "translit": "paaataaanapaaatatau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "புலவர்",
+      "translit": "paulavara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தன்றே",
+      "translit": "thanaraae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இயன்மொழி",
+      "translit": "iyanamaozhai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தோரே",
+      "translit": "thaooraae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அஞ்சி",
+      "translit": "anyasai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "என்னும்",
+      "translit": "enanauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அண்ணல்",
+      "translit": "ananala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "துஞ்சிய",
+      "translit": "thaunyasaiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "யாணர்",
+      "translit": "yaaanara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கண்ணி",
+      "translit": "kananai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அறியா",
+      "translit": "araiyaaa",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பட்ட",
+      "translit": "patata",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "டன்ன",
+      "translit": "tanana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "உண்கண்",
+      "translit": "unakana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அன்னாய்",
+      "translit": "ananaaaya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மாதோ",
+      "translit": "maaathaoo",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "போகிய",
+      "translit": "paookaiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "என்றும்",
+      "translit": "enarauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தந்த",
+      "translit": "thanatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பலவே",
+      "translit": "palavaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தண்",
+      "translit": "thana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பொலிந்த",
+      "translit": "paolainatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பரணர்",
+      "translit": "paranara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தன்",
+      "translit": "thana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தடக்கை",
+      "translit": "thatakakaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நின்ற",
+      "translit": "nainara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "போலப்",
+      "translit": "paoolapa",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "போலக்",
+      "translit": "paoolaka",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "என்ப",
+      "translit": "enapa",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "எல்லாம்",
+      "translit": "elalaaama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வேங்கை",
+      "translit": "vaaengakaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சேரமான்",
+      "translit": "saaeramaaana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வந்து",
+      "translit": "vanathau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பாணர்",
+      "translit": "paaanara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "உறையூர்",
+      "translit": "uraaiyaoora",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆம்பல்",
+      "translit": "aamapala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நாரை",
+      "translit": "naaaraai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கண்ணே",
+      "translit": "kananaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சான்ற",
+      "translit": "saaanara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சென்று",
+      "translit": "saenarau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "காமம்",
+      "translit": "kaaamama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "செந்துறைப்",
+      "translit": "saenathauraaipa",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மரபின்",
+      "translit": "marapaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மாரி",
+      "translit": "maaarai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தோன்றும்",
+      "translit": "thaoonarauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கடவுள்",
+      "translit": "katavaula",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மதுரை",
+      "translit": "mathauraai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சாரல்",
+      "translit": "saaarala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கோதை",
+      "translit": "kaoothaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பாவை",
+      "translit": "paaavaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆகலின்",
+      "translit": "aakalaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "களிறு",
+      "translit": "kalairau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மலர்",
+      "translit": "malara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வரை",
+      "translit": "varaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வேந்தர்",
+      "translit": "vaaenathara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நாடே",
+      "translit": "naaataae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மறவர்",
+      "translit": "maravara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அன்றே",
+      "translit": "anaraae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "யாமே",
+      "translit": "yaaamaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "செய்யுள்",
+      "translit": "saeyayaula",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "யாம்",
+      "translit": "yaaama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மன்னே",
+      "translit": "mananaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நிலை",
+      "translit": "nailaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இன்னும்",
+      "translit": "inanauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நெஞ்சம்",
+      "translit": "naenyasama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அல்குல்",
+      "translit": "alakaula",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பணைத்தோள்",
+      "translit": "panaaithathaoola",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இன்னா",
+      "translit": "inanaaa",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கிள்ளி",
+      "translit": "kailalai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பாண",
+      "translit": "paaana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அதியமான்",
+      "translit": "athaiyamaaana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "குன்றம்",
+      "translit": "kaunarama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மாக்கள்",
+      "translit": "maaakakala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "உருகெழு",
+      "translit": "uraukaezhau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "யோனே",
+      "translit": "yaoonaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மலர்ந்த",
+      "translit": "malaranatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "யாயின்",
+      "translit": "yaaayaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "எம்",
+      "translit": "ema",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நெடுந்தேர்",
+      "translit": "naetaunathaaera",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வாரா",
+      "translit": "vaaaraaa",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இனியே",
+      "translit": "inaiyaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மருப்பின்",
+      "translit": "maraupapaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வஞ்சி",
+      "translit": "vanyasai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "உயர்",
+      "translit": "uyara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "புகழ்",
+      "translit": "paukazha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நின்று",
+      "translit": "nainarau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வளவன்",
+      "translit": "valavana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஊரே",
+      "translit": "ooraae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வாரார்",
+      "translit": "vaaaraaara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பாடி",
+      "translit": "paaatai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நல்லிசை",
+      "translit": "nalalaisaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கான",
+      "translit": "kaaana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பாரி",
+      "translit": "paaarai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பாடிய",
+      "translit": "paaataiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நெடுமான்",
+      "translit": "naetaumaaana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "துறைவன்",
+      "translit": "thauraaivana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆங்கண்",
+      "translit": "aangakana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நாளும்",
+      "translit": "naaalauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கமழும்",
+      "translit": "kamazhauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அன்னை",
+      "translit": "ananaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நெல்லின்",
+      "translit": "naelalaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மஞ்ஞை",
+      "translit": "manyanyaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தாமே",
+      "translit": "thaaamaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "எனவும்",
+      "translit": "enavauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நாட",
+      "translit": "naaata",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நெஞ்சே",
+      "translit": "naenyasaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தேறல்",
+      "translit": "thaaerala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "புரவி",
+      "translit": "pauravai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கழனி",
+      "translit": "kazhanai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தோன்றல்",
+      "translit": "thaoonarala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மன்னர்",
+      "translit": "mananara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கண்டு",
+      "translit": "kanatau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இருந்த",
+      "translit": "iraunatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "உலகம்",
+      "translit": "ulakama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தோளே",
+      "translit": "thaoolaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஞாயிறு",
+      "translit": "nyaaayairau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "திங்கள்",
+      "translit": "thaingakala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பூத்த",
+      "translit": "paoothatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆங்கு",
+      "translit": "aangakau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆய்",
+      "translit": "aaya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஒக்கல்",
+      "translit": "okakala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அரிவை",
+      "translit": "araivaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "போலத்",
+      "translit": "paoolatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அத்தை",
+      "translit": "athathaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இனிய",
+      "translit": "inaiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நன்றும்",
+      "translit": "nanarauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வேந்தே",
+      "translit": "vaaenathaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அரச",
+      "translit": "arasa",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "எனக்",
+      "translit": "enaka",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இல்",
+      "translit": "ila",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மேனி",
+      "translit": "maaenai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வைகல்",
+      "translit": "vaaikala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சேவல்",
+      "translit": "saaevala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "விறலியர்",
+      "translit": "vairalaiyara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தெவ்வர்",
+      "translit": "thaevavara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கண்ட",
+      "translit": "kanata",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "யான்",
+      "translit": "yaaana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தொடுத்த",
+      "translit": "thaotauthatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "செய்த",
+      "translit": "saeyatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பாடியது",
+      "translit": "paaataiyathau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஊரன்",
+      "translit": "oorana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நன்றே",
+      "translit": "nanaraae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கலித்த",
+      "translit": "kalaithatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வரைப்பின்",
+      "translit": "varaaipapaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "முன்கை",
+      "translit": "maunakaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஏந்திய",
+      "translit": "aenathaiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மாறே",
+      "translit": "maaaraae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பூசல்",
+      "translit": "paoosala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நெடுந்தகை",
+      "translit": "naetaunathakaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மொழி",
+      "translit": "maozhai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "காந்தள்",
+      "translit": "kaaanathala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மூதூர்",
+      "translit": "maoothaoora",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கல்லென்",
+      "translit": "kalalaena",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பெற்ற",
+      "translit": "paerara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "உள்ளி",
+      "translit": "ulalai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மதுரைக்",
+      "translit": "mathauraaika",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வாழிய",
+      "translit": "vaaazhaiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கானல்",
+      "translit": "kaaanala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "குருசில்",
+      "translit": "kaurausaila",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பல்",
+      "translit": "pala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "முரசின்",
+      "translit": "maurasaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "விசும்பின்",
+      "translit": "vaisaumapaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தோள்",
+      "translit": "thaoola",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பாசறை",
+      "translit": "paaasaraai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "யானும்",
+      "translit": "yaaanauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆடும்",
+      "translit": "aatauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வாழிவேண்",
+      "translit": "vaaazhaivaaena",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வைப்பின்",
+      "translit": "vaaipapaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "படப்பை",
+      "translit": "patapapaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "முந்நீர்",
+      "translit": "maunanaeera",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "எந்தை",
+      "translit": "enathaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "புரையும்",
+      "translit": "pauraaiyauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "எனப்",
+      "translit": "enapa",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வாயில்",
+      "translit": "vaaayaila",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "காணிய",
+      "translit": "kaaanaiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஒன்று",
+      "translit": "onarau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பெரிதே",
+      "translit": "paeraithaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "புனை",
+      "translit": "paunaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இயல்",
+      "translit": "iyala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இருக்கை",
+      "translit": "iraukakaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சிலம்பின்",
+      "translit": "sailamapaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தனவே",
+      "translit": "thanavaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பலவின்",
+      "translit": "palavaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அண்டிரன்",
+      "translit": "anatairana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மடந்தை",
+      "translit": "matanathaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பெய்த",
+      "translit": "paeyatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கொள்ளும்",
+      "translit": "kaolalauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பல்வேறு",
+      "translit": "palavaaerau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆகிய",
+      "translit": "aakaiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பிறர்",
+      "translit": "pairara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இவன்",
+      "translit": "ivana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆறே",
+      "translit": "aaraae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இவள்",
+      "translit": "ivala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பொய்யா",
+      "translit": "paoyayaaa",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மருங்கிற்",
+      "translit": "maraungakaira",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "காமர்",
+      "translit": "kaaamara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பொருந",
+      "translit": "paorauna",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பொருத",
+      "translit": "paorautha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "உண்டு",
+      "translit": "unatau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கடந்த",
+      "translit": "katanatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கல்லா",
+      "translit": "kalalaaa",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கரும்பின்",
+      "translit": "karaumapaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தழீஇய",
+      "translit": "thazhaeeiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சேக்கும்",
+      "translit": "saaekakauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "உடைத்தே",
+      "translit": "utaaithathaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "எனவே",
+      "translit": "enavaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "முன்றில்",
+      "translit": "maunaraila",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கானம்",
+      "translit": "kaaanama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "குறுமகள்",
+      "translit": "kauraumakala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பொழுதே",
+      "translit": "paozhauthaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தோன்றி",
+      "translit": "thaoonarai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நெடுவரை",
+      "translit": "naetauvaraai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அடி",
+      "translit": "atai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "முழவின்",
+      "translit": "mauzhavaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பூவின்",
+      "translit": "paoovaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பாடம்",
+      "translit": "paaatama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "குருதி",
+      "translit": "kaurauthai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சான்றோர்",
+      "translit": "saaanaraoora",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மையின்",
+      "translit": "maaiyaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "யாத்த",
+      "translit": "yaaathatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சீறியாழ்",
+      "translit": "saeeraiyaaazha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கடுப்ப",
+      "translit": "kataupapa",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மறம்",
+      "translit": "marama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கள்ளின்",
+      "translit": "kalalaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கொடி",
+      "translit": "kaotai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அமர்",
+      "translit": "amara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சாத்தனார்",
+      "translit": "saaathathanaaara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நலங்கிள்ளி",
+      "translit": "nalangakailalai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "போர்",
+      "translit": "paoora",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இவ்",
+      "translit": "iva",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "யானைக்",
+      "translit": "yaaanaaika",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வரூஉம்",
+      "translit": "varaoouma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தனனே",
+      "translit": "thananaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கானவர்",
+      "translit": "kaaanavara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மகட்பாற்",
+      "translit": "makatapaaara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கழிமின்",
+      "translit": "kazhaimaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மந்தி",
+      "translit": "manathai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வானத்து",
+      "translit": "vaaanathathau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நன்கலம்",
+      "translit": "nanakalama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கோவே",
+      "translit": "kaoovaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆரம்",
+      "translit": "aarama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "போலும்",
+      "translit": "paoolauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "உலகத்து",
+      "translit": "ulakathathau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மைந்தர்",
+      "translit": "maainathara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அம்",
+      "translit": "ama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "காக்கும்",
+      "translit": "kaaakakauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வலம்படு",
+      "translit": "valamapatau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அரிதே",
+      "translit": "araithaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கோமான்",
+      "translit": "kaoomaaana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "குவளை",
+      "translit": "kauvalaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மூதின்",
+      "translit": "maoothaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பலவுடன்",
+      "translit": "palavautana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தழீஇ",
+      "translit": "thazhaeei",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "முரசம்",
+      "translit": "maurasama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கற்பின்",
+      "translit": "karapaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பொன்",
+      "translit": "paona",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சென்னி",
+      "translit": "saenanai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "குழவி",
+      "translit": "kauzhavai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நாடுகிழ",
+      "translit": "naaataukaizha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அவை",
+      "translit": "avaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கேள்வி",
+      "translit": "kaaelavai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "உற்ற",
+      "translit": "urara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அணிந்த",
+      "translit": "anainatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "என்னை",
+      "translit": "enanaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கின்றே",
+      "translit": "kainaraae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வாழியோ",
+      "translit": "vaaazhaiyaoo",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அருஞ்சுரம்",
+      "translit": "araunyasaurama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "டன்னை",
+      "translit": "tananaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "புறவின்",
+      "translit": "pauravaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அந்தணர்",
+      "translit": "anathanara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வேலி",
+      "translit": "vaaelai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பறந்தலை",
+      "translit": "paranathalaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பயந்த",
+      "translit": "payanatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நீயும்",
+      "translit": "naeeyauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இன்மையின்",
+      "translit": "inamaaiyaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அதுவே",
+      "translit": "athauvaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஓர்",
+      "translit": "oora",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "காக்கை",
+      "translit": "kaaakakaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "குருகின்",
+      "translit": "kauraukaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கொன்றை",
+      "translit": "kaonaraai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பற்றிய",
+      "translit": "pararaiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வியன்",
+      "translit": "vaiyana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "உண்ணும்",
+      "translit": "unanauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆனாது",
+      "translit": "aanaaathau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "போலவும்",
+      "translit": "paoolavauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பகைவர்",
+      "translit": "pakaaivara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "காவலர்",
+      "translit": "kaaavalara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கடந்து",
+      "translit": "katanathau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இழை",
+      "translit": "izhaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கண்ணனார்",
+      "translit": "kanananaaara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அரசவாகை",
+      "translit": "arasavaaakaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "முற்றிய",
+      "translit": "mauraraiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பொருண்மொழிக்",
+      "translit": "paoraunamaozhaika",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தந்து",
+      "translit": "thanathau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "குளமுற்றத்துத்",
+      "translit": "kaulamaurarathathautha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வாழ்க",
+      "translit": "vaaazhaka",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "புன்கண்",
+      "translit": "paunakana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "எக்கர்",
+      "translit": "ekakara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இயன்",
+      "translit": "iyana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பண்",
+      "translit": "pana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இரங்கும்",
+      "translit": "irangakauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கருங்கால்",
+      "translit": "karaungakaaala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கேண்மை",
+      "translit": "kaaenamaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சிறுவெண்",
+      "translit": "sairauvaena",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பெறுகுவிர்",
+      "translit": "paeraukauvaira",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பெருங்கடற்",
+      "translit": "paeraungakatara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "காத",
+      "translit": "kaaatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "எனவேட்",
+      "translit": "enavaaeta",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பெரும்பெயர்",
+      "translit": "paeraumapaeyara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கால",
+      "translit": "kaaala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நிலம்",
+      "translit": "nailama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சுற்றமொடு",
+      "translit": "sauraramaotau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அரிய",
+      "translit": "araiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கவலை",
+      "translit": "kavalaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வாள்",
+      "translit": "vaaala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஒன்னார்",
+      "translit": "onanaaara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "விளைந்த",
+      "translit": "vailaainatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "இனி",
+      "translit": "inai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நிற்",
+      "translit": "naira",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நீடிய",
+      "translit": "naeetaiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மென்",
+      "translit": "maena",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மாக",
+      "translit": "maaaka",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பெயரும்",
+      "translit": "paeyarauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வேல்",
+      "translit": "vaaela",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பரிசிலர்",
+      "translit": "paraisailara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "குன்ற",
+      "translit": "kaunara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மெல்லியல்",
+      "translit": "maelalaiyala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நிலைஇய",
+      "translit": "nailaaiiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "அனையை",
+      "translit": "anaaiyaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கோப்பெருஞ்",
+      "translit": "kaoopapaeraunya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நெடுவேல்",
+      "translit": "naetauvaaela",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மரபிற்",
+      "translit": "marapaira",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கடுமான்",
+      "translit": "kataumaaana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மாண்ட",
+      "translit": "maaanata",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "திருமணி",
+      "translit": "thairaumanai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "செல்லா",
+      "translit": "saelalaaa",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சீறூர்",
+      "translit": "saeeraoora",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பரப்பின்",
+      "translit": "parapapaina",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வேலன்",
+      "translit": "vaaelana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஈன்ற",
+      "translit": "eenara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "னன்ன",
+      "translit": "nanana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆகுதல்",
+      "translit": "aakauthala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தும்பி",
+      "translit": "thaumapai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பொய்கை",
+      "translit": "paoyakaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "நாறும்",
+      "translit": "naaarauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஞாழல்",
+      "translit": "nyaaazhala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "தான்வந்",
+      "translit": "thaaanavana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "எவன்கொல்",
+      "translit": "evanakaola",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மழைக்கண்",
+      "translit": "mazhaaikakana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "எருமை",
+      "translit": "eraumaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மள்ளர்",
+      "translit": "malalara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "சீர்",
+      "translit": "saeera",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வோனே",
+      "translit": "vaoonaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கண்ணகன்",
+      "translit": "kananakana",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வல்லே",
+      "translit": "valalaae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "உறையும்",
+      "translit": "uraaiyauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "புன்னை",
+      "translit": "paunanaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஈகை",
+      "translit": "eekaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மாமழை",
+      "translit": "maaamazhaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "என்னாது",
+      "translit": "enanaaathau",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "விளங்கும்",
+      "translit": "vailangakauma",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "போகி",
+      "translit": "paookai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "உரைசால்",
+      "translit": "uraaisaaala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கோழி",
+      "translit": "kaoozhai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆடிய",
+      "translit": "aataiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "ஆர்",
+      "translit": "aara",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "விளங்கிய",
+      "translit": "vailangakaiya",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வென்வேல்",
+      "translit": "vaenavaaela",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "வேழம்",
+      "translit": "vaaezhama",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கேழல்",
+      "translit": "kaaezhala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "லோரே",
+      "translit": "laooraae",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "கரந்தை",
+      "translit": "karanathaai",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "எழில்",
+      "translit": "ezhaila",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "மடமகள்",
+      "translit": "matamakala",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    },
+    {
+      "tamil": "பரந்த",
+      "translit": "paranatha",
+      "en": "",
+      "freq": 40,
+      "category": "corpus_auto"
+    }
+  ]
+}

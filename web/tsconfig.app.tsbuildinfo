@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/types.ts","./src/vite-env.d.ts","./src/components/AppHeader.tsx","./src/components/EditorPane.tsx","./src/components/KeyboardDock.tsx","./src/components/NotesSidebar.tsx","./src/components/TutorPane.tsx","./src/constants/keyboard.ts","./src/constants/lessons.ts","./src/lib/notes.ts","./src/lib/pm0100.ts"],"version":"5.9.3"}

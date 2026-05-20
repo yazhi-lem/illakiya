@@ -1,0 +1,44 @@
+{
+  "layout_name": "PM0100",
+  "version": "1.0.0",
+  "author": "Yazhi Team",
+  "description": "Tholkappiam-based Tamil layout. Row 1: Vallinam, Row 2: Idaiyinam, Row 3: Mellinam.",
+  "layers": {
+    "default": {
+      "row1": [
+        { "id": "k", "char": "க்", "class": "vallinam" },
+        { "id": "c", "char": "ச்", "class": "vallinam" },
+        { "id": "t", "char": "ட்", "class": "vallinam" },
+        { "id": "th", "char": "த்", "class": "vallinam" },
+        { "id": "p", "char": "ப்", "class": "vallinam" },
+        { "id": "r_hard", "char": "ற்", "class": "vallinam" }
+      ],
+      "row2": [
+        { "id": "y", "char": "ய்", "class": "idaiyinam" },
+        { "id": "r_soft", "char": "ர்", "class": "idaiyinam" },
+        { "id": "l_soft", "char": "ல்", "class": "idaiyinam" },
+        { "id": "v", "char": "வ்", "class": "idaiyinam" },
+        { "id": "zh", "char": "ழ்", "class": "idaiyinam" },
+        { "id": "l_hard", "char": "ள்", "class": "idaiyinam" }
+      ],
+      "row3": [
+        { "id": "ng", "char": "ங்", "class": "mellinam" },
+        { "id": "nj", "char": "ஞ்", "class": "mellinam" },
+        { "id": "n_hard", "char": "ண்", "class": "mellinam" },
+        { "id": "n_soft", "char": "ந்", "class": "mellinam" },
+        { "id": "m", "char": "ம்", "class": "mellinam" },
+        { "id": "n_end", "char": "ன்", "class": "mellinam" }
+      ]
+    },
+    "vowels": {
+      "logic": "tap_for_short_hold_for_long",
+      "keys": [
+        { "base": "அ", "long": "ஆ" },
+        { "base": "இ", "long": "ஈ" },
+        { "base": "உ", "long": "ஊ" },
+        { "base": "எ", "long": "ஏ" },
+        { "base": "ஒ", "long": "ஓ" }
+      ]
+    }
+  }
+}

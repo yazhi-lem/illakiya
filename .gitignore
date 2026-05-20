@@ -1,0 +1,33 @@
+# Rust
+target/
+Cargo.lock
+
+# Android
+*.apk
+*.aab
+*.dex
+*.class
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+*.iml
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+
+# Generated UniFFI bindings (regenerated at build time)
+# android/app/src/main/java/com/yazhi/illakiya/core/
+
+# Python
+__pycache__/
+*.pyc
+.env

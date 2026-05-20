@@ -1,0 +1,4 @@
+[tool.uniffi-bindgen]
+language = "kotlin"
+crate_name = "illakiya"
+out_dir = "../android/app/src/main/java/com/yazhi/illakiya/core"
