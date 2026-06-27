@@ -1,14 +1,13 @@
 use crate::layout::LayoutDef;
 use crate::dictionary::Dictionary;
 use crate::sandhi::AdhanSandhi;
+use std::sync::Arc;
 
-/// Core keyboard state machine.
-/// Integrates layout, dictionary, and sandhi into a unified engine.
 #[derive(uniffi::Object)]
 pub struct KeyboardEngine {
     layout: LayoutDef,
-    dict: Dictionary,
-    sandhi: AdhanSandhi,
+    dict: Arc<Dictionary>,
+    sandhi: Arc<AdhanSandhi>,
     state: std::sync::RwLock<EngineState>,
 }
 
@@ -16,88 +15,29 @@ struct EngineState {
     buffer: String,
     pending_consonant: Option<String>,
     nedil_active: bool,
-    /// Word boundaries for sandhi detection
     words: Vec<String>,
-    /// Current word being typed
     current_word: String,
 }
 
-/// Suggestion from the engine (word + source)
-#[derive(Debug, Clone)]
-pub struct Suggestion {
-    pub text: String,
-    pub source: SuggestionSource,
-}
-
-#[derive(Debug, Clone)]
-pub enum SuggestionSource {
-    Dictionary,
-    Sandhi,
-    Recent,
-}
-
-#[uniffi::export]
+// Private helpers — not exported via FFI
 impl KeyboardEngine {
-    pub fn new() -> Self {
-        Self {
-            layout: LayoutDef::load_pm0100(),
-            dict: Dictionary::new(),
-            sandhi: AdhanSandhi::new(),
-            state: std::sync::RwLock::new(EngineState {
-                buffer: String::new(),
-                pending_consonant: None,
-                nedil_active: false,
-                words: Vec::new(),
-                current_word: String::new(),
-            }),
-        }
-    }
-
-    /// Toggle long vowel mode (triggered by swipe up)
-    pub fn toggle_nedil(&self) {
-        let mut state = self.state.write().unwrap();
-        state.nedil_active = !state.nedil_active;
-    }
-
-    /// Process a single key press.
-    /// Returns the text to commit.
-    pub fn process_input(pub fn process_input(pub fn process_input(&self, key: &str) -> String {self, key: String) -> String {self, key: String) -> String {
-        let mut state = self.state.write().unwrap();
-        
-        // 1. Check vowels (short, long, or special)
-        let vowel = self.layout.any_vowel_lookup(key, state.nedil_active).cloned();
-        if state.nedil_active { state.nedil_active = false; }
-
-        if let Some(vowel) = vowel {
-            return self.handle_vowel(&mut state, &vowel);
-        }
-
-        // 2. Check consonant (base layer)
-        if let Some(consonant) = self.layout.base_lookup(key).cloned() {
-            return self.handle_consonant(&mut state, &consonant);
-        }
-
-        // 3. Special keys
-        self.handle_special(&mut state, key)
-    }
-
     fn handle_vowel(&self, state: &mut EngineState, vowel: &str) -> String {
         if let Some(consonant) = state.pending_consonant.take() {
             if let Some(combined) = self.layout.combine(&consonant, vowel) {
                 state.buffer.push_str(combined);
                 state.current_word.push_str(combined);
-                return combined.clone();
+                combined.clone()
             } else {
                 state.buffer.push_str(&consonant);
                 state.buffer.push_str(vowel);
                 state.current_word.push_str(&consonant);
                 state.current_word.push_str(vowel);
-                return format!("{}{}", consonant, vowel);
+                format!("{}{}", consonant, vowel)
             }
         } else {
             state.buffer.push_str(vowel);
             state.current_word.push_str(vowel);
-            return vowel.to_string();
+            vowel.to_string()
         }
     }
 
@@ -121,14 +61,11 @@ impl KeyboardEngine {
                     state.current_word.push_str(&pending);
                     output.push_str(&pending);
                 }
-                
-                // Word boundary: record word and check sandhi
                 if !state.current_word.is_empty() {
-                    self.dict.record_usage(&state.current_word);
+                    self.dict.record_usage_str(&state.current_word);
                     state.words.push(state.current_word.clone());
                     state.current_word.clear();
                 }
-                
                 output.push(' ');
                 state.buffer.push(' ');
                 output
@@ -164,7 +101,12 @@ impl KeyboardEngine {
                 String::new()
             }
             "clear" => {
-                self.reset();
+                // Inline reset: avoids re-locking self.state (deadlock)
+                state.buffer.clear();
+                state.pending_consonant = None;
+                state.nedil_active = false;
+                state.words.clear();
+                state.current_word.clear();
                 String::new()
             }
             _ => {
@@ -181,81 +123,104 @@ impl KeyboardEngine {
             }
         }
     }
+}
 
-    /// Get word suggestions for the current input prefix.
-    /// Returns up to `limit` suggestions ranked by frequency + recency.
-    pub fn get_suggestions(&self, limit: u32) -> Vec<String> {
-        let state = self.state.read().unwrap();
-        if state.current_word.is_empty() {
-            return Vec::new();
+#[uniffi::export]
+impl KeyboardEngine {
+    #[uniffi::constructor]
+    pub fn new() -> Arc<Self> {
+        Arc::new(Self {
+            layout: LayoutDef::load_pm0100(),
+            dict: Dictionary::new(),
+            sandhi: AdhanSandhi::new(),
+            state: std::sync::RwLock::new(EngineState {
+                buffer: String::new(),
+                pending_consonant: None,
+                nedil_active: false,
+                words: Vec::new(),
+                current_word: String::new(),
+            }),
+        })
+    }
+
+    pub fn toggle_nedil(&self) {
+        self.state.write().unwrap().nedil_active ^= true;
+    }
+
+    pub fn process_input(&self, key: String) -> String {
+        let mut state = self.state.write().unwrap();
+
+        let vowel = self.layout.any_vowel_lookup(&key, state.nedil_active).cloned();
+        if state.nedil_active {
+            state.nedil_active = false;
         }
 
+        if let Some(vowel) = vowel {
+            return self.handle_vowel(&mut state, &vowel);
+        }
+
+        if let Some(consonant) = self.layout.base_lookup(&key).cloned() {
+            return self.handle_consonant(&mut state, &consonant);
+        }
+
+        self.handle_special(&mut state, &key)
+    }
+
+    pub fn get_suggestions(&self, limit: u32) -> Vec<String> {
+        let state = self.state.read().unwrap();
+        if state.current_word.is_empty() && state.pending_consonant.is_none() {
+            return Vec::new();
+        }
         let mut prefix = state.current_word.clone();
         if let Some(ref pending) = state.pending_consonant {
             prefix.push_str(pending);
         }
-
-        self.dict.suggest(&prefix, limit)
+        self.dict.suggest_prefix(&prefix, limit)
     }
 
-    /// Get sandhi suggestion for the last two words
     pub fn get_sandhi_suggestion(&self) -> Option<String> {
         let state = self.state.read().unwrap();
-        if state.words.is_empty() { return None; }
-        
         let last_word = state.words.last()?;
-        if state.current_word.is_empty() { return None; }
-
+        if state.current_word.is_empty() {
+            return None;
+        }
         let result = self.sandhi.analyze(last_word, &state.current_word);
-        // Only suggest if a specific rule was applied
-        if result.rule != crate::sandhi::SandhiRule::IyalbuPunarchi 
-           && result.rule != crate::sandhi::SandhiRule::NoRule 
-           && result.confidence > 0.6 {
+        if result.rule != crate::sandhi::SandhiRule::IyalbuPunarchi
+            && result.rule != crate::sandhi::SandhiRule::NoRule
+            && result.confidence > 0.6
+        {
             Some(result.output)
         } else {
             None
         }
     }
 
-    /// Accept a suggestion: replace current word with the suggestion
-    pub fn accept_suggestion(&self, suggestion: &str) -> String {
+    pub fn accept_suggestion(&self, suggestion: String) -> String {
         let mut state = self.state.write().unwrap();
-        // Remove current partial word from buffer
         let current_len = state.current_word.len();
-        if let Some(ref pending) = state.pending_consonant {
-            // Also account for pending
-            let total = current_len + pending.len();
-            // But pending isn't in buffer yet
-        }
-        
-        // Truncate buffer by current_word length
         let buf_len = state.buffer.len();
         if buf_len >= current_len {
             state.buffer.truncate(buf_len - current_len);
         }
-        
-        // Replace with suggestion
-        state.buffer.push_str(suggestion);
-        state.current_word = suggestion.to_string();
+        state.buffer.push_str(&suggestion);
+        state.current_word = suggestion.clone();
         state.pending_consonant = None;
-        self.dict.record_usage(suggestion);
-        
-        suggestion.to_string()
+        self.dict.record_usage_str(&suggestion);
+        suggestion
     }
 
-    /// Check if a word is in the dictionary
-    pub fn is_valid_word(&self, word: &str) -> bool {
-        self.dict.contains(word)
+    pub fn is_valid_word(&self, word: String) -> bool {
+        self.dict.contains_str(&word)
     }
 
-    /// Translate current word
     pub fn translate_current(&self) -> Option<String> {
         let state = self.state.read().unwrap();
-        if state.current_word.is_empty() { return None; }
-        self.dict.translate(&state.current_word)
+        if state.current_word.is_empty() {
+            return None;
+        }
+        self.dict.translate_str(&state.current_word)
     }
 
-    /// Get the full current buffer
     pub fn get_buffer(&self) -> String {
         let state = self.state.read().unwrap();
         let mut buf = state.buffer.clone();
@@ -265,12 +230,10 @@ impl KeyboardEngine {
         buf
     }
 
-    /// Get pending consonant for UI underline
     pub fn get_pending(&self) -> Option<String> {
         self.state.read().unwrap().pending_consonant.clone()
     }
 
-    /// Get current partial word
     pub fn get_current_word(&self) -> String {
         let state = self.state.read().unwrap();
         let mut word = state.current_word.clone();
@@ -280,17 +243,14 @@ impl KeyboardEngine {
         word
     }
 
-    /// Check if nedil mode is active
     pub fn is_nedil_active(&self) -> bool {
         self.state.read().unwrap().nedil_active
     }
 
-    /// Get dictionary word count
     pub fn dictionary_size(&self) -> u32 {
         self.dict.word_count()
     }
 
-    /// Reset engine state
     pub fn reset(&self) {
         let mut state = self.state.write().unwrap();
         state.buffer.clear();
@@ -308,42 +268,44 @@ mod tests {
     #[test]
     fn test_vowel_standalone() {
         let eng = KeyboardEngine::new();
-        assert_eq!(eng.process_input("z"), "அ");
+        assert_eq!(eng.process_input("z".to_string()), "அ");
     }
 
     #[test]
     fn test_consonant_then_vowel() {
         let eng = KeyboardEngine::new();
-        assert_eq!(eng.process_input("q"), "");
-        assert_eq!(eng.process_input("z"), "க");
+        assert_eq!(eng.process_input("q".to_string()), "");
+        assert_eq!(eng.process_input("z".to_string()), "க");
     }
 
     #[test]
     fn test_long_vowel_nedil() {
         let eng = KeyboardEngine::new();
-        eng.process_input("q");
-        eng.process_input("nedil");
-        assert_eq!(eng.process_input("z"), "கா");
+        eng.process_input("q".to_string());
+        eng.process_input("nedil".to_string());
+        assert_eq!(eng.process_input("z".to_string()), "கா");
     }
 
     #[test]
     fn test_suggestions() {
         let eng = KeyboardEngine::new();
-        // Type "தமி" -> should suggest "தமிழ்"
-        eng.process_input("u"); // த் pending
-        eng.process_input("z"); // த
-        eng.process_input("p"); // ம் pending  
-        eng.process_input("x"); // மி
+        eng.process_input("u".to_string()); // த்
+        eng.process_input("z".to_string()); // த
+        eng.process_input("p".to_string()); // ம்
+        eng.process_input("x".to_string()); // மி
         let suggestions = eng.get_suggestions(5);
-        assert!(suggestions.iter().any(|s| s.contains("தமிழ")),
-            "Expected suggestion containing 'தமிழ', got: {:?}", suggestions);
+        assert!(
+            suggestions.iter().any(|s| s.contains("தமிழ")),
+            "Expected suggestion containing 'தமிழ', got: {:?}",
+            suggestions
+        );
     }
 
     #[test]
     fn test_word_boundary_tracking() {
-        let mut eng = KeyboardEngine::new();
-        eng.process_input("z"); // அ
-        eng.process_input(" "); // Space -> word boundary
+        let eng = KeyboardEngine::new();
+        eng.process_input("z".to_string()); // அ
+        eng.process_input(" ".to_string()); // space -> word boundary
         let state = eng.state.read().unwrap();
         assert_eq!(state.words.len(), 1);
         assert_eq!(state.words[0], "அ");
@@ -353,17 +315,17 @@ mod tests {
     #[test]
     fn test_dictionary_lookup() {
         let eng = KeyboardEngine::new();
-        assert!(eng.is_valid_word("நான்"));
-        assert!(!eng.is_valid_word("abcdef"));
+        assert!(eng.is_valid_word("நான்".to_string()));
+        assert!(!eng.is_valid_word("abcdef".to_string()));
     }
 
     #[test]
     fn test_current_word_tracking() {
         let eng = KeyboardEngine::new();
-        eng.process_input("u"); // த் pending
-        eng.process_input("z"); // த committed
+        eng.process_input("u".to_string()); // த்
+        eng.process_input("z".to_string()); // த committed
         assert_eq!(eng.get_current_word(), "த");
-        eng.process_input("p"); // ம் pending
+        eng.process_input("p".to_string()); // ம் pending
         assert_eq!(eng.get_current_word(), "தம்");
     }
 
@@ -376,22 +338,29 @@ mod tests {
     #[test]
     fn test_accept_suggestion() {
         let eng = KeyboardEngine::new();
-        eng.process_input("u"); // த் pending
-        eng.process_input("z"); // த
-        let result = eng.accept_suggestion("தமிழ்");
+        eng.process_input("u".to_string()); // த்
+        eng.process_input("z".to_string()); // த
+        let result = eng.accept_suggestion("தமிழ்".to_string());
         assert_eq!(result, "தமிழ்");
         assert_eq!(eng.get_current_word(), "தமிழ்");
     }
 
     #[test]
+    fn test_clear_resets_state() {
+        let eng = KeyboardEngine::new();
+        eng.process_input("z".to_string()); // அ
+        eng.process_input("q".to_string()); // க் pending
+        eng.process_input("clear".to_string());
+        assert_eq!(eng.get_buffer(), "");
+        assert_eq!(eng.get_current_word(), "");
+        assert!(eng.get_pending().is_none());
+    }
+
+    #[test]
     fn test_full_sentence() {
         let eng = KeyboardEngine::new();
-        // Type "நான் தமிழ்"
-        eng.process_input("i"); // ந் pending
-        eng.process_input("z"); // ந + அ -> ந... wait
-        // Actually: ந்+அ = ந
-        // Then ன் pending
-        // This tests the full pipeline
+        eng.process_input("i".to_string()); // ந்
+        eng.process_input("z".to_string()); // ந
         let buf = eng.get_buffer();
         assert!(!buf.is_empty());
     }
