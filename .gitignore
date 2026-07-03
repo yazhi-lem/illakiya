@@ -31,3 +31,8 @@ Thumbs.db
 __pycache__/
 *.pyc
 .env
+
+# Web
+web/node_modules/
+web/dist/
+web/*.tsbuildinfo
