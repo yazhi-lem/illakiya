@@ -1,5 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import type { KeyboardEvent } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AppHeader } from './components/AppHeader';
 import { EditorPane } from './components/EditorPane';
 import { KeyboardDock } from './components/KeyboardDock';
@@ -7,39 +6,21 @@ import { NotesSidebar } from './components/NotesSidebar';
 import { TutorPane } from './components/TutorPane';
 import { keyboardRows } from './constants/keyboard';
 import { lessons } from './constants/lessons';
-import { STORAGE_KEY, createNote, extractTags, parseNotes } from './lib/notes';
-import { composePm0100, revertPm0100Composition } from './lib/pm0100';
+import { STORAGE_KEY, createNote, parseNotes, updateNoteContent } from './lib/notes';
+import { backspaceInContentEditable, insertInContentEditable } from './lib/pm0100';
 import type { AppView, Note } from './types';
 
 const shortcutToTamilKey: Record<string, string> = {
-  q: 'க்',
-  w: 'ச்',
-  e: 'ட்',
-  r: 'த்',
-  t: 'ப்',
-  y: 'ற்',
-  a: 'ய்',
-  s: 'ர்',
-  d: 'ல்',
-  f: 'வ்',
-  g: 'ழ்',
-  h: 'ள்',
-  z: 'ங்',
-  x: 'ஞ்',
-  c: 'ண்',
-  v: 'ந்',
-  b: 'ம்',
-  n: 'ன்',
-  '1': 'அ',
-  '2': 'இ',
-  '3': 'உ',
-  '4': 'எ',
-  '5': 'ஒ',
-  u: 'அ',
-  i: 'இ',
-  o: 'உ',
-  p: 'எ',
-  '[': 'ஒ',
+  // consonants
+  q: 'க்', w: 'ச்', e: 'ட்', r: 'த்', t: 'ப்', y: 'ற்',
+  a: 'ய்', s: 'ர்', d: 'ல்', f: 'வ்', g: 'ழ்', h: 'ள்',
+  z: 'ங்', x: 'ஞ்', c: 'ண்', v: 'ந்', b: 'ம்', n: 'ன்',
+  // short vowels (number row)
+  '1': 'அ', '2': 'இ', '3': 'உ', '4': 'எ', '5': 'ஒ',
+  // short vowels (letter aliases)
+  u: 'அ', i: 'இ', o: 'உ', p: 'எ', '[': 'ஒ',
+  // long vowels
+  '6': 'ஆ', '7': 'ஈ', '8': 'ஊ', '9': 'ஏ', '0': 'ஓ',
 };
 
 export default function App() {
@@ -50,205 +31,139 @@ export default function App() {
     return loaded[0]?.id ?? createNote().id;
   });
 
-  const activeNote = useMemo(() => {
-    return notes.find((note) => note.id === activeNoteId) ?? notes[0];
-  }, [notes, activeNoteId]);
+  const editorRef = useRef<HTMLDivElement>(null);
 
-  const sortedNotes = useMemo(
-    () => [...notes].sort((a, b) => b.updatedAt - a.updatedAt),
-    [notes]
+  const activeNote = useMemo(
+    () => notes.find((n) => n.id === activeNoteId) ?? notes[0],
+    [notes, activeNoteId],
   );
 
-  const activeTags = useMemo(() => extractTags(activeNote?.content ?? ''), [activeNote]);
-  const editorRef = useRef<HTMLTextAreaElement>(null);
+  const sortedNotes = useMemo(() => [...notes].sort((a, b) => b.updatedAt - a.updatedAt), [notes]);
 
+  // Persist on change
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
   }, [notes]);
 
-  const createNewNote = () => {
+  const createNewNote = useCallback(() => {
     const note = createNote();
     setNotes((prev) => [note, ...prev]);
     setActiveNoteId(note.id);
-  };
+  }, []);
 
-  const updateActiveNote = (nextContent: string) => {
-    if (!activeNote) {
-      return;
-    }
-
-    setNotes((prev) =>
-      prev.map((note) => {
-        if (note.id !== activeNote.id) {
-          return note;
+  const deleteNote = useCallback(
+    (id: string) => {
+      setNotes((prev) => {
+        const next = prev.filter((n) => n.id !== id);
+        if (next.length === 0) {
+          const fresh = createNote();
+          setActiveNoteId(fresh.id);
+          return [fresh];
         }
+        if (id === activeNoteId) {
+          setActiveNoteId(next[0].id);
+        }
+        return next;
+      });
+    },
+    [activeNoteId],
+  );
 
-        const firstLine = nextContent
-          .split('\n')
-          .find((line) => line.trim().length > 0)
-          ?.replace(/^#+\s*/, '')
-          .trim();
-
-        return {
-          ...note,
-          content: nextContent,
-          title: firstLine || 'தலைப்பில்லா குறிப்பு',
-          updatedAt: Date.now(),
-        };
-      })
+  // Called by EditorPane's onInput — reads innerHTML and persists
+  const handleEditorInput = useCallback(() => {
+    const el = editorRef.current;
+    if (!el || !activeNote) return;
+    const html = el.innerHTML;
+    setNotes((prev) =>
+      prev.map((n) => (n.id === activeNote.id ? updateNoteContent(n, html) : n)),
     );
-  };
+  }, [activeNote]);
 
-  const updateActiveAndSelection = (nextContent: string, nextSelection: number) => {
-    updateActiveNote(nextContent);
-    requestAnimationFrame(() => {
-      const editor = editorRef.current;
-      if (!editor) {
+  // Keyboard shortcut → Tamil insertion in the contenteditable
+  const handleEditorKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+      if (event.key === 'Backspace') {
+        const el = editorRef.current;
+        if (!el) return;
+        event.preventDefault();
+        backspaceInContentEditable(el);
         return;
       }
-      editor.focus();
-      editor.setSelectionRange(nextSelection, nextSelection);
-    });
-  };
 
-  const insertTextAtCursor = (value: string) => {
-    const editor = editorRef.current;
-    if (!activeNote || !editor) {
-      return;
+      const mapped = shortcutToTamilKey[event.key.toLowerCase()];
+      if (!mapped) return;
+      event.preventDefault();
+      const el = editorRef.current;
+      if (el) insertInContentEditable(el, mapped);
+    },
+    [],
+  );
+
+  // Keyboard dock presses
+  const handleDockKey = useCallback((value: string) => {
+    const el = editorRef.current;
+    if (el) insertInContentEditable(el, value);
+  }, []);
+
+  const handleDockSpace = useCallback(() => {
+    const el = editorRef.current;
+    if (el) {
+      el.focus();
+      document.execCommand('insertText', false, ' ');
     }
+  }, []);
 
-    const start = editor.selectionStart ?? activeNote.content.length;
-    const end = editor.selectionEnd ?? activeNote.content.length;
-    const before = activeNote.content.slice(0, start);
-    const after = activeNote.content.slice(end);
+  const handleDockBackspace = useCallback(() => {
+    const el = editorRef.current;
+    if (el) backspaceInContentEditable(el);
+  }, []);
 
-    const composed = composePm0100(before, value);
-    const next = `${composed.before}${composed.inserted}${after}`;
-    const caret = composed.before.length + composed.inserted.length;
-    updateActiveAndSelection(next, caret);
-  };
-
-  const backspaceAtCursor = () => {
-    const editor = editorRef.current;
-    if (!activeNote || !editor) {
-      return;
-    }
-
-    const start = editor.selectionStart ?? activeNote.content.length;
-    const end = editor.selectionEnd ?? activeNote.content.length;
-
-    if (start !== end) {
-      const next = `${activeNote.content.slice(0, start)}${activeNote.content.slice(end)}`;
-      updateActiveAndSelection(next, start);
-      return;
-    }
-
-    if (start <= 0) {
-      return;
-    }
-
-    const before = activeNote.content.slice(0, start);
-    const after = activeNote.content.slice(start);
-
-    const reverted = revertPm0100Composition(before);
-    if (reverted.changed) {
-      const next = `${reverted.value}${after}`;
-      updateActiveAndSelection(next, reverted.value.length);
-      return;
-    }
-
-    const next = `${activeNote.content.slice(0, start - 1)}${activeNote.content.slice(start)}`;
-    updateActiveAndSelection(next, start - 1);
-  };
-
-  const exportText = () => {
-    if (!activeNote) {
-      return;
-    }
-
-    const blob = new Blob([activeNote.content], { type: 'text/plain;charset=utf-8' });
+  const exportNote = useCallback(() => {
+    if (!activeNote) return;
+    const blob = new Blob([activeNote.content], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `${activeNote.title || 'illakiya-note'}.txt`;
-    anchor.click();
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${activeNote.title || 'illakiya'}.html`;
+    a.click();
     URL.revokeObjectURL(url);
-  };
-
-  const shareToWhatsapp = () => {
-    if (!activeNote) {
-      return;
-    }
-    const message = encodeURIComponent(activeNote.content.slice(0, 1500));
-    window.open(`https://wa.me/?text=${message}`, '_blank', 'noopener,noreferrer');
-  };
-
-  const shareToSignal = () => {
-    if (!activeNote) {
-      return;
-    }
-    const message = encodeURIComponent(activeNote.content.slice(0, 1500));
-    window.open(`https://signal.me/#p?text=${message}`, '_blank', 'noopener,noreferrer');
-  };
-
-  const handleEditorKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.ctrlKey || event.metaKey || event.altKey) {
-      return;
-    }
-
-    if (event.key === 'Backspace') {
-      event.preventDefault();
-      backspaceAtCursor();
-      return;
-    }
-
-    if (event.key === ' ') {
-      event.preventDefault();
-      insertTextAtCursor(' ');
-      return;
-    }
-
-    const mapped = shortcutToTamilKey[event.key.toLowerCase()];
-    if (!mapped) {
-      return;
-    }
-
-    event.preventDefault();
-    insertTextAtCursor(mapped);
-  };
+  }, [activeNote]);
 
   return (
     <main className="appShell">
       <AppHeader view={view} onChangeView={setView} />
 
       {view === 'tutor' ? (
-        <TutorPane lessons={lessons} />
+        <div className="tutorWrap">
+          <TutorPane lessons={lessons} />
+        </div>
       ) : (
-        <section className="editorLayout withKeyboard">
+        <section className="editorLayout">
           <NotesSidebar
             notes={sortedNotes}
             activeNoteId={activeNote?.id}
             onSelect={setActiveNoteId}
             onCreate={createNewNote}
+            onDelete={deleteNote}
           />
 
-          <EditorPane
-            activeNote={activeNote}
-            activeTags={activeTags}
-            editorRef={editorRef}
-            onChangeContent={updateActiveNote}
-            onKeyDown={handleEditorKeyDown}
-            onExportText={exportText}
-            onShareWhatsapp={shareToWhatsapp}
-            onShareSignal={shareToSignal}
-          />
-
-          <KeyboardDock
-            rows={keyboardRows}
-            onKey={insertTextAtCursor}
-            onSpace={() => insertTextAtCursor(' ')}
-            onBackspace={backspaceAtCursor}
-          />
+          <div className="editorMain">
+            <EditorPane
+              activeNote={activeNote}
+              editorRef={editorRef}
+              onInput={handleEditorInput}
+              onExport={exportNote}
+              onKeyDown={handleEditorKeyDown}
+            />
+            <KeyboardDock
+              rows={keyboardRows}
+              onKey={handleDockKey}
+              onSpace={handleDockSpace}
+              onBackspace={handleDockBackspace}
+            />
+          </div>
         </section>
       )}
     </main>

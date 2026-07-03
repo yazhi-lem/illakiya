@@ -1,4 +1,5 @@
-import React, {useRef} from "react";
+import React, { useRef } from 'react';
+import { CONSONANT_ROW_COUNT } from '../constants/keyboard';
 
 type KeyboardDockProps = {
   rows: string[][];
@@ -11,95 +12,93 @@ export function KeyboardDock({ rows, onKey, onSpace, onBackspace }: KeyboardDock
   const buttonRefs = useRef<(HTMLButtonElement | null)[][]>([]);
 
   function focusButton(r: number, c: number) {
-    const row = buttonRefs.current[r];
-    if (!row) return;
-    const el = row[c];
-    if (el) el.focus();
+    buttonRefs.current[r]?.[c]?.focus();
   }
 
-  function handleArrowNavigation(e: React.KeyboardEvent, rowIndex: number, colIndex: number) {
-    const key = e.key;
-    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(key)) return;
+  function handleArrow(e: React.KeyboardEvent, row: number, col: number) {
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
     e.preventDefault();
-
-    if (key === 'ArrowRight') {
-      focusButton(rowIndex, colIndex + 1);
-      return;
-    }
-    if (key === 'ArrowLeft') {
-      focusButton(rowIndex, colIndex - 1);
-      return;
-    }
-    if (key === 'ArrowDown') {
-      focusButton(rowIndex + 1, colIndex);
-      return;
-    }
-    if (key === 'ArrowUp') {
-      focusButton(rowIndex - 1, colIndex);
-      return;
-    }
+    if (e.key === 'ArrowRight') focusButton(row, col + 1);
+    if (e.key === 'ArrowLeft') focusButton(row, col - 1);
+    if (e.key === 'ArrowDown') focusButton(row + 1, col);
+    if (e.key === 'ArrowUp') focusButton(row - 1, col);
   }
+
+  const shortVowelRowIdx = CONSONANT_ROW_COUNT;
+  const longVowelRowIdx = CONSONANT_ROW_COUNT + 1;
+  const lastRowIdx = rows.length - 1;
 
   return (
     <aside className="keyboardDock">
-      <div id="keyboard-instructions" className="sr-only">
-        Use arrow keys to navigate the keyboard. Press Enter or Space to activate a key.
+      <div id="kbd-hint" className="sr-only">
+        Arrow keys to navigate. Enter or Space to press a key.
       </div>
       <div
-        className="keyboardPanel attached big"
+        className="keyboardPanel"
         role="toolbar"
-        aria-label="PM0100 keyboard"
-        aria-describedby="keyboard-instructions"
+        aria-label="PM0100 Tamil keyboard"
+        aria-describedby="kbd-hint"
       >
-        {rows.map((row, rowIndex) => (
-          <div className="keyboardRow" role="row" key={`attach-row-${rowIndex}`}>
-            {row.map((k, colIndex) => (
-              <button
-                key={`${rowIndex}-${k}-${colIndex}`}
-                ref={(el) => {
-                  buttonRefs.current[rowIndex] = buttonRefs.current[rowIndex] || [];
-                  buttonRefs.current[rowIndex][colIndex] = el;
-                }}
-                aria-label={`Key ${k}`}
-                onClick={() => onKey(k)}
-                onKeyDown={(e) => handleArrowNavigation(e, rowIndex, colIndex)}
-              >
-                {k}
-              </button>
-            ))}
+        {rows.map((row, ri) => {
+          const isShortVowel = ri === shortVowelRowIdx;
+          const isLongVowel = ri === longVowelRowIdx;
+          const isLast = ri === lastRowIdx;
+          const rowClass = [
+            'keyboardRow',
+            isShortVowel ? 'shortVowelRow' : '',
+            isLongVowel ? 'longVowelRow' : '',
+          ]
+            .filter(Boolean)
+            .join(' ');
 
-            {rowIndex === rows.length - 1 ? (
-              <>
+          return (
+            <div className={rowClass} role="row" key={ri}>
+              {row.map((k, ci) => (
                 <button
-                  key={`space-${rowIndex}`}
+                  key={k}
                   ref={(el) => {
-                    const c = row.length;
-                    buttonRefs.current[rowIndex] = buttonRefs.current[rowIndex] || [];
-                    buttonRefs.current[rowIndex][c] = el;
+                    buttonRefs.current[ri] = buttonRefs.current[ri] || [];
+                    buttonRefs.current[ri][ci] = el;
                   }}
-                  aria-label={`Space`}
-                  onClick={onSpace}
-                  onKeyDown={(e) => handleArrowNavigation(e, rowIndex, row.length)}
+                  aria-label={k}
+                  onClick={() => onKey(k)}
+                  onKeyDown={(e) => handleArrow(e, ri, ci)}
                 >
-                  ⎵
+                  {k}
                 </button>
-                <button
-                  key={`back-${rowIndex}`}
-                  ref={(el) => {
-                    const c = row.length + 1;
-                    buttonRefs.current[rowIndex] = buttonRefs.current[rowIndex] || [];
-                    buttonRefs.current[rowIndex][c] = el;
-                  }}
-                  aria-label={`Backspace`}
-                  onClick={onBackspace}
-                  onKeyDown={(e) => handleArrowNavigation(e, rowIndex, row.length + 1)}
-                >
-                  ⌫
-                </button>
-              </>
-            ) : null}
-          </div>
-        ))}
+              ))}
+
+              {isLast && (
+                <>
+                  <button
+                    className="spaceKey"
+                    ref={(el) => {
+                      buttonRefs.current[ri] = buttonRefs.current[ri] || [];
+                      buttonRefs.current[ri][row.length] = el;
+                    }}
+                    aria-label="Space"
+                    onClick={onSpace}
+                    onKeyDown={(e) => handleArrow(e, ri, row.length)}
+                  >
+                    இடம்
+                  </button>
+                  <button
+                    className="backspaceKey"
+                    ref={(el) => {
+                      buttonRefs.current[ri] = buttonRefs.current[ri] || [];
+                      buttonRefs.current[ri][row.length + 1] = el;
+                    }}
+                    aria-label="Backspace"
+                    onClick={onBackspace}
+                    onKeyDown={(e) => handleArrow(e, ri, row.length + 1)}
+                  >
+                    ⌫
+                  </button>
+                </>
+              )}
+            </div>
+          );
+        })}
       </div>
     </aside>
   );

@@ -8,15 +8,26 @@ type AppHeaderProps = {
 export function AppHeader({ view, onChangeView }: AppHeaderProps) {
   return (
     <header className="topBar">
-      <h1>🎵 இலக்கியா V2</h1>
-      <div className="viewSwitch">
-        <button className={view === 'editor' ? 'active' : ''} onClick={() => onChangeView('editor')}>
-          PM0100 திருத்தி
-        </button>
-        <button className={view === 'tutor' ? 'active' : ''} onClick={() => onChangeView('tutor')}>
-          தட்டச்சு பயிற்சி
-        </button>
+      <div className="brand">
+        <span className="brandName">இலக்கியா</span>
+        <span className="brandSub">Tamil Document Writer</span>
       </div>
+      <nav className="viewSwitch" aria-label="View switcher">
+        <button
+          className={view === 'editor' ? 'active' : ''}
+          onClick={() => onChangeView('editor')}
+          aria-pressed={view === 'editor'}
+        >
+          எழுத்தாளர்
+        </button>
+        <button
+          className={view === 'tutor' ? 'active' : ''}
+          onClick={() => onChangeView('tutor')}
+          aria-pressed={view === 'tutor'}
+        >
+          பயிற்சி
+        </button>
+      </nav>
     </header>
   );
 }

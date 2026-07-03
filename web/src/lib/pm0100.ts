@@ -19,18 +19,26 @@ const meiToUyirBase: Record<string, string> = {
   'ன்': 'ன',
 };
 
+// All vowels (short + long) with their combining diacritic signs
 const vowelSigns: Record<string, string> = {
   அ: '',
   இ: 'ி',
   உ: 'ு',
   எ: 'ெ',
   ஒ: 'ொ',
+  ஆ: 'ா',
+  ஈ: 'ீ',
+  ஊ: 'ூ',
+  ஏ: 'ே',
+  ஓ: 'ோ',
+  ஐ: 'ை',
+  ஔ: 'ௌ',
 };
 
-const shortVowels = new Set(Object.keys(vowelSigns));
+const allVowels = new Set(Object.keys(vowelSigns));
 
 export function composePm0100(before: string, key: string): { before: string; inserted: string } {
-  if (!shortVowels.has(key)) {
+  if (!allVowels.has(key)) {
     return { before, inserted: key };
   }
 
@@ -59,4 +67,65 @@ export function revertPm0100Composition(before: string): { changed: boolean; val
   }
 
   return { changed: false, value: before };
+}
+
+// --- contenteditable helpers ---
+
+export function insertInContentEditable(el: HTMLElement, value: string): void {
+  el.focus();
+  const sel = window.getSelection();
+  if (!sel || !sel.rangeCount) return;
+
+  const range = sel.getRangeAt(0);
+
+  // Collect text before the cursor across all text nodes
+  const preRange = document.createRange();
+  preRange.selectNodeContents(el);
+  preRange.setEnd(range.startContainer, range.startOffset);
+  const before = preRange.toString();
+
+  const composed = composePm0100(before, value);
+  const charsToDelete = before.length - composed.before.length;
+
+  for (let i = 0; i < charsToDelete; i++) {
+    document.execCommand('delete', false);
+  }
+  document.execCommand('insertText', false, composed.inserted);
+}
+
+export function backspaceInContentEditable(el: HTMLElement): void {
+  el.focus();
+  const sel = window.getSelection();
+  if (!sel || !sel.rangeCount) return;
+
+  const range = sel.getRangeAt(0);
+
+  // If text is selected, delete the selection
+  if (!range.collapsed) {
+    document.execCommand('delete', false);
+    return;
+  }
+
+  const preRange = document.createRange();
+  preRange.selectNodeContents(el);
+  preRange.setEnd(range.startContainer, range.startOffset);
+  const before = preRange.toString();
+
+  if (!before.length) return;
+
+  const reverted = revertPm0100Composition(before);
+  if (reverted.changed) {
+    // Mei is always 2 chars (consonant + pulli). Use that to compute
+    // how many composed chars we need to delete before inserting the mei.
+    const MEI_LEN = 2;
+    const composedLen = before.length - reverted.value.length + MEI_LEN;
+    for (let i = 0; i < composedLen; i++) {
+      document.execCommand('delete', false);
+    }
+    const mei = reverted.value.slice(-MEI_LEN);
+    document.execCommand('insertText', false, mei);
+    return;
+  }
+
+  document.execCommand('delete', false);
 }

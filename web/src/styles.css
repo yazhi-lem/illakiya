@@ -1,450 +1,543 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;500;600;700&family=Noto+Serif+Tamil:wght@400;600;700&display=swap');
 
+/* ── Design tokens ─────────────────────────────────────────────────── */
 :root {
-  --bg: #f6f3ed;
-  --surface: #fffcf7;
-  --surface-soft: #f1ece3;
-  --border: #ddd6cb;
-  --text: #2a2621;
-  --text-muted: #6b645b;
-  --accent: #413a33;
-  --radius: 10px;
+  --hdr: #1a130d;
+  --hdr-border: #2e2118;
+  --gold: #c9973e;
+  --gold-dim: #9b7230;
+  --gold-pale: #f5e6c8;
+  --red: #8b1a1a;
+  --doc-bg: #fefaf4;
+  --doc-shadow: 0 1px 8px rgba(0,0,0,.14), 0 0 0 1px rgba(0,0,0,.06);
+  --sidebar-bg: #f5ede0;
+  --sidebar-border: #ddd0bc;
+  --kbd-bg: #231810;
+  --kbd-border: #3b2518;
+  --key-bg: #3d2f24;
+  --key-hover: #513d2f;
+  --key-text: #f0e0c8;
+  --key-shadow: 0 2px 0 rgba(0,0,0,.45);
+  --vowel-bg: #3b2210;
+  --vowel-text: #e8b86a;
+  --long-vowel-bg: #2e1a09;
+  --long-vowel-text: #d4a050;
+  --bs-bg: #4a1212;
+  --bs-text: #ffaaaa;
+  --text: #1a1005;
+  --text-2: #6b5e4a;
+  --text-light: #f0e0c8;
+  --border: #ddd0bc;
+  --fmt-bar: #fff;
+  --fmt-hover: #f5ede0;
+  --fmt-active-bg: rgba(201,151,62,.18);
+  --fmt-active-text: #7a5010;
+  --space-bg: #2a3a1a;
+  --space-text: #a8d08a;
+  --radius: 6px;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* ── Reset ──────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+button { font-family: inherit; cursor: pointer; }
+input  { font-family: inherit; }
 
-html,
-body,
-#root {
+html, body, #root {
+  height: 100%;
   width: 100%;
-  min-height: 100%;
 }
 
 body {
-  background: var(--bg);
+  background: #111;
   color: var(--text);
-  font-family: 'Noto Sans Tamil', 'Nirmala UI', 'Latha', 'Vijaya', system-ui, sans-serif;
+  font-family: 'Noto Sans Tamil', 'Nirmala UI', 'Latha', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* ── App shell ──────────────────────────────────────────────────────── */
 .appShell {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 10px;
   overflow: hidden;
 }
 
+/* ── Top bar ────────────────────────────────────────────────────────── */
 .topBar {
+  background: var(--hdr);
+  border-bottom: 1px solid var(--hdr-border);
+  height: 50px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 10px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 10px 12px;
+  padding: 0 1.1rem;
+  gap: 1.25rem;
+  flex-shrink: 0;
 }
 
-.topBar h1 {
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+}
+
+.brandName {
+  color: var(--gold);
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+
+.brandSub {
+  color: var(--text-light);
+  opacity: .38;
+  font-size: .72rem;
+  letter-spacing: .04em;
 }
 
 .viewSwitch {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  width: min(100%, 360px);
+  display: flex;
+  gap: 3px;
+  background: rgba(255,255,255,.07);
+  padding: 3px;
+  border-radius: 8px;
+  margin-left: auto;
 }
 
-.viewSwitch button,
-.sidebarHead button,
-.actions button,
-.keyboardControlBar button {
-  min-height: 40px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface-soft);
-  color: var(--text);
-  padding: 8px 10px;
-  font-size: 0.9rem;
-  font-family: inherit;
-  cursor: pointer;
+.viewSwitch button {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  opacity: .6;
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-size: .8rem;
+  transition: background .12s, opacity .12s;
 }
+
+.viewSwitch button:hover { opacity: .9; }
 
 .viewSwitch button.active {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
+  background: var(--gold);
+  color: var(--hdr);
+  opacity: 1;
+  font-weight: 600;
 }
 
+/* ── Editor layout (CSS grid) ───────────────────────────────────────── */
 .editorLayout {
   flex: 1;
   min-height: 0;
-  height: 100%;
   display: grid;
-  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
-  gap: 10px;
+  grid-template-columns: 220px 1fr;
+  grid-template-rows: 1fr;
 }
 
-/* When keyboard is visible, make a two-row layout: notes+editor on top, keyboard at bottom */
-.editorLayout.withKeyboard {
-  display: grid;
-  grid-template-columns: minmax(220px, 300px) 1fr;
-  grid-template-rows: 1fr 35vh;
-  gap: 10px;
-  grid-template-areas:
-    "notes editor"
-    "keyboard keyboard";
-}
-
-.editorLayout.withKeyboard > .sidebar {
-  grid-area: notes;
-}
-
-.editorLayout.withKeyboard > .editorPane {
-  grid-area: editor;
-}
-
-.editorLayout.withKeyboard > .keyboardDock {
-  grid-area: keyboard;
-}
-
-.sidebar,
-.editorPane,
-.keyboardDock,
-.lessonCard {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  height: 100%;
-}
-
-.sidebar {
-  min-height: 0;
+.editorMain {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 10px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Sidebar ────────────────────────────────────────────────────────── */
+.sidebar {
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .sidebarHead {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  padding: .6rem .85rem;
+  border-bottom: 1px solid var(--sidebar-border);
+  flex-shrink: 0;
 }
 
 .sidebarHead h2 {
-  font-size: 0.96rem;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: .06em;
 }
+
+.sidebarHead button {
+  background: var(--gold);
+  color: var(--hdr);
+  border: none;
+  padding: 3px 10px;
+  border-radius: 5px;
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.sidebarHead button:hover { background: #d9a84e; }
+
+.sidebarSearch {
+  padding: .45rem .6rem;
+  border-bottom: 1px solid var(--sidebar-border);
+  flex-shrink: 0;
+}
+
+.sidebarSearch input {
+  width: 100%;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: .8rem;
+  color: var(--text);
+  outline: none;
+}
+
+.sidebarSearch input:focus { border-color: var(--gold-dim); }
 
 .noteList {
-  min-height: 0;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.noteItem {
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px;
-  text-align: left;
-  color: var(--text);
+  flex: 1;
+  overflow-y: auto;
+  padding: .3rem .4rem;
   display: flex;
   flex-direction: column;
   gap: 2px;
-  font-family: inherit;
-  cursor: pointer;
 }
+
+.noteItemWrap {
+  position: relative;
+  display: flex;
+}
+
+.noteItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: none;
+  border: none;
+  border-radius: var(--radius);
+  padding: .55rem .7rem;
+  text-align: left;
+  color: var(--text);
+  transition: background .1s;
+  min-width: 0;
+}
+
+.noteItem:hover { background: rgba(0,0,0,.06); }
+.noteItem.active { background: rgba(201,151,62,.14); }
 
 .noteItem strong {
-  font-size: 0.9rem;
+  font-size: .84rem;
   line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.noteItem span {
-  font-size: 0.72rem;
-  color: var(--text-muted);
+.noteDate {
+  font-size: .68rem;
+  color: var(--text-2);
 }
 
-.noteItem.active {
-  border-color: var(--accent);
+.notePreview {
+  font-size: .72rem;
+  color: var(--text-2);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
 }
 
+.noteItemDelete {
+  display: none;
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-2);
+  font-size: .7rem;
+  padding: 3px 5px;
+  border-radius: 4px;
+}
+
+.noteItemWrap:hover .noteItemDelete { display: block; }
+.noteItemDelete:hover { background: #dc2626; color: #fff; }
+
+.emptyState {
+  font-size: .8rem;
+  color: var(--text-2);
+  padding: .75rem .7rem;
+  text-align: center;
+}
+
+/* ── Editor pane ────────────────────────────────────────────────────── */
 .editorPane {
-  min-height: 0;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 10px;
-}
-
-.editorToolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.tagsWrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.tagsWrap span {
-  background: var(--surface-soft);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 3px 9px;
-  font-size: 0.76rem;
-  color: var(--text-muted);
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.editorStack,
-.editorTextWrap {
   min-height: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
+  overflow: hidden;
+  background: #e8ddd0;
 }
 
-.markdownEditor {
-  flex: 1;
-  width: 100%;
-  min-height: 360px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #fff;
+/* ── Format bar ─────────────────────────────────────────────────────── */
+.formatBar {
+  background: var(--fmt-bar);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 3px 8px;
+  gap: 1px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.fmtSep {
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+.fmtBtn {
+  background: none;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 7px;
+  font-size: .8rem;
   color: var(--text);
-  font-family: 'Noto Sans Tamil', 'Nirmala UI', 'Latha', 'Vijaya', system-ui, sans-serif;
-  font-size: clamp(1rem, 1.6vw, 1.06rem);
-  line-height: 1.65;
-  padding: 12px;
-  resize: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .1s;
+  flex-shrink: 0;
 }
 
-.markdownEditor:focus {
-  outline: 2px solid #c5bdaf;
-  outline-offset: 1px;
+.fmtBtn:hover { background: var(--fmt-hover); }
+
+.fmtBtn.active {
+  background: var(--fmt-active-bg);
+  color: var(--fmt-active-text);
+  font-weight: 600;
+}
+
+.wordCount {
+  margin-left: auto;
+  font-size: .7rem;
+  color: var(--text-2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.exportBtn { color: var(--gold-dim); font-weight: 600; }
+.exportBtn:hover { background: var(--gold-pale); }
+
+/* ── Document scroll area ───────────────────────────────────────────── */
+.documentScroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* ── The "page" ─────────────────────────────────────────────────────── */
+.richEditor {
+  background: var(--doc-bg);
+  width: 100%;
+  max-width: 700px;
+  min-height: calc(100% - 2px);
+  padding: 3rem 3.5rem;
+  box-shadow: var(--doc-shadow);
+  border-radius: 2px;
+  font-family: 'Noto Serif Tamil', 'Latha', Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--text);
+  outline: none;
+}
+
+.richEditor:focus {
+  box-shadow: var(--doc-shadow), 0 0 0 2px rgba(201,151,62,.25);
+}
+
+.richEditor h1 { font-size: 1.8rem; font-weight: 700; margin: 0 0 .6rem; line-height: 1.3; }
+.richEditor h2 { font-size: 1.35rem; font-weight: 600; margin: 1.2rem 0 .4rem; line-height: 1.4; }
+.richEditor h3 { font-size: 1.1rem; font-weight: 600; margin: 1rem 0 .3rem; }
+.richEditor p  { margin-bottom: .6rem; }
+.richEditor ul, .richEditor ol { padding-left: 1.6rem; margin: .4rem 0 .8rem; }
+.richEditor li { margin-bottom: .25rem; }
+.richEditor blockquote {
+  border-left: 3px solid var(--gold);
+  padding: .4rem 1rem;
+  color: var(--text-2);
+  font-style: italic;
+  margin: 1rem 0;
 }
 
 .saveHint {
-  font-size: 0.78rem;
-  color: var(--text-muted);
+  font-size: .7rem;
+  color: var(--text-2);
+  text-align: right;
+  padding: 3px 10px;
+  flex-shrink: 0;
+  background: var(--fmt-bar);
+  border-top: 1px solid var(--border);
 }
 
+/* ── Keyboard dock ──────────────────────────────────────────────────── */
 .keyboardDock {
-  min-height: 0;
-  display: flex;
-  padding: 10px;
+  background: var(--kbd-bg);
+  border-top: 1px solid var(--kbd-border);
+  padding: 7px 8px 10px;
+  flex-shrink: 0;
 }
 
 .keyboardPanel {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  display: grid;
-  gap: 7px;
-  padding: 8px;
-}
-
-.keyboardPanel.attached {
-  width: 100%;
-  /* Make the attached keyboard occupy roughly 20% viewport height */
-  height: 35vh;
-  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-width: 680px;
+  margin: 0 auto;
 }
 
 .keyboardRow {
   display: flex;
   justify-content: center;
+  gap: 4px;
+}
+
+/* consonant keys */
+.keyboardDock button {
+  background: var(--key-bg);
+  color: var(--key-text);
+  border: none;
+  border-radius: 6px;
+  padding: 9px 4px;
+  min-width: 48px;
+  font-size: 1.05rem;
+  box-shadow: var(--key-shadow);
+  line-height: 1;
+  transition: background .1s, transform .06s;
+}
+
+.keyboardDock button:hover  { background: var(--key-hover); }
+.keyboardDock button:active { transform: translateY(1px); box-shadow: none; }
+.keyboardDock button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* short vowel row */
+.shortVowelRow button {
+  background: var(--vowel-bg) !important;
+  color: var(--vowel-text) !important;
+}
+.shortVowelRow button:hover { background: #4a2c14 !important; }
+
+/* long vowel row */
+.longVowelRow button {
+  background: var(--long-vowel-bg) !important;
+  color: var(--long-vowel-text) !important;
+  min-width: 42px;
+  font-size: .95rem;
+}
+.longVowelRow button:hover { background: #3a220c !important; }
+
+/* space key */
+.spaceKey {
+  background: var(--space-bg) !important;
+  color: var(--space-text) !important;
+  min-width: 72px !important;
+  font-size: .78rem !important;
+}
+.spaceKey:hover { background: #354a22 !important; }
+
+/* backspace key */
+.backspaceKey {
+  background: var(--bs-bg) !important;
+  color: var(--bs-text) !important;
+}
+.backspaceKey:hover { background: #5e1616 !important; }
+
+/* ── Tutor pane ─────────────────────────────────────────────────────── */
+.tutorWrap {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background: var(--sidebar-bg);
+}
+
+.tutorPane {
+  display: grid;
+  gap: 10px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.lessonCard {
+  background: var(--doc-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  display: grid;
+  gap: 8px;
+}
+
+.lessonCard h2 { font-size: 1rem; }
+.lessonCard p  { color: var(--text-2); font-size: .92rem; }
+
+.ghostKeys {
+  display: flex;
+  flex-wrap: wrap;
   gap: 6px;
 }
 
-.keyboardRow button {
-  min-width: 48px;
-  min-height: 48px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--surface-soft);
-  color: var(--text);
-  font-family: inherit;
+.ghostKey {
+  min-width: 42px;
+  height: 42px;
+  padding: 0 8px;
+  border-radius: 6px;
+  border: 1px dashed var(--border);
+  background: #f5f0e8;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   font-weight: 600;
-  font-size: 1.06rem;
-  padding: 0 10px;
-  cursor: pointer;
+  font-size: .95rem;
 }
 
-/* Visible focus styles for keyboard buttons */
-.keyboardRow button:focus-visible {
-  outline: 3px solid #f6b042;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 3px rgba(246,176,66,0.12);
-}
-
-/* Screen-reader only utility */
+/* ── Utility ────────────────────────────────────────────────────────── */
 .sr-only {
   position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
+  width: 1px !important; height: 1px !important;
+  padding: 0 !important; margin: -1px !important;
   overflow: hidden !important;
   clip: rect(0 0 0 0) !important;
   white-space: nowrap !important;
   border: 0 !important;
 }
 
-.keyboardPanel.big .keyboardRow button {
-  min-width: 62px;
-  min-height: 62px;
-  font-size: 1.24rem;
-}
-
-.tutorPane {
-  display: grid;
-  gap: 10px;
-}
-
-.lessonCard {
-  display: grid;
-  gap: 8px;
-  padding: 12px;
-}
-
-.lessonCard h2 {
-  font-size: 1.02rem;
-}
-
-.lessonCard p {
-  color: var(--text-muted);
-  font-size: 0.94rem;
-}
-
-.ghostKeys {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
-
-.ghostKey {
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0 8px;
-  border-radius: 8px;
-  border: 1px dashed #b5ada0;
-  background: var(--surface-soft);
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 600;
-}
-
-@media (max-width: 1280px) {
-  .keyboardPanel.big .keyboardRow button {
-    min-width: 56px;
-    min-height: 56px;
-    font-size: 1.14rem;
-  }
-}
-
-@media (max-width: 980px) {
-  .editorLayout,
-  .editorLayout.withKeyboard {
+/* ── Responsive ─────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .editorLayout {
     grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
   }
-
-  .sidebar,
-  .editorPane,
-  .keyboardDock {
-    min-height: auto;
-  }
-
-  .sidebar {
-    max-height: 240px;
-  }
-
-  .keyboardDock {
-    padding: 0;
-  }
-
-  .keyboardPanel.big .keyboardRow button {
-    min-width: 52px;
-    min-height: 52px;
-    font-size: 1.08rem;
-  }
+  .sidebar { max-height: 200px; border-right: none; border-bottom: 1px solid var(--sidebar-border); }
 }
 
-@media (max-width: 700px) {
-  .topBar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .viewSwitch {
-    width: 100%;
-  }
-
-  .actions button,
-  .sidebarHead button {
-    min-height: 38px;
-    font-size: 0.84rem;
-  }
-
-  .markdownEditor {
-    min-height: 52vh;
-  }
-
-  .keyboardRow {
-    gap: 4px;
-  }
-
-  .keyboardRow button {
-    min-width: 40px;
-    min-height: 40px;
-    font-size: 0.96rem;
-    padding: 0 7px;
-  }
-
-  .keyboardPanel.big .keyboardRow button {
-    min-width: 46px;
-    min-height: 46px;
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 420px) {
-  .appShell {
-    padding: 8px;
-  }
-
-  .topBar,
-  .sidebar,
-  .editorPane,
-  .lessonCard,
-  .keyboardDock {
-    border-radius: 8px;
-    padding: 8px;
-  }
-
-  .noteItem strong {
-    font-size: 0.84rem;
-  }
+@media (max-width: 640px) {
+  .richEditor { padding: 1.5rem 1.25rem; font-size: 1rem; }
+  .topBar { padding: 0 .75rem; }
+  .brandSub { display: none; }
+  .keyboardDock button { min-width: 40px; font-size: .92rem; padding: 8px 3px; }
+  .longVowelRow button { min-width: 36px; }
 }
