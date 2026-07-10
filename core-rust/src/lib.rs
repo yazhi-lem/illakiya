@@ -8,6 +8,9 @@ pub mod dictionary;
 pub mod sandhi;
 pub mod engine;
 
+#[cfg(feature = "wasm")]
+pub mod wasm;
+
 pub use engine::KeyboardEngine;
 pub use sandhi::AdhanSandhi;
 pub use dictionary::Dictionary;

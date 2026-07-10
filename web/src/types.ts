@@ -1,9 +1,10 @@
 export type AppView = 'editor' | 'tutor';
 
-export type Note = {
+export type Chapter = {
   id: string;
   title: string;
   content: string;
+  order: number;
   updatedAt: number;
 };
 

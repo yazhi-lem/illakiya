@@ -27,6 +27,12 @@ Thumbs.db
 # Generated UniFFI bindings (regenerated at build time)
 # android/app/src/main/java/com/yazhi/illakiya/core/
 
+# Node / Web
+node_modules/
+dist/
+# Generated WASM engine (built by scripts/build-wasm.sh)
+web/src/wasm/
+
 # Python
 __pycache__/
 *.pyc
