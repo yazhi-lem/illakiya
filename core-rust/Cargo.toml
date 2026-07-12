@@ -16,6 +16,8 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 anyhow = "1.0"
 log = "0.4"
+# Web build only — enabled via `--features wasm` (see scripts/build-wasm.sh).
+wasm-bindgen = { version = "0.2", optional = true }
 # ONNX Runtime for Adhan-Sandhi Phase 2 (ML-based ambiguous case resolution)
 # ort = { version = "1.16", features = ["load-dynamic"], optional = true }
 
@@ -25,3 +27,4 @@ uniffi = { version = "0.25", features = ["build"] }
 [features]
 default = []
 onnx = []
+wasm = ["dep:wasm-bindgen"]
