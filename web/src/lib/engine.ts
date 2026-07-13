@@ -32,8 +32,10 @@ export function suggest(prefixTamil: string, limit = 5): string[] {
   const prefix = prefixTamil.trim();
   if (!prefix) return [];
   const out: string[] = [];
+  const seen = new Set<string>();
   for (const w of BY_FREQ) {
-    if (w.tamil.startsWith(prefix) && w.tamil !== prefix) {
+    if (w.tamil.startsWith(prefix) && w.tamil !== prefix && !seen.has(w.tamil)) {
+      seen.add(w.tamil);
       out.push(w.tamil);
       if (out.length >= limit) break;
     }

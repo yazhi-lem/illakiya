@@ -265,15 +265,52 @@ body {
   cursor: pointer;
 }
 
-.suggestion.correction {
+.suggestion.primary {
   border-color: #8b2500;
   color: #8b2500;
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tabHint {
+  font-family: inherit;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #fff;
+  background: #8b2500;
+  border-radius: 5px;
+  padding: 1px 6px;
 }
 
 .suggestion:focus-visible {
   outline: 3px solid #f6b042;
   outline-offset: 2px;
+}
+
+.speakButton {
+  min-height: 38px;
+  min-width: 42px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-soft);
+  color: var(--text);
+  padding: 8px 10px;
+  font-size: 1.02rem;
+  line-height: 1;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.speakButton.speaking {
+  background: #8b2500;
+  border-color: #8b2500;
+}
+
+.speakButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .modeSwitch {

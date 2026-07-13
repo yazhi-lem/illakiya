@@ -1,18 +1,18 @@
 type SuggestionStripProps = {
   suggestions: string[];
-  correction?: string | null;
+  /** Recommended Tamil equivalent of the in-progress Taglish word (Tab accepts). */
+  recommendation?: string | null;
   onPick: (word: string) => void;
 };
 
 /**
- * Dictionary/auto-correct suggestions for the word being typed. A correction
- * (from `autoCorrect`) is highlighted first; the rest are Trie prefix matches
- * from the shared corpus. Tapping one replaces the current word.
+ * Word recommendations for the current word. In Taglish mode the first chip is
+ * the transliterated Tamil equivalent (accepted with Tab); the rest are
+ * dictionary prefix matches. Tapping any chip inserts it.
  */
-export function SuggestionStrip({ suggestions, correction, onPick }: SuggestionStripProps) {
-  const items = correction
-    ? [correction, ...suggestions.filter((s) => s !== correction)]
-    : suggestions;
+export function SuggestionStrip({ suggestions, recommendation, onPick }: SuggestionStripProps) {
+  const merged = recommendation ? [recommendation, ...suggestions] : suggestions;
+  const items = Array.from(new Set(merged)).slice(0, 6);
 
   if (!items.length) {
     return <div className="suggestionStrip empty" aria-hidden="true" />;
@@ -20,18 +20,22 @@ export function SuggestionStrip({ suggestions, correction, onPick }: SuggestionS
 
   return (
     <div className="suggestionStrip" role="listbox" aria-label="சொல் பரிந்துரைகள்">
-      {items.slice(0, 6).map((word, index) => (
-        <button
-          key={word}
-          type="button"
-          role="option"
-          aria-selected={index === 0 && Boolean(correction)}
-          className={index === 0 && correction ? 'suggestion correction' : 'suggestion'}
-          onClick={() => onPick(word)}
-        >
-          {word}
-        </button>
-      ))}
+      {items.map((word, index) => {
+        const isPrimary = index === 0 && Boolean(recommendation);
+        return (
+          <button
+            key={`${word}-${index}`}
+            type="button"
+            role="option"
+            aria-selected={isPrimary}
+            className={isPrimary ? 'suggestion primary' : 'suggestion'}
+            onClick={() => onPick(word)}
+          >
+            {word}
+            {isPrimary ? <kbd className="tabHint">⇥ Tab</kbd> : null}
+          </button>
+        );
+      })}
     </div>
   );
 }

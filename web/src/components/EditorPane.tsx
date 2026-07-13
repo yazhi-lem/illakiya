@@ -1,9 +1,10 @@
 import type { KeyboardEvent, RefObject } from 'react';
 import type { Chapter, InputMode } from '../types';
 import { SuggestionStrip } from './SuggestionStrip';
+import { SpeakButton } from './SpeakButton';
 
 const MODES: { id: InputMode; label: string; title: string }[] = [
-  { id: 'taglish', label: 'Taglish', title: 'Taglish → தமிழ் நேரடி மாற்றம்' },
+  { id: 'taglish', label: 'Taglish', title: 'Taglish எழுதி Tab அழுத்தவும் → தமிழ்' },
   { id: 'pm0100', label: 'PM0100', title: 'விசைப்பலகை நேரடி தமிழ் (Shift = நெடில்)' },
   { id: 'english', label: 'ABC', title: 'ஆங்கிலம் / raw English' },
 ];
@@ -18,7 +19,7 @@ type EditorPaneProps = {
   onKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
   onSelect: () => void;
   suggestions: string[];
-  correction: string | null;
+  recommendation: string | null;
   onPickSuggestion: (word: string) => void;
   onExportText: () => void;
 };
@@ -33,7 +34,7 @@ export function EditorPane({
   onKeyDown,
   onSelect,
   suggestions,
-  correction,
+  recommendation,
   onPickSuggestion,
   onExportText,
 }: EditorPaneProps) {
@@ -58,6 +59,7 @@ export function EditorPane({
           <span className="wordCount" aria-label="சொற்கள்">
             {wordCount} சொல்
           </span>
+          <SpeakButton getText={() => activeChapter?.content ?? ''} />
           <button className="exportButton" onClick={onExportText} title="உரையாக ஏற்றுமதி">
             ஏற்றுமதி
           </button>
@@ -76,7 +78,7 @@ export function EditorPane({
             onClick={onSelect}
             placeholder={
               inputMode === 'taglish'
-                ? 'Taglish-ல் எழுதுங்கள் — "vaNakkam" → வணக்கம் ...'
+                ? 'Taglish எழுதுங்கள் — "vanakkam" → Tab → வணக்கம் ...'
                 : inputMode === 'pm0100'
                   ? 'PM0100 — QWERTY விசைகளால் தமிழ் (Shift = நெடில்)...'
                   : 'தமிழில் / ஆங்கிலத்தில் எழுதுங்கள்...'
@@ -84,7 +86,7 @@ export function EditorPane({
           />
           <SuggestionStrip
             suggestions={suggestions}
-            correction={correction}
+            recommendation={recommendation}
             onPick={onPickSuggestion}
           />
           <p className="saveHint">உள்ளூரில் தானாகச் சேமிக்கப்பட்டது</p>
