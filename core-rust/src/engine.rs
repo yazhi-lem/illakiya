@@ -1,5 +1,5 @@
-use crate::layout::LayoutDef;
 use crate::dictionary::Dictionary;
+use crate::layout::LayoutDef;
 use crate::sandhi::AdhanSandhi;
 use std::sync::Arc;
 
@@ -150,7 +150,10 @@ impl KeyboardEngine {
     pub fn process_input(&self, key: String) -> String {
         let mut state = self.state.write().unwrap();
 
-        let vowel = self.layout.any_vowel_lookup(&key, state.nedil_active).cloned();
+        let vowel = self
+            .layout
+            .any_vowel_lookup(&key, state.nedil_active)
+            .cloned();
         if state.nedil_active {
             state.nedil_active = false;
         }

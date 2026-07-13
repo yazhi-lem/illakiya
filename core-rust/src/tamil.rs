@@ -1,5 +1,5 @@
-/// Tamil Unicode helpers — classifies characters by phonetic category.
-/// Based on Tholkaappiyam's three-class system.
+//! Tamil Unicode helpers — classifies characters by phonetic category.
+//! Based on Tholkaappiyam's three-class system.
 
 /// Vallinam (Hard consonants): க, ச, ட, த, ப, ற
 const VALLINAM: [char; 6] = ['க', 'ச', 'ட', 'த', 'ப', 'ற'];
@@ -70,7 +70,7 @@ pub fn ends_with_short_vowel(word: &str) -> bool {
     }
     // uyirmei without pulli has inherent short vowel
     let cp = last as u32;
-    if cp >= 0x0B95 && cp <= 0x0BD7 && !is_pulli(last) && !is_mei(last) {
+    if (0x0B95..=0x0BD7).contains(&cp) && !is_pulli(last) && !is_mei(last) {
         return true;
     }
     false
@@ -78,7 +78,7 @@ pub fn ends_with_short_vowel(word: &str) -> bool {
 
 /// Check if word ends with pulli (virama).
 pub fn ends_with_pulli(word: &str) -> bool {
-    word.chars().last().map_or(false, is_pulli)
+    word.chars().last().is_some_and(is_pulli)
 }
 
 /// Get the first consonant character of a word.

@@ -77,7 +77,7 @@ impl Dictionary {
                 *freq += 50;
             }
         }
-        candidates.sort_by(|a, b| b.1.cmp(&a.1));
+        candidates.sort_by_key(|c| std::cmp::Reverse(c.1));
         candidates.truncate(limit as usize);
         candidates.into_iter().map(|(w, _)| w).collect()
     }
@@ -102,8 +102,7 @@ impl Dictionary {
     #[uniffi::constructor]
     pub fn new() -> Arc<Self> {
         let json = include_str!("../../data/dictionary/tamil_base.json");
-        let dict_file: DictFile =
-            serde_json::from_str(json).expect("Invalid tamil_base.json");
+        let dict_file: DictFile = serde_json::from_str(json).expect("Invalid tamil_base.json");
 
         let mut trie = TrieNode::default();
         let mut entries = Vec::new();

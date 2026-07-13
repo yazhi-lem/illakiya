@@ -50,7 +50,8 @@ impl LayoutDef {
         if is_long {
             self.vowel_long_lookup(key)
         } else {
-            self.vowel_lookup(key).or_else(|| self.vowel_special_lookup(key))
+            self.vowel_lookup(key)
+                .or_else(|| self.vowel_special_lookup(key))
         }
     }
 
@@ -91,11 +92,7 @@ mod tests {
         let layout = LayoutDef::load_pm0100();
         let vowels = ["அ", "ஆ", "இ", "ஈ", "உ", "ஊ", "எ", "ஏ", "ஐ", "ஒ", "ஓ", "ஔ"];
         for v in vowels {
-            assert!(
-                layout.combine("த்", v).is_some(),
-                "Missing combo: த்+{}",
-                v
-            );
+            assert!(layout.combine("த்", v).is_some(), "Missing combo: த்+{}", v);
         }
     }
 
@@ -117,7 +114,8 @@ mod tests {
             chars.insert(v.clone());
         }
         for cons in layout.layers.base.values() {
-            for v in &["அ", "ஆ", "இ", "ஈ", "உ", "ஊ", "எ", "ஏ", "ஐ", "ஒ", "ஓ", "ஔ"] {
+            for v in &["அ", "ஆ", "இ", "ஈ", "உ", "ஊ", "எ", "ஏ", "ஐ", "ஒ", "ஓ", "ஔ"]
+            {
                 if let Some(combined) = layout.combine(cons, v) {
                     chars.insert(combined.clone());
                 }

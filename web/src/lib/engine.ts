@@ -1,13 +1,9 @@
 /**
- * Engine facade.
+ * Dictionary helpers for word suggestions and Tanglish auto-correct.
  *
- * The Illakiya Rust core (`core-rust/`) owns PM0100 composition, a Trie
- * dictionary and the Tholkaappiyam sandhi engine. This facade lets the web app
- * "leverage the rust engine better": when the WASM build
- * (`web/src/wasm/illakiya_core.js`, produced by `scripts/build-wasm.sh`) is
- * present it is used for native sandhi; otherwise everything runs in TypeScript
- * over the *same* dictionary data the Rust core embeds
- * (`data/dictionary/tamil_base.json`), so the editor always works.
+ * Backed by the same corpus the Illakiya Rust core embeds
+ * (`data/dictionary/tamil_base.json`), so the web editor stays in sync with the
+ * keyboard's vocabulary.
  */
 
 import dictionary from '@data/dictionary/tamil_base.json';
@@ -28,12 +24,6 @@ for (const w of BY_FREQ) {
   }
 }
 
-type NativeSandhi = {
-  get_sandhi_suggestion?: () => string | undefined;
-} | null;
-
-let nativeSandhi: NativeSandhi = null;
-
 /**
  * Dictionary prefix suggestions (Tamil), ranked by corpus frequency. Mirrors
  * the Rust `Dictionary::suggest_prefix`.
@@ -42,8 +32,10 @@ export function suggest(prefixTamil: string, limit = 5): string[] {
   const prefix = prefixTamil.trim();
   if (!prefix) return [];
   const out: string[] = [];
+  const seen = new Set<string>();
   for (const w of BY_FREQ) {
-    if (w.tamil.startsWith(prefix) && w.tamil !== prefix) {
+    if (w.tamil.startsWith(prefix) && w.tamil !== prefix && !seen.has(w.tamil)) {
+      seen.add(w.tamil);
       out.push(w.tamil);
       if (out.length >= limit) break;
     }
@@ -72,49 +64,4 @@ export function autoCorrect(romanSource: string, tamilWord: string): string | nu
     if (near.length) return near[0];
   }
   return null;
-}
-
-/**
- * Sandhi (grammar) join across a word boundary. Uses the native Rust engine
- * when the WASM build is loaded; otherwise returns null (we don't guess at
- * grammar in the fallback).
- */
-export function sandhiJoin(word1: string, word2: string): string | null {
-  if (!nativeSandhi?.get_sandhi_suggestion || !word1 || !word2) return null;
-  try {
-    return nativeSandhi.get_sandhi_suggestion() ?? null;
-  } catch {
-    return null;
-  }
-}
-
-export type EngineBackend = 'wasm' | 'ts';
-
-let backend: EngineBackend = 'ts';
-export function engineBackend(): EngineBackend {
-  return backend;
-}
-
-/**
- * Best-effort load of the native WASM engine. Safe to call once at startup; if
- * the artifact is absent (WASM not built) it silently stays on the TS backend.
- */
-export async function loadNativeEngine(): Promise<EngineBackend> {
-  try {
-    // Optional artifact produced by scripts/build-wasm.sh. The path is held in a
-    // variable so tsc/Vite don't statically require it; absence -> TS fallback.
-    const modPath = '../wasm/illakiya_core.js';
-    const mod: any = await import(/* @vite-ignore */ modPath).catch(() => null);
-    if (!mod) return backend;
-    if (typeof mod.default === 'function') {
-      await mod.default();
-    }
-    if (typeof mod.WasmEngine === 'function') {
-      nativeSandhi = new mod.WasmEngine();
-      backend = 'wasm';
-    }
-  } catch {
-    // stay on ts
-  }
-  return backend;
 }

@@ -21,16 +21,23 @@ const meiToUyirBase: Record<string, string> = {
 
 const vowelSigns: Record<string, string> = {
   அ: '',
+  ஆ: 'ா',
   இ: 'ி',
+  ஈ: 'ீ',
   உ: 'ு',
+  ஊ: 'ூ',
   எ: 'ெ',
+  ஏ: 'ே',
+  ஐ: 'ை',
   ஒ: 'ொ',
+  ஓ: 'ோ',
+  ஔ: 'ௌ',
 };
 
-const shortVowels = new Set(Object.keys(vowelSigns));
+const vowels = new Set(Object.keys(vowelSigns));
 
 export function composePm0100(before: string, key: string): { before: string; inserted: string } {
-  if (!shortVowels.has(key)) {
+  if (!vowels.has(key)) {
     return { before, inserted: key };
   }
 

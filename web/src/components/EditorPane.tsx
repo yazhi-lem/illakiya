@@ -1,65 +1,68 @@
 import type { KeyboardEvent, RefObject } from 'react';
-import type { Chapter } from '../types';
-import { MicButton } from './MicButton';
+import type { Chapter, InputMode } from '../types';
 import { SuggestionStrip } from './SuggestionStrip';
+import { SpeakButton } from './SpeakButton';
+
+const MODES: { id: InputMode; label: string; title: string }[] = [
+  { id: 'taglish', label: 'Taglish', title: 'Taglish எழுதி Tab அழுத்தவும் → தமிழ்' },
+  { id: 'pm0100', label: 'PM0100', title: 'விசைப்பலகை நேரடி தமிழ் (Shift = நெடில்)' },
+  { id: 'english', label: 'ABC', title: 'ஆங்கிலம் / raw English' },
+];
 
 type EditorPaneProps = {
   activeChapter?: Chapter;
   wordCount: number;
-  taglishMode: boolean;
-  onToggleTaglish: () => void;
+  inputMode: InputMode;
+  onChangeMode: (mode: InputMode) => void;
   editorRef: RefObject<HTMLTextAreaElement>;
   onChangeContent: (value: string) => void;
   onKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
   onSelect: () => void;
-  onTranscript: (text: string) => void;
   suggestions: string[];
-  correction: string | null;
+  recommendation: string | null;
   onPickSuggestion: (word: string) => void;
   onExportText: () => void;
-  onShareWhatsapp: () => void;
-  onShareSignal: () => void;
 };
 
 export function EditorPane({
   activeChapter,
   wordCount,
-  taglishMode,
-  onToggleTaglish,
+  inputMode,
+  onChangeMode,
   editorRef,
   onChangeContent,
   onKeyDown,
   onSelect,
-  onTranscript,
   suggestions,
-  correction,
+  recommendation,
   onPickSuggestion,
   onExportText,
-  onShareWhatsapp,
-  onShareSignal,
 }: EditorPaneProps) {
   return (
     <article className="editorPane">
       <div className="editorToolbar">
-        <div className="writeControls">
-          <button
-            type="button"
-            className={taglishMode ? 'taglishToggle on' : 'taglishToggle'}
-            onClick={onToggleTaglish}
-            aria-pressed={taglishMode}
-            title="Taglish → தமிழ் நேரடி மாற்றம்"
-          >
-            {taglishMode ? 'Taglish ✓' : 'Taglish'}
-          </button>
-          <MicButton onTranscript={onTranscript} />
+        <div className="modeSwitch" role="group" aria-label="உள்ளீட்டு முறை">
+          {MODES.map((mode) => (
+            <button
+              key={mode.id}
+              type="button"
+              className={inputMode === mode.id ? 'modeButton active' : 'modeButton'}
+              onClick={() => onChangeMode(mode.id)}
+              aria-pressed={inputMode === mode.id}
+              title={mode.title}
+            >
+              {mode.label}
+            </button>
+          ))}
+        </div>
+        <div className="toolbarEnd">
           <span className="wordCount" aria-label="சொற்கள்">
             {wordCount} சொல்
           </span>
-        </div>
-        <div className="actions">
-          <button onClick={onExportText}>ஏற்றுமதி</button>
-          <button onClick={onShareWhatsapp}>வாட்ஸ்அப்</button>
-          <button onClick={onShareSignal}>சிக்னல்</button>
+          <SpeakButton getText={() => activeChapter?.content ?? ''} />
+          <button className="exportButton" onClick={onExportText} title="உரையாக ஏற்றுமதி">
+            ஏற்றுமதி
+          </button>
         </div>
       </div>
 
@@ -74,14 +77,16 @@ export function EditorPane({
             onSelect={onSelect}
             onClick={onSelect}
             placeholder={
-              taglishMode
-                ? 'Taglish-ல் எழுதுங்கள் — "vaNakkam" → வணக்கம் ...'
-                : 'தமிழில் எழுதுங்கள்...'
+              inputMode === 'taglish'
+                ? 'Taglish எழுதுங்கள் — "vanakkam" → Tab → வணக்கம் ...'
+                : inputMode === 'pm0100'
+                  ? 'PM0100 — QWERTY விசைகளால் தமிழ் (Shift = நெடில்)...'
+                  : 'தமிழில் / ஆங்கிலத்தில் எழுதுங்கள்...'
             }
           />
           <SuggestionStrip
             suggestions={suggestions}
-            correction={correction}
+            recommendation={recommendation}
             onPick={onPickSuggestion}
           />
           <p className="saveHint">உள்ளூரில் தானாகச் சேமிக்கப்பட்டது</p>
