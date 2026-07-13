@@ -7,6 +7,7 @@
  */
 
 import dictionary from '@data/dictionary/tamil_base.json';
+import { levenshteinDistance, findSimilar } from './fuzzy';
 
 type DictWord = { tamil: string; translit: string; en: string; freq: number };
 
@@ -50,15 +51,31 @@ export function isValidWord(word: string): boolean {
 
 /**
  * Auto-correct a just-typed word. If the romanized source maps to a known Tamil
- * word, return it; otherwise return a close dictionary word by prefix. Returns
- * null when nothing confident is found (so we never "correct" to noise).
+ * word, return it; otherwise return a close dictionary word by prefix or fuzzy match.
+ * Returns null when nothing confident is found (so we never "correct" to noise).
  */
 export function autoCorrect(romanSource: string, tamilWord: string): string | null {
   const roman = romanSource.trim().toLowerCase();
+
+  // 1. Try exact translit match first (most common case)
   if (roman && BY_TRANSLIT.has(roman)) {
     const hit = BY_TRANSLIT.get(roman)!;
     return hit === tamilWord ? null : hit;
   }
+
+  // 2. Try fuzzy match on translit (handles typos: "pandra" ≈ "panra")
+  if (roman) {
+    const fuzzyMatches = findSimilar(roman, Array.from(BY_TRANSLIT.keys()), 1);
+    if (fuzzyMatches.length > 0) {
+      const bestMatch = fuzzyMatches[0];
+      const hit = BY_TRANSLIT.get(bestMatch.word)!;
+      if (hit !== tamilWord) {
+        return hit;
+      }
+    }
+  }
+
+  // 3. Fall back to prefix-based suggestions for Tamil word
   if (tamilWord && !TAMIL_SET.has(tamilWord)) {
     const near = suggest(tamilWord, 1);
     if (near.length) return near[0];
