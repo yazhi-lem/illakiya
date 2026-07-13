@@ -77,7 +77,7 @@ impl Dictionary {
                 *freq += 50;
             }
         }
-        candidates.sort_by(|a, b| b.1.cmp(&a.1));
+        candidates.sort_by_key(|c| std::cmp::Reverse(c.1));
         candidates.truncate(limit as usize);
         candidates.into_iter().map(|(w, _)| w).collect()
     }
