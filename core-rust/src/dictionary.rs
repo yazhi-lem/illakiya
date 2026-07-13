@@ -102,8 +102,7 @@ impl Dictionary {
     #[uniffi::constructor]
     pub fn new() -> Arc<Self> {
         let json = include_str!("../../data/dictionary/tamil_base.json");
-        let dict_file: DictFile =
-            serde_json::from_str(json).expect("Invalid tamil_base.json");
+        let dict_file: DictFile = serde_json::from_str(json).expect("Invalid tamil_base.json");
 
         let mut trie = TrieNode::default();
         let mut entries = Vec::new();

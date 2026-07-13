@@ -2,15 +2,12 @@
 #![allow(unpredictable_function_pointer_comparisons)]
 uniffi::setup_scaffolding!();
 
-pub mod tamil;
-pub mod layout;
 pub mod dictionary;
-pub mod sandhi;
 pub mod engine;
+pub mod layout;
+pub mod sandhi;
+pub mod tamil;
 
-#[cfg(feature = "wasm")]
-pub mod wasm;
-
+pub use dictionary::Dictionary;
 pub use engine::KeyboardEngine;
 pub use sandhi::AdhanSandhi;
-pub use dictionary::Dictionary;

@@ -1,17 +1,17 @@
+//! Adhan-Sandhi: Tamil word-joining (Punarchi) engine.
+//!
+//! Implements the 8 core Sandhi rules from Tholkaappiyam:
+//!   1. Iyalbu Punarchi (Natural joining)
+//!   2. Vallinam Migu (Hard consonant doubling)
+//!   3. Mellinam Migu (Nasal insertion)
+//!   4. Uyirmei Tiribu (Vowel mutation)
+//!   5. Tontru Punarchi (Deletion at boundary)
+//!   6. Nool Punarchi (Grammatical joining)
+//!   7. Vazhakku Punarchi (Colloquial joining)
+//!   8. Idaiyinam insertion
+
 use crate::tamil;
 use std::sync::Arc;
-
-/// Adhan-Sandhi: Tamil word-joining (Punarchi) engine.
-///
-/// Implements the 8 core Sandhi rules from Tholkaappiyam:
-///   1. Iyalbu Punarchi (Natural joining)
-///   2. Vallinam Migu (Hard consonant doubling)
-///   3. Mellinam Migu (Nasal insertion)
-///   4. Uyirmei Tiribu (Vowel mutation)
-///   5. Tontru Punarchi (Deletion at boundary)
-///   6. Nool Punarchi (Grammatical joining)
-///   7. Vazhakku Punarchi (Colloquial joining)
-///   8. Idaiyinam insertion
 
 /// Pulli (்) byte length in UTF-8
 const PULLI_LEN: usize = 3;
@@ -99,8 +99,7 @@ impl AdhanSandhi {
         if !tamil::is_vallinam(first) {
             return None;
         }
-        if tamil::ends_with_short_vowel(word1)
-            || (!tamil::is_pulli(last) && !tamil::is_uyir(last))
+        if tamil::ends_with_short_vowel(word1) || (!tamil::is_pulli(last) && !tamil::is_uyir(last))
         {
             // Insert consonant+pulli before word2: word1 + க + ் + word2
             let doubled = format!("{}{}்{}", word1, first, word2);
@@ -268,7 +267,11 @@ mod tests {
         let s = AdhanSandhi::new();
         let r = s.analyze("பூ", "கொடி");
         assert_eq!(r.rule, SandhiRule::VallinamMigu);
-        assert!(r.output.contains("க்"), "Expected க் in output, got: {}", r.output);
+        assert!(
+            r.output.contains("க்"),
+            "Expected க் in output, got: {}",
+            r.output
+        );
     }
 
     #[test]
@@ -284,7 +287,11 @@ mod tests {
         let s = AdhanSandhi::new();
         let r = s.analyze("மண்", "அழகு");
         assert_eq!(r.rule, SandhiRule::TontruPunarchi);
-        assert!(!r.output.contains("்அ"), "Pulli+vowel should not appear: {}", r.output);
+        assert!(
+            !r.output.contains("்அ"),
+            "Pulli+vowel should not appear: {}",
+            r.output
+        );
     }
 
     #[test]

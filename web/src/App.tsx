@@ -4,9 +4,12 @@ import { AppHeader } from './components/AppHeader';
 import { EditorPane } from './components/EditorPane';
 import { KeyboardDock } from './components/KeyboardDock';
 import { ChaptersSidebar } from './components/ChaptersSidebar';
-import { TutorPane } from './components/TutorPane';
-import { keyboardRows } from './constants/keyboard';
-import { lessons } from './constants/lessons';
+import {
+  keyboardRows,
+  kurilToNedil,
+  pm0100KeyHints,
+  qwertyToPm0100,
+} from './constants/keyboard';
 import {
   STORAGE_KEY,
   chapterWordCount,
@@ -15,8 +18,8 @@ import {
 } from './lib/chapters';
 import { composePm0100, revertPm0100Composition } from './lib/pm0100';
 import { transliterateLive } from './lib/translit';
-import { autoCorrect, loadNativeEngine, suggest } from './lib/engine';
-import type { AppView, Chapter } from './types';
+import { autoCorrect, suggest } from './lib/engine';
+import type { Chapter, InputMode } from './types';
 
 // Live-transliteration state for the word currently being typed at the caret.
 type RomanState = { buffer: string; wordStart: number; tamilLen: number };
@@ -28,15 +31,15 @@ function currentWordInfo(content: string, caret: number): { word: string; start:
 }
 
 export default function App() {
-  const [view, setView] = useState<AppView>('editor');
   const [chapters, setChapters] = useState<Chapter[]>(() => loadChapters());
   const [activeChapterId, setActiveChapterId] = useState<string>(() => loadChapters()[0]?.id ?? '');
-  const [taglishMode, setTaglishMode] = useState(true);
+  const [inputMode, setInputMode] = useState<InputMode>('taglish');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [correction, setCorrection] = useState<string | null>(null);
-  const [backend, setBackend] = useState<'wasm' | 'ts'>('ts');
+  const [activeKey, setActiveKey] = useState<string | null>(null);
 
   const editorRef = useRef<HTMLTextAreaElement>(null);
+  const flashTimer = useRef<number | undefined>(undefined);
   const romanRef = useRef<RomanState>({ buffer: '', wordStart: 0, tamilLen: 0 });
   // Authoritative editing state, updated synchronously so rapid keystrokes never
   // read stale values between React renders.
@@ -60,10 +63,6 @@ export default function App() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(chapters));
   }, [chapters]);
 
-  useEffect(() => {
-    loadNativeEngine().then((b) => setBackend(b));
-  }, []);
-
   // Re-sync editing refs when the active chapter changes (switch / initial load).
   useEffect(() => {
     contentRef.current = activeChapter?.content ?? '';
@@ -76,6 +75,13 @@ export default function App() {
 
   const resetRoman = (caret: number) => {
     romanRef.current = { buffer: '', wordStart: caret, tamilLen: 0 };
+  };
+
+  // Briefly highlight the matching on-screen key when a physical key is pressed.
+  const flashKey = (char: string) => {
+    setActiveKey(char);
+    window.clearTimeout(flashTimer.current);
+    flashTimer.current = window.setTimeout(() => setActiveKey(null), 150);
   };
 
   const refreshSuggestions = (content: string, caret: number) => {
@@ -148,18 +154,9 @@ export default function App() {
     if (!activeChapter) return;
 
     const key = event.key;
-    const { s, en } = readSelection();
-    const content = contentRef.current;
-    const st = romanRef.current;
 
-    // Navigation and other non-text keys: drop the buffer, let the browser act.
-    if (key.length !== 1 && key !== 'Backspace' && key !== 'Enter') {
-      resetRoman(s);
-      return;
-    }
-
-    if (!taglishMode) {
-      // Raw typing: let the textarea handle it; refresh suggestions afterwards.
+    // English: raw passthrough; just keep refs/suggestions in sync afterwards.
+    if (inputMode === 'english') {
       requestAnimationFrame(() => {
         const e2 = editorRef.current;
         if (e2) {
@@ -168,6 +165,46 @@ export default function App() {
           refreshSuggestions(e2.value, caretRef.current);
         }
       });
+      return;
+    }
+
+    // PM0100: laptop QWERTY keys drive the Tamil layout; Shift on a vowel = nedil.
+    if (inputMode === 'pm0100') {
+      if (key === 'Backspace') {
+        event.preventDefault();
+        backspaceAtCursor();
+        return;
+      }
+      if (key === 'Enter') {
+        event.preventDefault();
+        insertTextAtCursor('\n');
+        return;
+      }
+      if (key === ' ') {
+        event.preventDefault();
+        insertTextAtCursor(' ');
+        return;
+      }
+      const entry = qwertyToPm0100[event.code];
+      if (entry) {
+        event.preventDefault();
+        const char =
+          entry.isVowel && event.shiftKey ? kurilToNedil[entry.char] ?? entry.char : entry.char;
+        insertTextAtCursor(char);
+        flashKey(entry.char);
+      }
+      // Unmapped keys (punctuation, digits, navigation) fall through to default.
+      return;
+    }
+
+    // Taglish (phonetic transliteration).
+    const { s, en } = readSelection();
+    const content = contentRef.current;
+    const st = romanRef.current;
+
+    // Navigation and other non-text keys: drop the buffer, let the browser act.
+    if (key.length !== 1 && key !== 'Backspace' && key !== 'Enter') {
+      resetRoman(s);
       return;
     }
 
@@ -283,16 +320,6 @@ export default function App() {
     editorRef.current?.focus();
   };
 
-  const handleTranscript = (text: string) => {
-    if (!activeChapter) return;
-    const { s, en } = readSelection();
-    const content = contentRef.current;
-    const next = content.slice(0, s) + text + content.slice(en);
-    const caret = s + text.length;
-    resetRoman(caret);
-    commit(next, caret);
-  };
-
   const createNewChapter = () => {
     const maxOrder = chapters.reduce((m, c) => Math.max(m, c.order), -1);
     const n = chapters.length + 1;
@@ -309,9 +336,9 @@ export default function App() {
     setChapters((prev) => prev.map((c) => (c.id === id ? { ...c, title } : c)));
   };
 
-  const toggleTaglish = () => {
+  const changeMode = (mode: InputMode) => {
     resetRoman(caretRef.current);
-    setTaglishMode((prev) => !prev);
+    setInputMode(mode);
     editorRef.current?.focus();
   };
 
@@ -326,60 +353,44 @@ export default function App() {
     URL.revokeObjectURL(url);
   };
 
-  const shareToWhatsapp = () => {
-    if (!activeChapter) return;
-    const message = encodeURIComponent(activeChapter.content.slice(0, 1500));
-    window.open(`https://wa.me/?text=${message}`, '_blank', 'noopener,noreferrer');
-  };
-
-  const shareToSignal = () => {
-    if (!activeChapter) return;
-    const message = encodeURIComponent(activeChapter.content.slice(0, 1500));
-    window.open(`https://signal.me/#p?text=${message}`, '_blank', 'noopener,noreferrer');
-  };
-
   return (
     <main className="appShell">
-      <AppHeader view={view} onChangeView={setView} backend={backend} />
+      <AppHeader />
 
-      {view === 'tutor' ? (
-        <TutorPane lessons={lessons} />
-      ) : (
-        <section className="editorLayout withKeyboard">
-          <ChaptersSidebar
-            chapters={sortedChapters}
-            activeChapterId={activeChapter?.id}
-            onSelect={setActiveChapterId}
-            onCreate={createNewChapter}
-            onRename={renameChapter}
-          />
+      <section className="editorLayout withKeyboard">
+        <ChaptersSidebar
+          chapters={sortedChapters}
+          activeChapterId={activeChapter?.id}
+          onSelect={setActiveChapterId}
+          onCreate={createNewChapter}
+          onRename={renameChapter}
+        />
 
-          <EditorPane
-            activeChapter={activeChapter}
-            wordCount={wordCount}
-            taglishMode={taglishMode}
-            onToggleTaglish={toggleTaglish}
-            editorRef={editorRef}
-            onChangeContent={handleChange}
-            onKeyDown={handleEditorKeyDown}
-            onSelect={handleSelect}
-            onTranscript={handleTranscript}
-            suggestions={suggestions}
-            correction={correction}
-            onPickSuggestion={pickSuggestion}
-            onExportText={exportText}
-            onShareWhatsapp={shareToWhatsapp}
-            onShareSignal={shareToSignal}
-          />
+        <EditorPane
+          activeChapter={activeChapter}
+          wordCount={wordCount}
+          inputMode={inputMode}
+          onChangeMode={changeMode}
+          editorRef={editorRef}
+          onChangeContent={handleChange}
+          onKeyDown={handleEditorKeyDown}
+          onSelect={handleSelect}
+          suggestions={suggestions}
+          correction={correction}
+          onPickSuggestion={pickSuggestion}
+          onExportText={exportText}
+        />
 
-          <KeyboardDock
-            rows={keyboardRows}
-            onKey={insertTextAtCursor}
-            onSpace={() => insertTextAtCursor(' ')}
-            onBackspace={backspaceAtCursor}
-          />
-        </section>
-      )}
+        <KeyboardDock
+          rows={keyboardRows}
+          hints={pm0100KeyHints}
+          nedilMap={kurilToNedil}
+          activeKey={activeKey}
+          onKey={insertTextAtCursor}
+          onSpace={() => insertTextAtCursor(' ')}
+          onBackspace={backspaceAtCursor}
+        />
+      </section>
     </main>
   );
 }
