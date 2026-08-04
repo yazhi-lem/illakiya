@@ -109,6 +109,12 @@
       "freq": 90
     },
     {
+      "tamil": "என்ன",
+      "translit": "ena",
+      "en": "what (shorthand)",
+      "freq": 95
+    },
+    {
       "tamil": "சிறந்த",
       "translit": "sirantha",
       "en": "good",
@@ -5615,6 +5621,12 @@
       "en": "",
       "freq": 40,
       "category": "corpus_auto"
+    },
+    {
+      "tamil": "பண்ற",
+      "translit": "panra",
+      "en": "do/happening (shorthand)",
+      "freq": 85
     }
   ]
 }
