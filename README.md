@@ -7,6 +7,9 @@
   [![Kotlin](https://img.shields.io/badge/Kotlin-0095D5?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org)
   
   > *Named after the Tamil word for "literature" (இலக்கியம்), Illakiya brings the elegance of Sangam poetry to modern mobile input.*
+
+See [NEXT_ACTION.md](./NEXT_ACTION.md) for the roadmap, **October 2026 Pilot**, and **December 2026 Launch** deliverables.
+
 </div>
 
 ---
