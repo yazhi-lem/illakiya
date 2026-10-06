@@ -93,6 +93,7 @@ adb install android/app/build/outputs/apk/debug/app-debug.apk
 ## 📜 License & Open Source
 
 Part of the [Yazhi](https://github.com/yazhi-lem) open source ecosystem.  
+Licensed under the [GNU General Public License v3.0](LICENSE).  
 FLOSS-first. Community-driven. Tamil-powered.
 
 <div align="center">
