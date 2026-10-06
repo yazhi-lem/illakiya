@@ -99,27 +99,10 @@ export function getPhoneticVariants(input: string): Set<string> {
   const variants = new Set<string>();
   variants.add(input); // Always include exact
 
-  // Simple pattern-based variant generation
-  const rules = [
-    // Double consonant tolerance
-    ['([a-z])\\1', '$1'], // "kk" → "k"
-    ['([a-z])', '$1$1'], // "k" → "kk" (optional)
-
-    // Consonant variations
-    ['kh', 'k'],
-    ['k', 'kh'],
-    ['ch', 'c'],
-    ['c', 'ch'],
-    ['sh', 's'],
-    ['s', 'sh'],
-
-    // Vowel variations
-    ['aa', 'A'],
-    ['A', 'aa'],
-    ['ii', 'I'],
-    ['I', 'ii'],
-  ];
-
+  // TODO: pattern-based variant generation (double-consonant tolerance,
+  // kh/k, ch/c, sh/s, aa/A, ii/I) is not implemented yet. The unused rule
+  // table that used to sit here was removed because it broke `tsc -b`
+  // (noUnusedLocals); see git history for the planned rules.
   // For now, just return base + manual expansions
   // Full regex handling would require more complex logic
   return variants;
