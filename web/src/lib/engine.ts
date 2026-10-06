@@ -7,7 +7,7 @@
  */
 
 import dictionary from '@data/dictionary/tamil_base.json';
-import { levenshteinDistance, findSimilar } from './fuzzy';
+import { findSimilar } from './fuzzy';
 
 type DictWord = { tamil: string; translit: string; en: string; freq: number };
 
