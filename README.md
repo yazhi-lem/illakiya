@@ -1,61 +1,64 @@
 <div align="center">
-  <h1>✨ Illakiya (இலக்கிய) ✨</h1>
-  <p><b>A native Tamil keyboard for Android, built with Rust + Kotlin.</b></p>
-  
-  [![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://android.com)
-  [![Rust Core](https://img.shields.io/badge/Rust-000000?style=for-the-badge&logo=rust&logoColor=white)](https://rust-lang.org)
-  [![Kotlin](https://img.shields.io/badge/Kotlin-0095D5?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org)
-  
-  > *Named after the Tamil word for "literature" (இலக்கியம்), Illakiya brings the elegance of Sangam poetry to modern mobile input.*
+  <h1>✨ Illakiya (இலக்கியா) ✨</h1>
+  <p><b>The Tamil writing toolbox. Paste anything — get clean Tamil.</b></p>
 
-See [NEXT_ACTION.md](./NEXT_ACTION.md) for the roadmap, **October 2026 Pilot**, and **December 2026 Launch** deliverables.
+  > *Named after இலக்கியம் ("literature"). English, Tanglish or rough Tamil goes in; clean, grammatical Tamil comes out.*
+
+**Live:** https://illakiya.yazhi.dev · See [NEXT_ACTION.md](./NEXT_ACTION.md) for the roadmap.
 
 </div>
 
 ---
 
+## 🧰 The toolbox
+
+| Tool | What it does | Runs |
+|------|--------------|------|
+| **தூய தமிழ்** (Clean Tamil) — default | Anything (English, Tanglish, mixed, Tamil with mistakes) → clean, natural Tamil | Claude |
+| **மொழிபெயர்** (Translate) | English → fluent Tamil, by meaning | Claude |
+| **இலக்கணம்** (Grammar) | Minimal fixes: spelling, sandhi (புணர்ச்சி), case endings, agreement | Claude |
+| **எழுத்து நடை** (Formal) | Spoken / colloquial Tamil → formal written Tamil | Claude |
+| **Tanglish → தமிழ்** | Instant offline transliteration (`vanakkam` → `வணக்கம்`) | Browser |
+
+Paste into the box and the active tool runs straight away (or press **Ctrl/⌘ + Enter**). Copy or listen to the result.
+
 ## 🏗️ Architecture
 
 ```mermaid
-graph TD
-    subgraph Android["🤖 Android (Kotlin / Compose)"]
-        A[IllakiyaIME] --> B[KeyboardView]
-        C[SettingsActivity] --> D[Theme]
-        E[SuggestionStrip]
-    end
-
-    subgraph Bridge["🌉 UniFFI Bridge"]
-        F((FFI Layer))
-    end
-
-    subgraph Rust["🦀 Rust Core (libillakiya)"]
-        G[Engine] --> H[Layout & Dictionary]
-        I[Sandhi] --> J[Tamil Unicode]
-    end
-
-    Android <--> F
-    F <--> Rust
+graph LR
+    U[Browser — React UI<br/>web/src] -->|POST /api/tamil<br/>tool + text| F[Cloudflare Pages Function<br/>web/functions/api/tamil.ts]
+    F -->|Messages API, streaming| C[Claude]
+    C -->|Tamil text stream| F --> U
+    U -.->|offline| T[Tanglish transliterator<br/>web/src/lib/translit.ts]
 ```
 
-## ✨ Features
+- **`web/src`** — single-screen UI: tool row, input, streamed output, copy, text-to-speech.
+- **`web/server/tools.ts`** — one system prompt per tool, request validation (20,000 character limit). Pasted text is sent as data inside `<text>` tags, never as instructions.
+- **`web/functions/api/tamil.ts`** — the only server code; holds the `ANTHROPIC_API_KEY` secret and streams the result back as plain text.
 
-- 🎹 **PM0100 Layout** — Phonetically grouped Tamil keyboard based on *Tholkaappiyam*
-- 🔠 **247 Tamil Characters** — All 12 vowels, 18 consonants, 216 combinations, and ayutham
-- 👆 **Nedil Swipe** — Swipe up for long vowels (குறில் → நெடில்)
-- 📖 **Lightning Fast Dictionary** — 836 words with Trie-based prefix search (`<5ms` latency)
-- 🧠 **Sandhi Engine** — 6 Tholkaappiyam Punarchi rules with confidence scoring
-- 🎨 **Sangam Theme** — Stunning UI inspired by Tamil literary landscapes (குறிஞ்சி, முல்லை, நெய்தல், பாலை, மருதம்)
-- 🗜️ **Zero Filesystem** — All data safely embedded in binary via `include_str!`
-
-## 🚀 Quick Start
+## 🚀 Quick start (web)
 
 ```bash
-# Build APK (requires Android SDK + NDK + Rust)
-./scripts/build-apk.sh
-
-# Install to connected device
-adb install android/app/build/outputs/apk/debug/app-debug.apk
+cd web && npm ci
+npm test            # unit tests
+npm run dev         # UI on http://localhost:5173 (Tanglish tool works offline)
 ```
+
+To run the Claude tools locally, put your key in `web/.dev.vars` (git-ignored):
+
+```bash
+echo "ANTHROPIC_API_KEY=sk-ant-..." > web/.dev.vars
+```
+
+```bash
+cd web && npm run dev:api   # serves dist + functions on :8788; `npm run dev` proxies /api there
+```
+
+Deployment: [docs/DEPLOY.md](./docs/DEPLOY.md).
+
+## 📱 Android keyboard (separate track)
+
+`android/` and `core-rust/` hold the earlier native Tamil keyboard (PM0100 layout, Rust engine, UniFFI). It is not part of the web toolbox and is kept for the keyboard roadmap.
 
 ## 📚 Dictionary Sources
 
@@ -83,6 +86,8 @@ adb install android/app/build/outputs/apk/debug/app-debug.apk
 
 ## 💻 Tech Stack
 
+- **React + Vite** — web toolbox UI
+- **Cloudflare Pages Functions** — `/api/tamil`, Claude via the Anthropic TypeScript SDK
 - **Kotlin** — Android UI (Jetpack Compose, Material 3)
 - **Rust** — Core engine (state machine, dictionary, sandhi)
 - **UniFFI** — FFI bridge (Mozilla, type-safe)

@@ -35,3 +35,10 @@ dist/
 __pycache__/
 *.pyc
 .env
+
+# Cloudflare local secrets / build state
+.dev.vars
+.wrangler/
+*.tsbuildinfo
+web/vite.config.js
+web/vite.config.d.ts

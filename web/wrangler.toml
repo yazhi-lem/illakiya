@@ -1,0 +1,5 @@
+# Cloudflare Pages config for the Illakiya web toolbox.
+# Static UI from dist/, plus Pages Functions from functions/ (POST /api/tamil).
+name = "illakiya"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-07-18"
