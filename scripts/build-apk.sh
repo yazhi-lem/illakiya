@@ -1,45 +1,23 @@
 #!/bin/bash
-# Build Illakiya APK (Debug)
-# Prerequisites: Android SDK, NDK r25+, Rust toolchain with android targets
-set -e
+# Build the Illakiya keyboard APKs (debug + release) and the Play Store bundle.
+#
+# Prerequisites:
+#   - JDK 17, Android SDK (ANDROID_HOME) with an NDK (or ANDROID_NDK_HOME)
+#   - Rust:  rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android
+#   - cargo install cargo-ndk
+# Gradle builds core-rust with cargo-ndk and generates the UniFFI Kotlin bindings itself.
+# To sign the release build set ILLAKIYA_KEYSTORE_PATH, ILLAKIYA_KEYSTORE_PASSWORD,
+# ILLAKIYA_KEY_ALIAS and ILLAKIYA_KEY_PASSWORD (see docs/RELEASE_ANDROID.md).
+set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
-echo "=== Illakiya APK Build ==="
-echo ""
+command -v cargo-ndk >/dev/null || { echo "cargo-ndk missing: cargo install cargo-ndk"; exit 1; }
 
-# Step 1: Install Rust Android targets (if needed)
-echo "[1/4] Checking Rust Android targets..."
-rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android i686-linux-android 2>/dev/null || true
-
-# Step 2: Build Rust core
-echo "[2/4] Building Rust core..."
-cd "$PROJECT_DIR/core-rust"
-cargo build --release
-echo "  -> libillakiya_core built"
-
-# Step 3: Generate Kotlin bindings
-echo "[3/4] Generating UniFFI bindings..."
-cargo run --bin uniffi-bindgen generate \
-    --library ./target/release/libillakiya_core.so \
-    --language kotlin \
-    --out-dir "$PROJECT_DIR/android/app/src/main/java/com/yazhi/illakiya/core"
-echo "  -> Kotlin bindings generated"
-
-# Step 4: Build APK
-echo "[4/4] Building APK..."
 cd "$PROJECT_DIR/android"
-./gradlew assembleDebug
+./gradlew assembleDebug assembleRelease bundleRelease "$@"
 
-APK_PATH="app/build/outputs/apk/debug/app-debug.apk"
-if [ -f "$APK_PATH" ]; then
-    SIZE=$(du -h "$APK_PATH" | cut -f1)
-    echo ""
-    echo "=== BUILD SUCCESS ==="
-    echo "APK: $APK_PATH ($SIZE)"
-    echo "Install: adb install $APK_PATH"
-else
-    echo "BUILD FAILED: APK not found"
-    exit 1
-fi
+echo ""
+echo "=== BUILD SUCCESS ==="
+ls -lh app/build/outputs/apk/debug/*.apk app/build/outputs/apk/release/*.apk app/build/outputs/bundle/release/*.aab
+echo "Install debug: adb install -r app/build/outputs/apk/debug/app-debug.apk"

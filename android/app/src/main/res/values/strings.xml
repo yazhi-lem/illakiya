@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Illakiya Keyboard</string>
+    <string name="app_name">இலக்கியா</string>
+    <string name="ime_name">இலக்கியா தமிழ் விசைப்பலகை</string>
+    <string name="subtype_tamil">தமிழ் (PM0100)</string>
 </resources>

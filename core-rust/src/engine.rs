@@ -176,26 +176,48 @@ impl KeyboardEngine {
         }
         let mut prefix = state.current_word.clone();
         if let Some(ref pending) = state.pending_consonant {
-            prefix.push_str(pending);
+            // A pending consonant (ம்) usually becomes an uyirmei (மி, மா…), so
+            // match on its bare form: "தம" finds both தமிழ் and தம்பி.
+            prefix.push_str(pending.trim_end_matches(crate::tamil::PULLI));
         }
         self.dict.suggest_prefix(&prefix, limit)
     }
 
+    /// வல்லினம் மிகும் இடம்: when the word being typed starts with க/ச/த/ப and
+    /// the previous word requires the hard consonant to double onto it, returns
+    /// the corrected previous word (பள்ளிக்கு → பள்ளிக்குச்). None otherwise.
     pub fn get_sandhi_suggestion(&self) -> Option<String> {
         let state = self.state.read().unwrap();
-        let last_word = state.words.last()?;
-        if state.current_word.is_empty() {
+        if state.current_word.is_empty() || state.pending_consonant.is_some() {
             return None;
         }
-        let result = self.sandhi.analyze(last_word, &state.current_word);
-        if result.rule != crate::sandhi::SandhiRule::IyalbuPunarchi
-            && result.rule != crate::sandhi::SandhiRule::NoRule
-            && result.confidence > 0.6
-        {
-            Some(result.output)
-        } else {
-            None
+        let last_word = state.words.last()?;
+        // Only when the previous word is directly before this one ("prev current").
+        let tail = format!("{} {}", last_word, state.current_word);
+        if !state.buffer.ends_with(&tail) {
+            return None;
         }
+        self.sandhi.migu_between(last_word, &state.current_word)
+    }
+
+    /// Apply the current sandhi suggestion. Returns the text to insert at the
+    /// end of the previous word (e.g. "ச்"), or None when nothing applies. The
+    /// editor must insert it before the space that precedes the current word.
+    pub fn accept_sandhi_suggestion(&self) -> Option<String> {
+        let corrected = self.get_sandhi_suggestion()?;
+        let mut state = self.state.write().unwrap();
+        let last = state.words.last()?.clone();
+        let suffix = corrected.strip_prefix(&last)?.to_string();
+        let current = state.current_word.clone();
+        let cut = state.buffer.len() - current.len() - 1;
+        state.buffer.truncate(cut);
+        state.buffer.push_str(&suffix);
+        state.buffer.push(' ');
+        state.buffer.push_str(&current);
+        if let Some(w) = state.words.last_mut() {
+            *w = corrected;
+        }
+        Some(suffix)
     }
 
     pub fn accept_suggestion(&self, suggestion: String) -> String {
@@ -357,6 +379,46 @@ mod tests {
         assert_eq!(eng.get_buffer(), "");
         assert_eq!(eng.get_current_word(), "");
         assert!(eng.get_pending().is_none());
+    }
+
+    fn type_keys(eng: &KeyboardEngine, keys: &[&str]) {
+        for k in keys {
+            eng.process_input(k.to_string());
+        }
+    }
+
+    #[test]
+    fn test_suggestions_with_pending_consonant() {
+        let eng = KeyboardEngine::new();
+        type_keys(&eng, &["u", "z", "p"]); // த + ம் pending
+        let suggestions = eng.get_suggestions(10);
+        assert!(
+            suggestions.iter().any(|s| s.starts_with("தமி")),
+            "pending ம் should still suggest தமிழ்: {:?}",
+            suggestions
+        );
+    }
+
+    #[test]
+    fn test_sandhi_migu_hint_and_accept() {
+        let eng = KeyboardEngine::new();
+        eng.accept_suggestion("பள்ளிக்கு".to_string());
+        eng.process_input("space".to_string());
+        type_keys(&eng, &["e", "v", "nedil"]); // ச் + எ, then nedil armed
+        assert_eq!(eng.get_current_word(), "செ");
+        assert_eq!(eng.get_sandhi_suggestion().as_deref(), Some("பள்ளிக்குச்"));
+        assert_eq!(eng.accept_sandhi_suggestion().as_deref(), Some("ச்"));
+        assert_eq!(eng.get_buffer(), "பள்ளிக்குச் செ");
+        assert_eq!(eng.get_sandhi_suggestion(), None, "already applied");
+    }
+
+    #[test]
+    fn test_no_sandhi_hint_for_plain_words() {
+        let eng = KeyboardEngine::new();
+        eng.accept_suggestion("நல்ல".to_string());
+        eng.process_input("space".to_string());
+        type_keys(&eng, &["o", "z"]); // ப
+        assert_eq!(eng.get_sandhi_suggestion(), None);
     }
 
     #[test]

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Compose draws the UI; this only sets the window around it. -->
+    <style name="Theme.Illakiya" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/illakiya_bg</item>
+        <item name="android:statusBarColor">@color/illakiya_bg</item>
+        <item name="android:navigationBarColor">@color/illakiya_bg</item>
+    </style>
+</resources>
