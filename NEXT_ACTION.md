@@ -37,4 +37,11 @@
 
 ## 4. Android keyboard track
 
-`android/` and `core-rust/` (PM0100 keyboard, Rust engine) are unchanged and parked. Decide whether the keyboard continues as its own product or gets a "clean Tamil" action that calls the same `/api/tamil` endpoint.
+Status, build and Play Store checklist: [`docs/RELEASE_ANDROID.md`](docs/RELEASE_ANDROID.md).
+
+- [x] Build modernised (AGP 8.13, Kotlin 2.2, targetSdk 36). CI builds the debug APK, release APK and AAB on every change, and attaches them to GitHub Releases on `v*` tags.
+- [x] IME fixed: Compose lifecycle crash, consonant visibility, backspace and suggestion duplication. New PM0100 class-row layout, symbols, Enter and keyboard switch.
+- [x] Sandhi engine aligned with Adhan's Swaram morphology. The keyboard offers only வல்லினம் மிகும் இடம் hints.
+- [ ] Add the release signing secrets and cut `v0.3.0`.
+- [ ] Device pass on Android 8 / 12 / 15+, then Play internal testing → closed pilot.
+- [ ] Shared sandhi fixture with Adhan, so rule drift fails CI in both repos.

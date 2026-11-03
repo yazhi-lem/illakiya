@@ -69,9 +69,9 @@ cd web && npm run dev:api   # serves dist + functions on :8788; `npm run dev` pr
 
 Deployment: [docs/DEPLOY.md](./docs/DEPLOY.md).
 
-## 📱 Android keyboard (separate track)
+## 📱 Android keyboard
 
-`android/` and `core-rust/` hold the earlier native Tamil keyboard (PM0100 layout, Rust engine, UniFFI). It is not part of the web toolbox and is kept for the keyboard roadmap.
+`android/` + `core-rust/`: a native PM0100 Tamil keyboard (Kotlin/Compose IME on a Rust engine through UniFFI). It works offline and has no network permission. CI builds the APKs and AAB. Status, local build steps and the Play Store checklist are in [docs/RELEASE_ANDROID.md](docs/RELEASE_ANDROID.md).
 
 ## 📚 Dictionary Sources
 
