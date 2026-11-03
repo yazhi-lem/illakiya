@@ -1,8 +1,8 @@
 <div align="center">
   <h1>✨ Illakiya (இலக்கியா) ✨</h1>
-  <p><b>The Tamil writing toolbox. Paste anything — get clean Tamil.</b></p>
+  <p><b>Research and write anything in Tamil. By Yazhi.</b></p>
 
-  > *Named after இலக்கியம் ("literature"). English, Tanglish or rough Tamil goes in; clean, grammatical Tamil comes out.*
+  > *Named after இலக்கியம் ("literature"). Ask for an article, letter or post and Illakiya researches and writes it in Tamil; paste English, Tanglish or rough Tamil and get clean Tamil back.*
 
 **Live:** https://illakiya.yazhi.dev · See [NEXT_ACTION.md](./NEXT_ACTION.md) for the roadmap.
 
@@ -10,31 +10,34 @@
 
 ---
 
-## 🧰 The toolbox
+## ✍️ How it works
 
-| Tool | What it does | Runs |
+One centred box. Type or paste, pick a mode underneath, press Enter. Answers appear above the box; keep typing below to follow up ("shorter", "make it formal", "add a conclusion").
+
+| Mode | What it does | Runs |
 |------|--------------|------|
-| **தூய தமிழ்** (Clean Tamil) — default | Anything (English, Tanglish, mixed, Tamil with mistakes) → clean, natural Tamil | Claude |
+| **எழுது** (Write) — default | Researches on the web when facts matter, then writes any content in Tamil (articles, letters, posts, speeches, summaries). A bare paste comes back as clean Tamil. Sources are listed under the answer. | Claude + web search |
+| **தூய தமிழ்** (Clean) | Anything → clean, natural Tamil | Claude |
 | **மொழிபெயர்** (Translate) | English → fluent Tamil, by meaning | Claude |
 | **இலக்கணம்** (Grammar) | Minimal fixes: spelling, sandhi (புணர்ச்சி), case endings, agreement | Claude |
-| **எழுத்து நடை** (Formal) | Spoken / colloquial Tamil → formal written Tamil | Claude |
-| **Tanglish → தமிழ்** | Instant offline transliteration (`vanakkam` → `வணக்கம்`) | Browser |
+| **எழுத்து நடை** (Formal) | Spoken Tamil → formal written Tamil | Claude |
+| **Tanglish** | Instant offline transliteration (`vanakkam` → `வணக்கம்`) | Browser |
 
-Paste into the box and the active tool runs straight away (or press **Ctrl/⌘ + Enter**). Copy or listen to the result.
+After a message is sent the mode returns to **எழுது**, so follow-ups read as instructions. In a conversion mode, pasting into an empty box sends straight away.
 
 ## 🏗️ Architecture
 
 ```mermaid
 graph LR
-    U[Browser — React UI<br/>web/src] -->|POST /api/tamil<br/>tool + text| F[Cloudflare Pages Function<br/>web/functions/api/tamil.ts]
-    F -->|Messages API, streaming| C[Claude]
-    C -->|Tamil text stream| F --> U
+    U[Browser — React chat UI<br/>web/src] -->|POST /api/tamil<br/>conversation + mode| F[Cloudflare Pages Function<br/>web/functions/api/tamil.ts]
+    F -->|Messages API, streaming,<br/>web search in Write mode| C[Claude]
+    C -->|text, searches, sources| F -->|NDJSON stream| U
     U -.->|offline| T[Tanglish transliterator<br/>web/src/lib/translit.ts]
 ```
 
-- **`web/src`** — single-screen UI: tool row, input, streamed output, copy, text-to-speech.
-- **`web/server/tools.ts`** — one system prompt per tool, request validation (20,000 character limit). Pasted text is sent as data inside `<text>` tags, never as instructions.
-- **`web/functions/api/tamil.ts`** — the only server code; holds the `ANTHROPIC_API_KEY` secret and streams the result back as plain text.
+- **`web/src`** — chat UI: thread on top, centred composer with the mode chips below, copy and text-to-speech per answer, conversation saved in the browser.
+- **`web/server/tools.ts`** — the system prompt, per-mode instructions and request validation (40 turns, 20,000 characters a message). Text sent in a conversion mode goes in `<text>` tags as data, never as instructions.
+- **`web/functions/api/tamil.ts`** — the only server code. Holds the `ANTHROPIC_API_KEY` secret, enables web search (up to 5 searches) in Write mode, resumes long research turns, and streams text, searches and sources back as NDJSON.
 
 ## 🚀 Quick start (web)
 

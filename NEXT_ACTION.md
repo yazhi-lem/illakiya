@@ -1,17 +1,19 @@
 # Next Actions — Illakiya
 
-> **Pivot (November 2026):** Illakiya is now a **Tamil writing toolbox**. Paste anything (English, Tanglish, rough Tamil) and get clean, grammatical Tamil. The web app is one screen: tools, input, output. The chapter editor, on-screen PM0100 keyboard and word suggestions are gone from the web app.
+> **Pivot (November 2026):** Illakiya is now a **Tamil writer by Yazhi**: research and write anything in Tamil, or paste anything (English, Tanglish, rough Tamil) and get clean Tamil. One centred box, modes below it, answers above it, follow-ups in the same box. The chapter editor, on-screen PM0100 keyboard and word suggestions are gone from the web app.
 
 ---
 
 ## 1. What ships today (web)
 
-- [x] **தூய தமிழ் (Clean Tamil)** — anything → clean Tamil (default tool)
+- [x] **எழுது (Write)** — research (web search) and write any content in Tamil, with sources; default mode
+- [x] Chat layout with follow-ups, conversation saved in the browser, cobalt Yazhi theme
+- [x] **தூய தமிழ் (Clean Tamil)** — anything → clean Tamil
 - [x] **மொழிபெயர் (Translate)** — English → Tamil
 - [x] **இலக்கணம் (Grammar)** — minimal Tamil grammar and spelling fixes
 - [x] **எழுத்து நடை (Formal)** — colloquial → formal written Tamil
 - [x] **Tanglish → தமிழ்** — offline transliteration in the browser
-- [x] Paste-to-run, streaming output, copy, text-to-speech, light/dark, mobile layout
+- [x] Streaming output, copy, text-to-speech, light/dark, mobile layout
 - [x] `/api/tamil` Pages Function on Claude, with server-side refusal fallback
 
 ## 2. Before public launch
@@ -24,6 +26,7 @@
 ## 3. Next tools for the box
 
 - Summarise in Tamil (சுருக்கம்)
+- Export an answer as .docx / PDF
 - Tamil → English (for checking meaning)
 - Simplify for young readers (எளிய தமிழ்)
 - Document upload (.docx / .txt) and side-by-side diff of corrections

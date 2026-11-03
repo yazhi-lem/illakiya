@@ -1,19 +1,27 @@
-import type { ToolId } from '../types';
+import type { ServerToolId, Source } from '../types';
 
-/**
- * Stream a Tamil result from the server toolbox. `onText` receives the full
- * text so far on every chunk. Resolves with the final text.
- */
-export async function streamTamil(
-  tool: Exclude<ToolId, 'translit'>,
-  text: string,
-  onText: (soFar: string) => void,
-  signal?: AbortSignal
-): Promise<string> {
+export type ChatTurn = { role: 'user' | 'assistant'; content: string; tool?: ServerToolId };
+
+export type StreamHandlers = {
+  onText: (delta: string) => void;
+  onSearch: (query: string) => void;
+  onSources: (sources: Source[]) => void;
+  onNote: (note: string) => void;
+};
+
+type StreamEvent =
+  | { t: 'text'; v: string }
+  | { t: 'search'; q: string }
+  | { t: 'sources'; v: Source[] }
+  | { t: 'note'; v: string }
+  | { t: 'error'; v: string };
+
+/** Send the conversation to /api/tamil and dispatch streamed NDJSON events. */
+export async function streamChat(turns: ChatTurn[], handlers: StreamHandlers, signal?: AbortSignal): Promise<void> {
   const res = await fetch('/api/tamil', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ tool, text }),
+    body: JSON.stringify({ messages: turns }),
     signal,
   });
 
@@ -30,14 +38,33 @@ export async function streamTamil(
 
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
-  let out = '';
+  let buffer = '';
+
+  const handle = (line: string) => {
+    if (!line.trim()) return;
+    let event: StreamEvent;
+    try {
+      event = JSON.parse(line) as StreamEvent;
+    } catch {
+      return;
+    }
+    if (event.t === 'text') handlers.onText(event.v);
+    else if (event.t === 'search') handlers.onSearch(event.q);
+    else if (event.t === 'sources') handlers.onSources(event.v);
+    else if (event.t === 'note') handlers.onNote(event.v);
+    else if (event.t === 'error') throw new Error(event.v);
+  };
+
   for (;;) {
     const { done, value } = await reader.read();
     if (done) break;
-    out += decoder.decode(value, { stream: true });
-    onText(out);
+    buffer += decoder.decode(value, { stream: true });
+    let nl = buffer.indexOf('\n');
+    while (nl >= 0) {
+      handle(buffer.slice(0, nl));
+      buffer = buffer.slice(nl + 1);
+      nl = buffer.indexOf('\n');
+    }
   }
-  out += decoder.decode();
-  onText(out);
-  return out;
+  handle(buffer + decoder.decode());
 }

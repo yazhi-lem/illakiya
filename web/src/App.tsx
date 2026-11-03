@@ -1,223 +1,353 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import type { ClipboardEvent, KeyboardEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import type { KeyboardEvent } from 'react';
+import { Markdown } from './components/Markdown';
 import { SpeakButton } from './components/SpeakButton';
-import { streamTamil } from './lib/api';
+import { streamChat, type ChatTurn } from './lib/api';
 import { load, save } from './lib/storage';
-import { MAX_INPUT_CHARS, TOOLS } from './lib/tools';
+import { MAX_INPUT_CHARS, TOOLS, toolById } from './lib/tools';
 import { transliterateWord } from './lib/translit';
-import type { ToolId } from './types';
+import type { Message, ServerToolId, ToolId } from './types';
 
-type Status = 'idle' | 'working' | 'done' | 'error';
+const CHAT_KEY = 'illakiya.chat.v1';
+const MAX_KEPT = 40;
 
-const INPUT_KEY = 'illakiya.input';
-const TOOL_KEY = 'illakiya.tool';
+const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 
-const isToolId = (v: string): v is ToolId => TOOLS.some((t) => t.id === v);
+function loadChat(): Message[] {
+  try {
+    const parsed = JSON.parse(load(CHAT_KEY, '[]')) as Message[];
+    return Array.isArray(parsed) ? parsed.filter((m) => m && typeof m.content === 'string') : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Completed user/assistant pairs, as the server expects them. */
+function historyTurns(messages: Message[]): ChatTurn[] {
+  const turns: ChatTurn[] = [];
+  for (let i = 0; i + 1 < messages.length; i += 2) {
+    const u = messages[i];
+    const a = messages[i + 1];
+    if (u.role !== 'user' || a.role !== 'assistant' || a.error || a.pending || !a.content.trim()) continue;
+    const tool: ServerToolId = u.tool === 'translit' ? 'write' : u.tool;
+    turns.push({ role: 'user', content: u.content, tool }, { role: 'assistant', content: a.content });
+  }
+  return turns;
+}
 
 export default function App() {
-  const [input, setInput] = useState(() => load(INPUT_KEY, ''));
-  const [tool, setTool] = useState<ToolId>(() => {
-    const saved = load(TOOL_KEY, 'clean');
-    return isToolId(saved) ? saved : 'clean';
-  });
-  const [aiOutput, setAiOutput] = useState('');
-  const [status, setStatus] = useState<Status>('idle');
-  const [error, setError] = useState('');
-  const [copied, setCopied] = useState(false);
+  const [messages, setMessages] = useState<Message[]>(loadChat);
+  const [draft, setDraft] = useState('');
+  const [tool, setTool] = useState<ToolId>('write');
+  const [busy, setBusy] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const abortRef = useRef<AbortController | null>(null);
-  const runAfterPaste = useRef(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const threadRef = useRef<HTMLDivElement>(null);
+  const stickToBottom = useRef(true);
+  const sendAfterPaste = useRef(false);
 
-  const activeTool = TOOLS.find((t) => t.id === tool) ?? TOOLS[0];
-  const offline = Boolean(activeTool.offline);
-  const tooLong = input.length > MAX_INPUT_CHARS;
+  const activeTool = toolById(tool);
+  const empty = messages.length === 0;
+  const tooLong = draft.length > MAX_INPUT_CHARS;
 
-  // Offline transliteration is instant: derive it as the user types.
-  const translitOutput = useMemo(() => (offline ? transliterateWord(input) : ''), [offline, input]);
-  const output = offline ? translitOutput : aiOutput;
-
-  useEffect(() => save(INPUT_KEY, input), [input]);
-  useEffect(() => save(TOOL_KEY, tool), [tool]);
+  useEffect(() => {
+    if (!busy) save(CHAT_KEY, JSON.stringify(messages.slice(-MAX_KEPT)));
+  }, [messages, busy]);
   useEffect(() => () => abortRef.current?.abort(), []);
 
-  const run = async (text: string, toolId: ToolId) => {
-    abortRef.current?.abort();
-    if (toolId === 'translit' || !text.trim() || text.length > MAX_INPUT_CHARS) return;
+  // Keep the newest text in view while it streams, unless the reader scrolled up.
+  useLayoutEffect(() => {
+    const el = threadRef.current;
+    if (el && stickToBottom.current) el.scrollTop = el.scrollHeight;
+  }, [messages]);
+
+  // Auto-grow the composer.
+  useLayoutEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, window.innerHeight * 0.4)}px`;
+  }, [draft, empty]);
+
+  const patch = (id: string, change: (m: Message) => Partial<Message>) =>
+    setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, ...change(m) } : m)));
+
+  const send = async (text = draft, mode = tool) => {
+    const content = text.trim();
+    if (!content || busy || content.length > MAX_INPUT_CHARS) return;
+
+    const userMsg: Message = { id: uid(), role: 'user', content, tool: mode };
+    setDraft('');
+    setTool('write'); // follow-ups continue the conversation in free-writing mode
+    stickToBottom.current = true;
+
+    if (mode === 'translit') {
+      const reply: Message = { id: uid(), role: 'assistant', content: transliterateWord(content), tool: mode };
+      setMessages((prev) => [...prev, userMsg, reply]);
+      return;
+    }
+
+    const replyId = uid();
+    const turns = [...historyTurns(messages), { role: 'user' as const, content, tool: mode }];
+    setMessages((prev) => [...prev, userMsg, { id: replyId, role: 'assistant', content: '', tool: mode, pending: true }]);
 
     const controller = new AbortController();
     abortRef.current = controller;
-    setStatus('working');
-    setError('');
-    setAiOutput('');
+    setBusy(true);
     try {
-      await streamTamil(toolId, text, setAiOutput, controller.signal);
-      if (abortRef.current === controller) setStatus('done');
+      await streamChat(
+        turns,
+        {
+          onText: (delta) => patch(replyId, (m) => ({ content: m.content + delta })),
+          onSearch: (q) => patch(replyId, (m) => ({ searches: [...(m.searches ?? []), q] })),
+          onSources: (sources) => patch(replyId, () => ({ sources })),
+          onNote: (note) => patch(replyId, () => ({ note })),
+        },
+        controller.signal
+      );
+      patch(replyId, () => ({ pending: false }));
     } catch (err) {
-      if (controller.signal.aborted) return;
-      setStatus('error');
-      setError(err instanceof Error ? err.message : 'பிழை. மீண்டும் முயலவும்.');
+      if (controller.signal.aborted) {
+        patch(replyId, (m) => ({ pending: false, note: m.content ? 'நிறுத்தப்பட்டது.' : undefined, error: m.content ? undefined : 'நிறுத்தப்பட்டது.' }));
+      } else {
+        patch(replyId, () => ({ pending: false, error: err instanceof Error ? err.message : 'பிழை. மீண்டும் முயலவும்.' }));
+      }
+    } finally {
+      if (abortRef.current === controller) abortRef.current = null;
+      setBusy(false);
+      inputRef.current?.focus();
     }
   };
 
-  const stop = () => {
+  const stop = () => abortRef.current?.abort();
+
+  const newChat = () => {
     abortRef.current?.abort();
-    setStatus(aiOutput ? 'done' : 'idle');
-  };
-
-  const handleChange = (value: string) => {
-    setInput(value);
-    if (runAfterPaste.current) {
-      runAfterPaste.current = false;
-      void run(value, tool);
-    }
-  };
-
-  // "Just paste": a paste triggers the active tool straight away.
-  const handlePaste = (_event: ClipboardEvent<HTMLTextAreaElement>) => {
-    if (!offline) runAfterPaste.current = true;
+    setMessages([]);
+    setDraft('');
+    setTool('write');
+    inputRef.current?.focus();
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+    // Never send mid-composition (Tamil IMEs compose characters with Enter).
+    if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
       event.preventDefault();
-      void run(input, tool);
+      void send();
     }
+  };
+
+  const handleChange = (value: string) => {
+    setDraft(value);
+    if (sendAfterPaste.current) {
+      sendAfterPaste.current = false;
+      void send(value, tool);
+    }
+  };
+
+  // In a conversion mode, pasting into an empty box sends straight away.
+  const handlePaste = () => {
+    if (!draft.trim() && tool !== 'write' && !busy) sendAfterPaste.current = true;
   };
 
   const chooseTool = (id: ToolId) => {
     setTool(id);
-    setCopied(false);
-    if (id === 'translit') {
-      abortRef.current?.abort();
-      setStatus('idle');
-      setError('');
-    } else if (input.trim()) {
-      void run(input, id);
-    }
     inputRef.current?.focus();
   };
 
-  const clearAll = () => {
-    abortRef.current?.abort();
-    setInput('');
-    setAiOutput('');
-    setStatus('idle');
-    setError('');
-    inputRef.current?.focus();
-  };
-
-  const copyOutput = async () => {
-    if (!output) return;
+  const copy = async (m: Message) => {
     try {
-      await navigator.clipboard.writeText(output);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1500);
+      await navigator.clipboard.writeText(m.content);
+      setCopiedId(m.id);
+      window.setTimeout(() => setCopiedId((c) => (c === m.id ? null : c)), 1500);
     } catch {
-      /* clipboard blocked — user can still select the text */
+      /* clipboard blocked */
     }
   };
 
-  const working = status === 'working';
+  const composer = (
+    <div className="dock">
+      <div className={tooLong ? 'composer over' : 'composer'}>
+        <textarea
+          ref={inputRef}
+          value={draft}
+          rows={1}
+          autoFocus
+          lang="ta"
+          aria-label="உங்கள் செய்தி"
+          placeholder={empty ? activeTool.placeholder : 'தொடர்ந்து கேளுங்கள்… · Ask a follow-up'}
+          onChange={(e) => handleChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
+        />
+        {busy ? (
+          <button type="button" className="sendBtn" onClick={stop} aria-label="நிறுத்து · Stop" title="நிறுத்து">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="7" y="7" width="10" height="10" rx="2" />
+            </svg>
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="sendBtn"
+            onClick={() => void send()}
+            disabled={!draft.trim() || tooLong}
+            aria-label="அனுப்பு · Send"
+            title="அனுப்பு (Enter)"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 19V5M5 12l7-7 7 7" />
+            </svg>
+          </button>
+        )}
+      </div>
 
-  return (
-    <main className="shell">
-      <header className="brand">
-        <h1>
-          இலக்கியா <span className="brandEn">Illakiya</span>
-        </h1>
-        <p className="tagline">தமிழ் கருவிப்பெட்டி — எதையும் ஒட்டுங்கள், சுத்தமான தமிழ் பெறுங்கள்.</p>
-      </header>
-
-      <nav className="tools" role="tablist" aria-label="கருவிகள் · Tools">
+      <div className="chips" role="radiogroup" aria-label="முறை · Mode">
         {TOOLS.map((t) => (
           <button
             key={t.id}
             type="button"
-            role="tab"
-            aria-selected={t.id === tool}
-            className={t.id === tool ? 'tool active' : 'tool'}
+            role="radio"
+            aria-checked={t.id === tool}
+            className={t.id === tool ? 'chip on' : 'chip'}
             onClick={() => chooseTool(t.id)}
             title={t.hint}
           >
             {t.label}
           </button>
         ))}
-      </nav>
-      <p className="toolHint">{activeTool.hint}</p>
+      </div>
+      <p className="hint">
+        {tooLong ? `அதிகபட்சம் ${MAX_INPUT_CHARS.toLocaleString('ta-IN')} எழுத்துகள்.` : activeTool.hint}
+      </p>
+    </div>
+  );
 
-      <section className="panes">
-        <div className="pane">
-          <div className="paneHead">
-            <span className="paneLabel">உள்ளீடு · Input</span>
-            <span className={tooLong ? 'count over' : 'count'}>
-              {input.length.toLocaleString('ta-IN')} / {MAX_INPUT_CHARS.toLocaleString('ta-IN')}
-            </span>
-          </div>
-          <textarea
-            ref={inputRef}
-            className="field"
-            value={input}
-            autoFocus
-            spellCheck={false}
-            onChange={(e) => handleChange(e.target.value)}
-            onPaste={handlePaste}
-            onKeyDown={handleKeyDown}
-            placeholder={
-              offline
-                ? 'Tanglish தட்டச்சு செய்யுங்கள் — "vanakkam nanbargale"'
-                : 'ஆங்கிலம், Tanglish, பிழையான தமிழ் — எதையும் இங்கே ஒட்டுங்கள்…\nPaste English, Tanglish or rough Tamil here…'
-            }
-          />
-          <div className="paneFoot">
-            <button type="button" className="ghost" onClick={clearAll} disabled={!input && !output}>
-              அழி · Clear
-            </button>
-            {offline ? null : working ? (
-              <button type="button" className="primary" onClick={stop}>
-                நிறுத்து · Stop
-              </button>
+  if (empty) {
+    return (
+      <main className="app home">
+        <section className="hero">
+          <Logo size={56} />
+          <h1>இலக்கியா</h1>
+          <p className="lede">எதையும் தமிழில் — ஆராய்ந்து, எழுதி, திருத்தி.</p>
+          <p className="ledeEn">Research and write anything in Tamil.</p>
+        </section>
+        {composer}
+        <footer className="byline">
+          <span>யாழி</span> Yazhi
+        </footer>
+      </main>
+    );
+  }
+
+  return (
+    <main className="app">
+      <header className="bar">
+        <div className="barBrand">
+          <Logo size={28} />
+          <span className="barName">இலக்கியா</span>
+          <span className="barBy">by Yazhi</span>
+        </div>
+        <button type="button" className="ghostBtn" onClick={newChat}>
+          + புதியது
+        </button>
+      </header>
+
+      <div
+        className="thread"
+        ref={threadRef}
+        onScroll={(e) => {
+          const el = e.currentTarget;
+          stickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+        }}
+      >
+        <div className="threadInner">
+          {messages.map((m) =>
+            m.role === 'user' ? (
+              <div key={m.id} className="msg user">
+                {m.tool !== 'write' ? <span className="msgTool">{toolById(m.tool).label}</span> : null}
+                <div className="bubble">{m.content}</div>
+              </div>
             ) : (
-              <button
-                type="button"
-                className="primary"
-                onClick={() => void run(input, tool)}
-                disabled={!input.trim() || tooLong}
-                title="Ctrl/⌘ + Enter"
-              >
-                தமிழாக்கு →
-              </button>
-            )}
-          </div>
+              <article key={m.id} className="msg bot" lang="ta" aria-busy={m.pending}>
+                {m.searches?.length ? (
+                  <ul className="searches" aria-label="இணையத் தேடல்">
+                    {m.searches.map((q, i) => (
+                      <li key={i}>
+                        <SearchIcon /> {q || 'தேடுகிறது…'}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                <div className={m.pending ? 'prose typing' : 'prose'}>
+                  {m.content ? <Markdown text={m.content} /> : m.pending ? <span className="thinking">எழுதுகிறது…</span> : null}
+                </div>
+                {m.error ? <p className="err">{m.error}</p> : null}
+                {m.note ? <p className="note">{m.note}</p> : null}
+                {m.sources?.length ? (
+                  <div className="sources">
+                    <span className="sourcesLabel">ஆதாரங்கள்</span>
+                    {m.sources.map((s) => (
+                      <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" title={s.title}>
+                        {hostOf(s.url)}
+                      </a>
+                    ))}
+                  </div>
+                ) : null}
+                {!m.pending && m.content ? (
+                  <div className="actions">
+                    <button type="button" className="ghostBtn small" onClick={() => void copy(m)}>
+                      {copiedId === m.id ? '✓ நகலெடுத்தது' : 'நகலெடு'}
+                    </button>
+                    <SpeakButton getText={() => m.content} />
+                  </div>
+                ) : null}
+              </article>
+            )
+          )}
         </div>
+      </div>
 
-        <div className="pane out">
-          <div className="paneHead">
-            <span className="paneLabel">தமிழ் · Tamil</span>
-            <span className="status" aria-live="polite">
-              {working ? 'எழுதுகிறது…' : status === 'error' ? '' : copied ? 'நகலெடுக்கப்பட்டது ✓' : ''}
-            </span>
-          </div>
-          <div className={working ? 'field result working' : 'field result'} aria-live="polite" lang="ta">
-            {output ? (
-              output
-            ) : status === 'error' ? null : (
-              <span className="placeholder">சுத்தமான தமிழ் இங்கே வரும்.</span>
-            )}
-            {status === 'error' ? <p className="error">{error}</p> : null}
-          </div>
-          <div className="paneFoot">
-            <SpeakButton getText={() => output} />
-            <button type="button" className="primary" onClick={() => void copyOutput()} disabled={!output}>
-              {copied ? '✓ நகல்' : 'நகலெடு · Copy'}
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <footer className="foot">
-        யாழி · Yazhi — தமிழுக்கான இறையாண்மைத் தொழில்நுட்பம்
-      </footer>
+      {composer}
     </main>
+  );
+}
+
+function hostOf(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return url;
+  }
+}
+
+/** Yazhi mark: cobalt tile with யா. */
+function Logo({ size }: { size: number }) {
+  return (
+    <svg className="logo" width={size} height={size} viewBox="0 0 48 48" role="img" aria-label="Yazhi">
+      <rect width="48" height="48" rx="13" fill="var(--cobalt)" />
+      <text
+        x="24"
+        y="31"
+        textAnchor="middle"
+        fontSize="20"
+        fontWeight="700"
+        fill="#fff"
+        fontFamily="'Noto Sans Tamil', sans-serif"
+      >
+        யா
+      </text>
+    </svg>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="M16 16l4 4" />
+    </svg>
   );
 }
