@@ -29,6 +29,11 @@ describe('transliterateWord', () => {
     expect(transliterateWord('tamil 2!')).toBe('டமில் 2!');
   });
 
+  it('uses H as aytham only inside a word', () => {
+    expect(transliterateWord('aHdhu')).toBe('அஃது');
+    expect(transliterateWord('Hari')).toBe(transliterateWord('hari'));
+  });
+
   it('expands grantha clusters', () => {
     expect(transliterateWord('lakshmi')).toBe('லக்ஷ்மி');
   });

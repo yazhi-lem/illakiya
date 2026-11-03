@@ -1,18 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-const workspaceRoot = new URL('..', import.meta.url).pathname;
-
 export default defineConfig({
   plugins: [react()],
-  resolve: {
-    alias: {
-      '@data': `${workspaceRoot}data`,
-    },
-  },
   server: {
-    fs: {
-      allow: [workspaceRoot],
+    // `npm run dev` serves the UI; `/api` goes to `npm run dev:api`
+    // (wrangler pages dev, which runs functions/ with .dev.vars secrets).
+    proxy: {
+      '/api': 'http://127.0.0.1:8788',
     },
   },
 });

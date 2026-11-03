@@ -42,7 +42,9 @@ type Pending = { base: string } | null;
  * characters (spaces, punctuation, digits) pass through untouched and act as
  * word boundaries.
  */
-export function transliterateWord(roman: string): string {
+export function transliterateWord(input: string): string {
+  // A word-initial capital H is sentence case ("Hari"), not aytham: read it as h.
+  const roman = input.replace(/(^|[^A-Za-z])H/g, '$1h');
   let out = '';
   let pending: Pending = null;
   // Offset (within `roman`) where the current word began — for word-initial n.
@@ -68,7 +70,7 @@ export function transliterateWord(roman: string): string {
       continue;
     }
 
-    // Aytham: "H" on its own (kept distinct from lowercase h = ஹ).
+    // Aytham: "H" inside a word (kept distinct from lowercase h = ஹ).
     if (ch === 'H') {
       flushPending();
       out += AYTHAM;

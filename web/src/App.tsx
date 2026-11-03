@@ -1,330 +1,372 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
-import { AppHeader } from './components/AppHeader';
-import { EditorPane } from './components/EditorPane';
-import { KeyboardDock } from './components/KeyboardDock';
-import { ChaptersSidebar } from './components/ChaptersSidebar';
-import {
-  keyboardRows,
-  kurilToNedil,
-  pm0100KeyHints,
-  qwertyToPm0100,
-} from './constants/keyboard';
-import {
-  STORAGE_KEY,
-  chapterWordCount,
-  createChapter,
-  loadChapters,
-} from './lib/chapters';
-import { composePm0100, revertPm0100Composition } from './lib/pm0100';
+import { Markdown } from './components/Markdown';
+import { SpeakButton } from './components/SpeakButton';
+import { streamChat, type ChatTurn } from './lib/api';
+import { load, save } from './lib/storage';
+import { INTENT_LABELS, MAX_INPUT_CHARS, TOOLS, toolById } from './lib/tools';
 import { transliterateWord } from './lib/translit';
-import { suggest } from './lib/engine';
-import type { Chapter, InputMode } from './types';
+import type { Intent, Message, Mode } from './types';
 
-function currentWordInfo(content: string, caret: number): { word: string; start: number } {
-  let start = caret;
-  while (start > 0 && !/\s/.test(content[start - 1])) start -= 1;
-  return { word: content.slice(start, caret), start };
+const CHAT_KEY = 'illakiya.chat.v2';
+const MAX_KEPT = 40;
+
+const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+
+function loadChat(): Message[] {
+  try {
+    const parsed = JSON.parse(load(CHAT_KEY, '[]')) as Message[];
+    return Array.isArray(parsed) ? parsed.filter((m) => m && typeof m.content === 'string') : [];
+  } catch {
+    return [];
+  }
 }
 
-const isRomanWord = (word: string) => /[A-Za-z]/.test(word);
+/**
+ * Completed user/assistant pairs, as the server expects them. Each user turn
+ * carries the intent that was actually used, so it is replayed the same way.
+ */
+function historyTurns(messages: Message[]): ChatTurn[] {
+  const turns: ChatTurn[] = [];
+  for (let i = 0; i + 1 < messages.length; i += 2) {
+    const u = messages[i];
+    const a = messages[i + 1];
+    if (u.role !== 'user' || a.role !== 'assistant' || a.error || a.pending || !a.content.trim()) continue;
+    const used: Intent | 'auto' = a.intent ?? (u.mode === 'translit' ? 'clean' : u.mode);
+    turns.push({ role: 'user', content: u.content, mode: used }, { role: 'assistant', content: a.content });
+  }
+  return turns;
+}
 
 export default function App() {
-  const [chapters, setChapters] = useState<Chapter[]>(() => loadChapters());
-  const [activeChapterId, setActiveChapterId] = useState<string>(() => loadChapters()[0]?.id ?? '');
-  const [inputMode, setInputMode] = useState<InputMode>('taglish');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  // The recommended Tamil equivalent of the in-progress Taglish word (Tab accepts).
-  const [recommendation, setRecommendation] = useState<string | null>(null);
-  const [activeKey, setActiveKey] = useState<string | null>(null);
+  const [messages, setMessages] = useState<Message[]>(loadChat);
+  const [draft, setDraft] = useState('');
+  const [mode, setMode] = useState<Mode>('auto');
+  const [busy, setBusy] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const editorRef = useRef<HTMLTextAreaElement>(null);
-  const flashTimer = useRef<number | undefined>(undefined);
-  // Authoritative editing state, updated synchronously so keyboard/Tab actions
-  // never read stale values between React renders.
-  const contentRef = useRef<string>('');
-  const caretRef = useRef<number>(0);
-  const recommendationRef = useRef<string | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const threadRef = useRef<HTMLDivElement>(null);
+  const stickToBottom = useRef(true);
+  const sendAfterPaste = useRef(false);
 
-  const sortedChapters = useMemo(
-    () => [...chapters].sort((a, b) => a.order - b.order),
-    [chapters]
-  );
-  const activeChapter = useMemo(
-    () => chapters.find((c) => c.id === activeChapterId) ?? sortedChapters[0],
-    [chapters, activeChapterId, sortedChapters]
-  );
-  const wordCount = useMemo(
-    () => (activeChapter ? chapterWordCount(activeChapter.content) : 0),
-    [activeChapter]
-  );
+  const activeTool = toolById(mode);
+  const empty = messages.length === 0;
+  const tooLong = draft.length > MAX_INPUT_CHARS;
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(chapters));
-  }, [chapters]);
+    if (!busy) save(CHAT_KEY, JSON.stringify(messages.slice(-MAX_KEPT)));
+  }, [messages, busy]);
+  useEffect(() => () => abortRef.current?.abort(), []);
 
-  // Re-sync editing refs when the active chapter changes (switch / initial load).
-  useEffect(() => {
-    contentRef.current = activeChapter?.content ?? '';
-    caretRef.current = 0;
-    setSuggestions([]);
-    setRecommendation(null);
-    recommendationRef.current = null;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeChapterId]);
+  // Keep the newest text in view while it streams, unless the reader scrolled up.
+  useLayoutEffect(() => {
+    const el = threadRef.current;
+    if (el && stickToBottom.current) el.scrollTop = el.scrollHeight;
+  }, [messages]);
 
-  // Briefly highlight the matching on-screen key when a physical key is pressed.
-  const flashKey = (char: string) => {
-    setActiveKey(char);
-    window.clearTimeout(flashTimer.current);
-    flashTimer.current = window.setTimeout(() => setActiveKey(null), 150);
-  };
+  // Auto-grow the composer.
+  useLayoutEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, window.innerHeight * 0.4)}px`;
+  }, [draft, empty]);
 
-  // Recompute the recommendation (Taglish → Tamil) and dictionary suggestions
-  // for the word at the caret.
-  const refreshRecommendations = (content: string, caret: number) => {
-    const { word } = currentWordInfo(content, caret);
-    if (!word) {
-      setRecommendation(null);
-      recommendationRef.current = null;
-      setSuggestions([]);
-      return;
-    }
-    if (inputMode === 'taglish' && isRomanWord(word)) {
-      const tamil = transliterateWord(word);
-      recommendationRef.current = tamil;
-      setRecommendation(tamil);
-      setSuggestions(suggest(tamil, 5));
-    } else {
-      recommendationRef.current = null;
-      setRecommendation(null);
-      setSuggestions(inputMode === 'english' ? [] : suggest(word, 6));
-    }
-  };
+  const patch = (id: string, change: (m: Message) => Partial<Message>) =>
+    setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, ...change(m) } : m)));
 
-  const writeChapter = (nextContent: string) => {
-    const id = activeChapter?.id;
-    if (!id) return;
-    setChapters((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, content: nextContent, updatedAt: Date.now() } : c))
-    );
-  };
+  const send = async (text = draft, sendMode = mode) => {
+    const content = text.trim();
+    if (!content || busy || content.length > MAX_INPUT_CHARS) return;
 
-  // Single source of truth for a programmatic edit (on-screen keyboard, Tab
-  // accept, suggestion pick): update refs + DOM synchronously, then React state.
-  const commit = (next: string, caret: number) => {
-    contentRef.current = next;
-    caretRef.current = caret;
-    const editor = editorRef.current;
-    if (editor) {
-      editor.value = next;
-      editor.setSelectionRange(caret, caret);
-    }
-    writeChapter(next);
-    refreshRecommendations(next, caret);
-  };
+    const userMsg: Message = { id: uid(), role: 'user', content, mode: sendMode };
+    setDraft('');
+    setMode('auto'); // follow-ups go back to automatic intent detection
+    stickToBottom.current = true;
 
-  const readSelection = () => {
-    const editor = editorRef.current;
-    const domS = editor?.selectionStart ?? caretRef.current;
-    const domE = editor?.selectionEnd ?? domS;
-    if (domS !== domE) return { s: domS, en: domE };
-    return { s: caretRef.current, en: caretRef.current };
-  };
-
-  // Free-typed input (Taglish roman text, or raw English) flows through the
-  // normal controlled textarea; we just keep refs + recommendations in sync.
-  const handleChange = (value: string) => {
-    contentRef.current = value;
-    const editor = editorRef.current;
-    const caret = editor?.selectionStart ?? value.length;
-    caretRef.current = caret;
-    writeChapter(value);
-    refreshRecommendations(value, caret);
-  };
-
-  const handleSelect = () => {
-    const editor = editorRef.current;
-    if (!editor) return;
-    const caret = editor.selectionStart ?? 0;
-    caretRef.current = caret;
-    refreshRecommendations(contentRef.current, caret);
-  };
-
-  // Replace the in-progress Taglish word with its recommended Tamil equivalent.
-  const acceptRecommendation = () => {
-    const tamil = recommendationRef.current;
-    if (!tamil) return;
-    const content = contentRef.current;
-    const caret = caretRef.current;
-    const { word, start } = currentWordInfo(content, caret);
-    if (!word) return;
-    const next = content.slice(0, start) + tamil + content.slice(caret);
-    commit(next, start + tamil.length);
-    editorRef.current?.focus();
-  };
-
-  const handleEditorKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.ctrlKey || event.metaKey || event.altKey) return;
-    if (!activeChapter) return;
-    const key = event.key;
-
-    // PM0100: laptop QWERTY keys drive the Tamil layout; Shift on a vowel = nedil.
-    if (inputMode === 'pm0100') {
-      if (key === 'Backspace') {
-        event.preventDefault();
-        backspaceAtCursor();
-        return;
-      }
-      if (key === 'Enter') {
-        event.preventDefault();
-        insertTextAtCursor('\n');
-        return;
-      }
-      if (key === ' ') {
-        event.preventDefault();
-        insertTextAtCursor(' ');
-        return;
-      }
-      const entry = qwertyToPm0100[event.code];
-      if (entry) {
-        event.preventDefault();
-        const char =
-          entry.isVowel && event.shiftKey ? kurilToNedil[entry.char] ?? entry.char : entry.char;
-        insertTextAtCursor(char);
-        flashKey(entry.char);
-      }
-      // Unmapped keys (punctuation, digits, navigation) fall through to default.
+    if (sendMode === 'translit') {
+      const reply: Message = { id: uid(), role: 'assistant', content: transliterateWord(content), mode: sendMode };
+      setMessages((prev) => [...prev, userMsg, reply]);
       return;
     }
 
-    // Taglish: Tab completes the in-progress roman word to its Tamil equivalent.
-    if (inputMode === 'taglish' && key === 'Tab' && recommendationRef.current) {
+    const replyId = uid();
+    const turns: ChatTurn[] = [...historyTurns(messages), { role: 'user', content, mode: sendMode }];
+    setMessages((prev) => [...prev, userMsg, { id: replyId, role: 'assistant', content: '', mode: sendMode, pending: true }]);
+
+    const controller = new AbortController();
+    abortRef.current = controller;
+    setBusy(true);
+    try {
+      await streamChat(
+        turns,
+        {
+          onIntent: (intent, auto) => patch(replyId, () => ({ intent, auto })),
+          onText: (delta) => patch(replyId, (m) => ({ content: m.content + delta })),
+          onSearch: (q) => patch(replyId, (m) => ({ searches: [...(m.searches ?? []), q] })),
+          onSources: (sources) => patch(replyId, () => ({ sources })),
+          onNote: (note) => patch(replyId, () => ({ note })),
+        },
+        controller.signal
+      );
+      patch(replyId, () => ({ pending: false }));
+    } catch (err) {
+      if (controller.signal.aborted) {
+        patch(replyId, (m) => ({ pending: false, note: m.content ? 'நிறுத்தப்பட்டது.' : undefined, error: m.content ? undefined : 'நிறுத்தப்பட்டது.' }));
+      } else {
+        patch(replyId, () => ({ pending: false, error: err instanceof Error ? err.message : 'பிழை. மீண்டும் முயலவும்.' }));
+      }
+    } finally {
+      if (abortRef.current === controller) abortRef.current = null;
+      setBusy(false);
+      inputRef.current?.focus();
+    }
+  };
+
+  const stop = () => abortRef.current?.abort();
+
+  const newChat = () => {
+    abortRef.current?.abort();
+    setMessages([]);
+    setDraft('');
+    setMode('auto');
+    inputRef.current?.focus();
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    // Never send mid-composition (Tamil IMEs compose characters with Enter).
+    if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
       event.preventDefault();
-      acceptRecommendation();
-      return;
+      void send();
     }
-    // Everything else (Taglish roman typing, ABC English) is plain typing;
-    // handleChange keeps refs + recommendations in sync.
   };
 
-  // On-screen PM0100 keyboard (direct Tamil, uses the composition helper).
-  const insertTextAtCursor = (value: string) => {
-    if (!activeChapter) return;
-    const { s, en } = readSelection();
-    const content = contentRef.current;
-    const before = content.slice(0, s);
-    const after = content.slice(en);
-    const composed = composePm0100(before, value);
-    const next = `${composed.before}${composed.inserted}${after}`;
-    const caret = composed.before.length + composed.inserted.length;
-    commit(next, caret);
-    editorRef.current?.focus();
-  };
-
-  const backspaceAtCursor = () => {
-    if (!activeChapter) return;
-    const { s, en } = readSelection();
-    const content = contentRef.current;
-    if (s !== en) {
-      commit(content.slice(0, s) + content.slice(en), s);
-      editorRef.current?.focus();
-      return;
+  const handleChange = (value: string) => {
+    setDraft(value);
+    if (sendAfterPaste.current) {
+      sendAfterPaste.current = false;
+      void send(value, mode);
     }
-    if (s <= 0) return;
-    const before = content.slice(0, s);
-    const after = content.slice(s);
-    const reverted = revertPm0100Composition(before);
-    if (reverted.changed) {
-      commit(`${reverted.value}${after}`, reverted.value.length);
-    } else {
-      commit(content.slice(0, s - 1) + content.slice(s), s - 1);
+  };
+
+  // In a forced conversion mode, pasting into an empty box sends straight away.
+  const handlePaste = () => {
+    const convert = mode === 'clean' || mode === 'translate' || mode === 'grammar' || mode === 'formal';
+    if (!draft.trim() && convert && !busy) sendAfterPaste.current = true;
+  };
+
+  const chooseMode = (id: Mode) => {
+    setMode(id);
+    inputRef.current?.focus();
+  };
+
+  const copy = async (m: Message) => {
+    try {
+      await navigator.clipboard.writeText(m.content);
+      setCopiedId(m.id);
+      window.setTimeout(() => setCopiedId((c) => (c === m.id ? null : c)), 1500);
+    } catch {
+      /* clipboard blocked */
     }
-    editorRef.current?.focus();
   };
 
-  const pickSuggestion = (word: string) => {
-    if (!activeChapter) return;
-    const content = contentRef.current;
-    const caret = caretRef.current;
-    const { start } = currentWordInfo(content, caret);
-    const next = content.slice(0, start) + word + content.slice(caret);
-    commit(next, start + word.length);
-    editorRef.current?.focus();
-  };
+  const composer = (
+    <div className="dock">
+      <div className={tooLong ? 'composer over' : 'composer'}>
+        <textarea
+          ref={inputRef}
+          value={draft}
+          rows={1}
+          autoFocus
+          lang="ta"
+          aria-label="உங்கள் செய்தி"
+          placeholder={empty ? activeTool.placeholder : 'தொடர்ந்து கேளுங்கள்… · Ask a follow-up'}
+          onChange={(e) => handleChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
+        />
+        {busy ? (
+          <button type="button" className="sendBtn" onClick={stop} aria-label="நிறுத்து · Stop" title="நிறுத்து">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="7" y="7" width="10" height="10" rx="2" />
+            </svg>
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="sendBtn"
+            onClick={() => void send()}
+            disabled={!draft.trim() || tooLong}
+            aria-label="அனுப்பு · Send"
+            title="அனுப்பு (Enter)"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 19V5M5 12l7-7 7 7" />
+            </svg>
+          </button>
+        )}
+      </div>
 
-  const createNewChapter = () => {
-    const maxOrder = chapters.reduce((m, c) => Math.max(m, c.order), -1);
-    const n = chapters.length + 1;
-    const chapter = createChapter({
-      title: `அத்தியாயம் ${n}`,
-      order: maxOrder + 1,
-      content: `# அத்தியாயம் ${n}\n\n`,
-    });
-    setChapters((prev) => [...prev, chapter]);
-    setActiveChapterId(chapter.id);
-  };
+      <div className="chips" role="radiogroup" aria-label="முறை · Mode">
+        {TOOLS.map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            role="radio"
+            aria-checked={t.id === mode}
+            className={t.id === mode ? 'chip on' : 'chip'}
+            onClick={() => chooseMode(t.id)}
+            title={t.hint}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+      <p className="hint">
+        {tooLong ? `அதிகபட்சம் ${MAX_INPUT_CHARS.toLocaleString('ta-IN')} எழுத்துகள்.` : activeTool.hint}
+      </p>
+    </div>
+  );
 
-  const renameChapter = (id: string, title: string) => {
-    setChapters((prev) => prev.map((c) => (c.id === id ? { ...c, title } : c)));
-  };
-
-  const changeMode = (mode: InputMode) => {
-    setInputMode(mode);
-    setRecommendation(null);
-    recommendationRef.current = null;
-    editorRef.current?.focus();
-  };
-
-  const exportText = () => {
-    if (!activeChapter) return;
-    const blob = new Blob([activeChapter.content], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = `${activeChapter.title || 'illakiya-chapter'}.txt`;
-    anchor.click();
-    URL.revokeObjectURL(url);
-  };
+  if (empty) {
+    return (
+      <main className="app home">
+        <section className="hero">
+          <Logo size={56} />
+          <h1>இலக்கியா</h1>
+          <p className="lede">எதையும் தமிழில் — ஆராய்ந்து, எழுதி, திருத்தி.</p>
+          <p className="ledeEn">Research and write anything in Tamil.</p>
+        </section>
+        {composer}
+        <footer className="byline">
+          <span>யாழி</span> Yazhi
+        </footer>
+      </main>
+    );
+  }
 
   return (
-    <main className="appShell">
-      <AppHeader />
+    <main className="app">
+      <header className="bar">
+        <div className="barBrand">
+          <Logo size={28} />
+          <span className="barName">இலக்கியா</span>
+          <span className="barBy">by Yazhi</span>
+        </div>
+        <button type="button" className="ghostBtn" onClick={newChat}>
+          + புதியது
+        </button>
+      </header>
 
-      <section className="editorLayout withKeyboard">
-        <ChaptersSidebar
-          chapters={sortedChapters}
-          activeChapterId={activeChapter?.id}
-          onSelect={setActiveChapterId}
-          onCreate={createNewChapter}
-          onRename={renameChapter}
-        />
+      <div
+        className="thread"
+        ref={threadRef}
+        onScroll={(e) => {
+          const el = e.currentTarget;
+          stickToBottom.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+        }}
+      >
+        <div className="threadInner">
+          {messages.map((m) =>
+            m.role === 'user' ? (
+              <div key={m.id} className="msg user">
+                {m.mode !== 'auto' ? <span className="msgTool">{toolById(m.mode).label}</span> : null}
+                <div className="bubble">{m.content}</div>
+              </div>
+            ) : (
+              <article key={m.id} className="msg bot" lang="ta" aria-busy={m.pending}>
+                {m.intent ? (
+                  <span className="intent" title={m.auto ? 'தானாகக் கண்டறிந்தது · Detected automatically' : 'நீங்கள் தேர்ந்தெடுத்தது · Chosen by you'}>
+                    {m.auto ? <SparkIcon /> : null}
+                    {INTENT_LABELS[m.intent]}
+                  </span>
+                ) : null}
+                {m.searches?.length ? (
+                  <ul className="searches" aria-label="இணையத் தேடல்">
+                    {m.searches.map((q, i) => (
+                      <li key={i}>
+                        <SearchIcon /> {q || 'தேடுகிறது…'}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                <div className={m.pending ? 'prose typing' : 'prose'}>
+                  {m.content ? <Markdown text={m.content} /> : m.pending ? <span className="thinking">எழுதுகிறது…</span> : null}
+                </div>
+                {m.error ? <p className="err">{m.error}</p> : null}
+                {m.note ? <p className="note">{m.note}</p> : null}
+                {m.sources?.length ? (
+                  <div className="sources">
+                    <span className="sourcesLabel">ஆதாரங்கள்</span>
+                    {m.sources.map((s) => (
+                      <a key={s.url} href={s.url} target="_blank" rel="noopener noreferrer" title={s.title}>
+                        {hostOf(s.url)}
+                      </a>
+                    ))}
+                  </div>
+                ) : null}
+                {!m.pending && m.content ? (
+                  <div className="actions">
+                    <button type="button" className="ghostBtn small" onClick={() => void copy(m)}>
+                      {copiedId === m.id ? '✓ நகலெடுத்தது' : 'நகலெடு'}
+                    </button>
+                    <SpeakButton getText={() => m.content} />
+                  </div>
+                ) : null}
+              </article>
+            )
+          )}
+        </div>
+      </div>
 
-        <EditorPane
-          activeChapter={activeChapter}
-          wordCount={wordCount}
-          inputMode={inputMode}
-          onChangeMode={changeMode}
-          editorRef={editorRef}
-          onChangeContent={handleChange}
-          onKeyDown={handleEditorKeyDown}
-          onSelect={handleSelect}
-          suggestions={suggestions}
-          recommendation={recommendation}
-          onPickSuggestion={pickSuggestion}
-          onExportText={exportText}
-        />
-
-        <KeyboardDock
-          rows={keyboardRows}
-          hints={pm0100KeyHints}
-          nedilMap={kurilToNedil}
-          activeKey={activeKey}
-          onKey={insertTextAtCursor}
-          onSpace={() => insertTextAtCursor(' ')}
-          onBackspace={backspaceAtCursor}
-        />
-      </section>
+      {composer}
     </main>
+  );
+}
+
+function hostOf(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return url;
+  }
+}
+
+/** Yazhi mark: cobalt tile with யா. */
+function Logo({ size }: { size: number }) {
+  return (
+    <svg className="logo" width={size} height={size} viewBox="0 0 48 48" role="img" aria-label="Yazhi">
+      <rect width="48" height="48" rx="13" fill="var(--cobalt)" />
+      <text
+        x="24"
+        y="31"
+        textAnchor="middle"
+        fontSize="20"
+        fontWeight="700"
+        fill="#fff"
+        fontFamily="'Noto Sans Tamil', sans-serif"
+      >
+        யா
+      </text>
+    </svg>
+  );
+}
+
+function SparkIcon() {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />
+    </svg>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="M16 16l4 4" />
+    </svg>
   );
 }
