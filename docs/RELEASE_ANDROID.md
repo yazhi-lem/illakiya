@@ -8,7 +8,7 @@ Status, build steps and the Play Store checklist for the PM0100 Tamil keyboard
 | Area | State |
 |---|---|
 | Rust core (`core-rust`) | ✅ Tests, clippy and rustfmt pass in CI. The PM0100 layout covers all 247 letters. The dictionary has 836 words. |
-| Android build | ⏳ First CI build in progress (`.github/workflows/android.yml`): debug APK, release APK, AAB and lint. |
+| Android build | ✅ Builds in CI (`.github/workflows/android.yml`): debug APK, release APK, AAB, release lint and debug lint. The first run passed in 6 min ([run 41659035611](https://github.com/yazhi-lem/illakiya/actions/runs/41659035611)). |
 | Toolchain | Gradle 8.14.3 · AGP 8.13.0 · Kotlin 2.2.21 · Compose BOM 2025.06.01 · compileSdk/targetSdk 36 · minSdk 26 · JDK 17 |
 | Native libs | `arm64-v8a`, `armeabi-v7a`, `x86_64`, built with `cargo-ndk` (API 26) |
 | IME | PM0100 layout (வல்லினம் / இடையினம் / மெல்லினம் rows + vowels), நெடில் by long-press or ⇧, symbols and digits, Enter with editor actions, keyboard switch, held backspace repeats, suggestions, வல்லினம் மிகும் hints |
@@ -90,4 +90,5 @@ Keep the `.jks` file and both passwords offline. Use Play App Signing: this key 
 - If you edit text with gestures or the cursor mid-word, the engine resets its view of the current word. Suggestions restart from the next word.
 - R8 minification is off: JNA and the UniFFI bindings use reflection. Turn it on once the keep rules are checked on a device.
 - No swipe-to-nedil gesture yet. Use long-press or ⇧ நெடில்.
+- AGP reports it can't strip the native libraries (`libillakiya_core.so`), so they ship with symbols. Set `ndkVersion` and add `strip = true` to the release profile in `Cargo.toml` to cut APK size.
 - The dictionary is small (836 words). Expanding it is tracked in `docs/dictionary-expansion.md`.
