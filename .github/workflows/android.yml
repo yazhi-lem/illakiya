@@ -2,7 +2,7 @@ name: Android
 
 on:
   push:
-    branches: [main]
+    branches: [main, "claude/**", "vajra/**"]
     tags: ["v*"]
     paths:
       - "android/**"
