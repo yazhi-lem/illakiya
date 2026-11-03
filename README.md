@@ -2,7 +2,7 @@
   <h1>✨ Illakiya (இலக்கியா) ✨</h1>
   <p><b>Research and write anything in Tamil. By Yazhi.</b></p>
 
-  > *Named after இலக்கியம் ("literature"). Ask for an article, letter or post and Illakiya researches and writes it in Tamil; paste English, Tanglish or rough Tamil and get clean Tamil back.*
+  > *Named after இலக்கியம் ("literature"). Ask for anything and Illakiya works out what you need: it researches and writes in Tamil, translates English, cleans up Tanglish or fixes Tamil grammar. Powered by Sarvam AI.*
 
 **Live:** https://illakiya.yazhi.dev · See [NEXT_ACTION.md](./NEXT_ACTION.md) for the roadmap.
 
@@ -12,32 +12,42 @@
 
 ## ✍️ How it works
 
-One centred box. Type or paste, pick a mode underneath, press Enter. Answers appear above the box; keep typing below to follow up ("shorter", "make it formal", "add a conclusion").
+One centred box. Type, ask or paste anything and press Enter. Illakiya works out what you need, answers above the box, and you keep typing below to follow up ("shorter", "make it formal", "add a conclusion").
 
-| Mode | What it does | Runs |
-|------|--------------|------|
-| **எழுது** (Write) — default | Researches on the web when facts matter, then writes any content in Tamil (articles, letters, posts, speeches, summaries). A bare paste comes back as clean Tamil. Sources are listed under the answer. | Claude + web search |
-| **தூய தமிழ்** (Clean) | Anything → clean, natural Tamil | Claude |
-| **மொழிபெயர்** (Translate) | English → fluent Tamil, by meaning | Claude |
-| **இலக்கணம்** (Grammar) | Minimal fixes: spelling, sandhi (புணர்ச்சி), case endings, agreement | Claude |
-| **எழுத்து நடை** (Formal) | Spoken Tamil → formal written Tamil | Claude |
-| **Tanglish** | Instant offline transliteration (`vanakkam` → `வணக்கம்`) | Browser |
+**Automatic intent detection (தானியங்கு, default).** Every message is classified before it is answered:
 
-After a message is sent the mode returns to **எழுது**, so follow-ups read as instructions. In a conversion mode, pasting into an empty box sends straight away.
+| Detected intent | When | What Illakiya does |
+|---|---|---|
+| **ஆய்ந்து எழுதுதல்** research | questions and essays about real people, places, history, science, current topics | searches Tamil + English Wikipedia, then writes in Tamil from those facts and lists the sources |
+| **எழுதுதல்** write | poems, stories, letters, wishes, posts, general answers | writes in Tamil |
+| **மொழிபெயர்ப்பு** translate | pasted English | natural Tamil translation |
+| **தூய தமிழாக்கம்** clean | Tanglish / mixed text | clean Tamil |
+| **இலக்கணத் திருத்தம்** grammar | pasted Tamil | minimal grammar and spelling fixes |
+| **எழுத்து நடை** formal | "make this formal" + Tamil | formal written Tamil |
+| **திருத்தி எழுதுதல்** revise | follow-up instructions | revises the previous answer |
+
+Fast heuristics (script, Tanglish vocabulary, request words) decide the clear cases instantly. When they are unsure, a small Sarvam call with a JSON schema decides. Each answer shows the detected intent as a badge. The chips under the box force a mode for the next message, and the composer goes back to Auto after each send. **Tanglish** transliterates offline in the browser.
+
+**Tamil quality.** One base prompt sets the standard: correct புணர்ச்சி and வல்லினம் மிகுதல், case endings and agreement, Tamil word order, Tamil words in place of needless loanwords, and no Latin-script English inside Tamil sentences. Each conversion task carries a worked example. Conversions run at low temperature with light reasoning; writing and research get more room and deeper reasoning.
 
 ## 🏗️ Architecture
 
 ```mermaid
 graph LR
     U[Browser — React chat UI<br/>web/src] -->|POST /api/tamil<br/>conversation + mode| F[Cloudflare Pages Function<br/>web/functions/api/tamil.ts]
-    F -->|Messages API, streaming,<br/>web search in Write mode| C[Claude]
-    C -->|text, searches, sources| F -->|NDJSON stream| U
+    F -->|1 detect intent| I[heuristics → Sarvam classifier]
+    F -->|2 research| W[Tamil + English Wikipedia]
+    F -->|3 stream| S[Sarvam AI sarvam-105b]
+    S -->|Tamil text| F -->|NDJSON: intent, search, sources, text| U
     U -.->|offline| T[Tanglish transliterator<br/>web/src/lib/translit.ts]
 ```
 
-- **`web/src`** — chat UI: thread on top, centred composer with the mode chips below, copy and text-to-speech per answer, conversation saved in the browser.
-- **`web/server/tools.ts`** — the system prompt, per-mode instructions and request validation (40 turns, 20,000 characters a message). Text sent in a conversion mode goes in `<text>` tags as data, never as instructions.
-- **`web/functions/api/tamil.ts`** — the only server code. Holds the `ANTHROPIC_API_KEY` secret, enables web search (up to 5 searches) in Write mode, resumes long research turns, and streams text, searches and sources back as NDJSON.
+- **`web/server/intent.ts`**: intent heuristics, the classifier prompt and schema, and conversion-payload extraction ("Translate: …").
+- **`web/server/prompts.ts`**: the Tamil-standard base prompt, per-intent tasks with examples, and sampling per intent.
+- **`web/server/research.ts`**: Wikipedia search and extracts (best effort, 6 s timeout).
+- **`web/server/sarvam.ts`**: Sarvam chat client (`api-subscription-key`, SSE parsing, `<think>` filtering).
+- **`web/server/request.ts`**: request validation (40 turns, 20,000 characters a message).
+- **`web/functions/api/tamil.ts`**: the only server entry point. It holds `SARVAM_API_KEY`.
 
 ## 🚀 Quick start (web)
 
@@ -47,10 +57,10 @@ npm test            # unit tests
 npm run dev         # UI on http://localhost:5173 (Tanglish tool works offline)
 ```
 
-To run the Claude tools locally, put your key in `web/.dev.vars` (git-ignored):
+To run the Sarvam-powered modes locally, put your key in `web/.dev.vars` (git-ignored):
 
 ```bash
-echo "ANTHROPIC_API_KEY=sk-ant-..." > web/.dev.vars
+echo "SARVAM_API_KEY=your-sarvam-key" > web/.dev.vars
 ```
 
 ```bash
@@ -90,7 +100,7 @@ Deployment: [docs/DEPLOY.md](./docs/DEPLOY.md).
 ## 💻 Tech Stack
 
 - **React + Vite** — web toolbox UI
-- **Cloudflare Pages Functions** — `/api/tamil`, Claude via the Anthropic TypeScript SDK
+- **Cloudflare Pages Functions** — `/api/tamil`, Sarvam AI (`sarvam-105b`) + Wikipedia research
 - **Kotlin** — Android UI (Jetpack Compose, Material 3)
 - **Rust** — Core engine (state machine, dictionary, sandhi)
 - **UniFFI** — FFI bridge (Mozilla, type-safe)

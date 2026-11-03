@@ -4,11 +4,11 @@ import { Markdown } from './components/Markdown';
 import { SpeakButton } from './components/SpeakButton';
 import { streamChat, type ChatTurn } from './lib/api';
 import { load, save } from './lib/storage';
-import { MAX_INPUT_CHARS, TOOLS, toolById } from './lib/tools';
+import { INTENT_LABELS, MAX_INPUT_CHARS, TOOLS, toolById } from './lib/tools';
 import { transliterateWord } from './lib/translit';
-import type { Message, ServerToolId, ToolId } from './types';
+import type { Intent, Message, Mode } from './types';
 
-const CHAT_KEY = 'illakiya.chat.v1';
+const CHAT_KEY = 'illakiya.chat.v2';
 const MAX_KEPT = 40;
 
 const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
@@ -22,15 +22,18 @@ function loadChat(): Message[] {
   }
 }
 
-/** Completed user/assistant pairs, as the server expects them. */
+/**
+ * Completed user/assistant pairs, as the server expects them. Each user turn
+ * carries the intent that was actually used, so it is replayed the same way.
+ */
 function historyTurns(messages: Message[]): ChatTurn[] {
   const turns: ChatTurn[] = [];
   for (let i = 0; i + 1 < messages.length; i += 2) {
     const u = messages[i];
     const a = messages[i + 1];
     if (u.role !== 'user' || a.role !== 'assistant' || a.error || a.pending || !a.content.trim()) continue;
-    const tool: ServerToolId = u.tool === 'translit' ? 'write' : u.tool;
-    turns.push({ role: 'user', content: u.content, tool }, { role: 'assistant', content: a.content });
+    const used: Intent | 'auto' = a.intent ?? (u.mode === 'translit' ? 'clean' : u.mode);
+    turns.push({ role: 'user', content: u.content, mode: used }, { role: 'assistant', content: a.content });
   }
   return turns;
 }
@@ -38,7 +41,7 @@ function historyTurns(messages: Message[]): ChatTurn[] {
 export default function App() {
   const [messages, setMessages] = useState<Message[]>(loadChat);
   const [draft, setDraft] = useState('');
-  const [tool, setTool] = useState<ToolId>('write');
+  const [mode, setMode] = useState<Mode>('auto');
   const [busy, setBusy] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -48,7 +51,7 @@ export default function App() {
   const stickToBottom = useRef(true);
   const sendAfterPaste = useRef(false);
 
-  const activeTool = toolById(tool);
+  const activeTool = toolById(mode);
   const empty = messages.length === 0;
   const tooLong = draft.length > MAX_INPUT_CHARS;
 
@@ -74,24 +77,24 @@ export default function App() {
   const patch = (id: string, change: (m: Message) => Partial<Message>) =>
     setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, ...change(m) } : m)));
 
-  const send = async (text = draft, mode = tool) => {
+  const send = async (text = draft, sendMode = mode) => {
     const content = text.trim();
     if (!content || busy || content.length > MAX_INPUT_CHARS) return;
 
-    const userMsg: Message = { id: uid(), role: 'user', content, tool: mode };
+    const userMsg: Message = { id: uid(), role: 'user', content, mode: sendMode };
     setDraft('');
-    setTool('write'); // follow-ups continue the conversation in free-writing mode
+    setMode('auto'); // follow-ups go back to automatic intent detection
     stickToBottom.current = true;
 
-    if (mode === 'translit') {
-      const reply: Message = { id: uid(), role: 'assistant', content: transliterateWord(content), tool: mode };
+    if (sendMode === 'translit') {
+      const reply: Message = { id: uid(), role: 'assistant', content: transliterateWord(content), mode: sendMode };
       setMessages((prev) => [...prev, userMsg, reply]);
       return;
     }
 
     const replyId = uid();
-    const turns = [...historyTurns(messages), { role: 'user' as const, content, tool: mode }];
-    setMessages((prev) => [...prev, userMsg, { id: replyId, role: 'assistant', content: '', tool: mode, pending: true }]);
+    const turns: ChatTurn[] = [...historyTurns(messages), { role: 'user', content, mode: sendMode }];
+    setMessages((prev) => [...prev, userMsg, { id: replyId, role: 'assistant', content: '', mode: sendMode, pending: true }]);
 
     const controller = new AbortController();
     abortRef.current = controller;
@@ -100,6 +103,7 @@ export default function App() {
       await streamChat(
         turns,
         {
+          onIntent: (intent, auto) => patch(replyId, () => ({ intent, auto })),
           onText: (delta) => patch(replyId, (m) => ({ content: m.content + delta })),
           onSearch: (q) => patch(replyId, (m) => ({ searches: [...(m.searches ?? []), q] })),
           onSources: (sources) => patch(replyId, () => ({ sources })),
@@ -127,7 +131,7 @@ export default function App() {
     abortRef.current?.abort();
     setMessages([]);
     setDraft('');
-    setTool('write');
+    setMode('auto');
     inputRef.current?.focus();
   };
 
@@ -143,17 +147,18 @@ export default function App() {
     setDraft(value);
     if (sendAfterPaste.current) {
       sendAfterPaste.current = false;
-      void send(value, tool);
+      void send(value, mode);
     }
   };
 
-  // In a conversion mode, pasting into an empty box sends straight away.
+  // In a forced conversion mode, pasting into an empty box sends straight away.
   const handlePaste = () => {
-    if (!draft.trim() && tool !== 'write' && !busy) sendAfterPaste.current = true;
+    const convert = mode === 'clean' || mode === 'translate' || mode === 'grammar' || mode === 'formal';
+    if (!draft.trim() && convert && !busy) sendAfterPaste.current = true;
   };
 
-  const chooseTool = (id: ToolId) => {
-    setTool(id);
+  const chooseMode = (id: Mode) => {
+    setMode(id);
     inputRef.current?.focus();
   };
 
@@ -210,9 +215,9 @@ export default function App() {
             key={t.id}
             type="button"
             role="radio"
-            aria-checked={t.id === tool}
-            className={t.id === tool ? 'chip on' : 'chip'}
-            onClick={() => chooseTool(t.id)}
+            aria-checked={t.id === mode}
+            className={t.id === mode ? 'chip on' : 'chip'}
+            onClick={() => chooseMode(t.id)}
             title={t.hint}
           >
             {t.label}
@@ -267,11 +272,17 @@ export default function App() {
           {messages.map((m) =>
             m.role === 'user' ? (
               <div key={m.id} className="msg user">
-                {m.tool !== 'write' ? <span className="msgTool">{toolById(m.tool).label}</span> : null}
+                {m.mode !== 'auto' ? <span className="msgTool">{toolById(m.mode).label}</span> : null}
                 <div className="bubble">{m.content}</div>
               </div>
             ) : (
               <article key={m.id} className="msg bot" lang="ta" aria-busy={m.pending}>
+                {m.intent ? (
+                  <span className="intent" title={m.auto ? 'தானாகக் கண்டறிந்தது · Detected automatically' : 'நீங்கள் தேர்ந்தெடுத்தது · Chosen by you'}>
+                    {m.auto ? <SparkIcon /> : null}
+                    {INTENT_LABELS[m.intent]}
+                  </span>
+                ) : null}
                 {m.searches?.length ? (
                   <ul className="searches" aria-label="இணையத் தேடல்">
                     {m.searches.map((q, i) => (
@@ -339,6 +350,14 @@ function Logo({ size }: { size: number }) {
       >
         யா
       </text>
+    </svg>
+  );
+}
+
+function SparkIcon() {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />
     </svg>
   );
 }

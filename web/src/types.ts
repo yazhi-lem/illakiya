@@ -1,9 +1,11 @@
-/** Modes in the Illakiya composer. `translit` runs offline in the browser. */
-export type ServerToolId = 'write' | 'clean' | 'translate' | 'grammar' | 'formal';
-export type ToolId = ServerToolId | 'translit';
+/** What the server did with a message (detected or forced). */
+export type Intent = 'write' | 'research' | 'clean' | 'translate' | 'grammar' | 'formal' | 'revise';
+
+/** Composer modes. `auto` lets Illakiya detect the intent; `translit` runs offline. */
+export type Mode = 'auto' | 'research' | 'clean' | 'translate' | 'grammar' | 'formal' | 'translit';
 
 export type Tool = {
-  id: ToolId;
+  id: Mode;
   label: string;
   hint: string;
   placeholder: string;
@@ -17,9 +19,11 @@ export type Message = {
   id: string;
   role: 'user' | 'assistant';
   content: string;
-  /** Mode a user message was sent with. */
-  tool: ToolId;
-  /** Assistant only: web searches made while writing. */
+  /** User: the mode it was sent with. */
+  mode: Mode;
+  /** Assistant: what Illakiya did, and whether it detected that itself. */
+  intent?: Intent;
+  auto?: boolean;
   searches?: string[];
   sources?: Source[];
   note?: string;

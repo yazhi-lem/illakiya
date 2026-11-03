@@ -1,11 +1,17 @@
-import type { Tool } from '../types';
+import type { Intent, Tool } from '../types';
 
 export const TOOLS: Tool[] = [
   {
-    id: 'write',
-    label: 'எழுது',
-    hint: 'ஆராய்ந்து எழுதும் — கட்டுரை, கடிதம், பதிவு, எதுவும் · Research & write anything',
-    placeholder: 'எதைப் பற்றி எழுத வேண்டும்? அல்லது எந்த உரையையும் ஒட்டுங்கள்…',
+    id: 'auto',
+    label: 'தானியங்கு',
+    hint: 'எதையும் எழுதுங்கள் — தேவையை இலக்கியா தானே அறியும் · Auto: Illakiya works out what you need',
+    placeholder: 'கேளுங்கள், எழுதச் சொல்லுங்கள், அல்லது ஒட்டுங்கள்…',
+  },
+  {
+    id: 'research',
+    label: 'ஆய்ந்தெழுது',
+    hint: 'விக்கிப்பீடியாவில் தேடி, உண்மைகளுடன் எழுதும் · Research & write',
+    placeholder: 'எதைப் பற்றி ஆய்ந்து எழுத வேண்டும்?',
   },
   {
     id: 'clean',
@@ -41,5 +47,16 @@ export const TOOLS: Tool[] = [
 ];
 
 export const toolById = (id: string) => TOOLS.find((t) => t.id === id) ?? TOOLS[0];
+
+/** Labels for what Illakiya did with a message. */
+export const INTENT_LABELS: Record<Intent, string> = {
+  write: 'எழுதுதல்',
+  research: 'ஆய்ந்து எழுதுதல்',
+  clean: 'தூய தமிழாக்கம்',
+  translate: 'மொழிபெயர்ப்பு',
+  grammar: 'இலக்கணத் திருத்தம்',
+  formal: 'எழுத்து நடை',
+  revise: 'திருத்தி எழுதுதல்',
+};
 
 export const MAX_INPUT_CHARS = 20_000;

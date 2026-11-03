@@ -1,8 +1,10 @@
-import type { ServerToolId, Source } from '../types';
+import type { Intent, Source } from '../types';
 
-export type ChatTurn = { role: 'user' | 'assistant'; content: string; tool?: ServerToolId };
+/** `mode` of a user turn: 'auto', or the intent to force / that was used. */
+export type ChatTurn = { role: 'user' | 'assistant'; content: string; mode?: 'auto' | Intent };
 
 export type StreamHandlers = {
+  onIntent: (intent: Intent, auto: boolean) => void;
   onText: (delta: string) => void;
   onSearch: (query: string) => void;
   onSources: (sources: Source[]) => void;
@@ -10,6 +12,7 @@ export type StreamHandlers = {
 };
 
 type StreamEvent =
+  | { t: 'intent'; v: Intent; auto: boolean }
   | { t: 'text'; v: string }
   | { t: 'search'; q: string }
   | { t: 'sources'; v: Source[] }
@@ -48,7 +51,8 @@ export async function streamChat(turns: ChatTurn[], handlers: StreamHandlers, si
     } catch {
       return;
     }
-    if (event.t === 'text') handlers.onText(event.v);
+    if (event.t === 'intent') handlers.onIntent(event.v, event.auto);
+    else if (event.t === 'text') handlers.onText(event.v);
     else if (event.t === 'search') handlers.onSearch(event.q);
     else if (event.t === 'sources') handlers.onSources(event.v);
     else if (event.t === 'note') handlers.onNote(event.v);

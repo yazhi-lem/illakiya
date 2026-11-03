@@ -6,7 +6,9 @@
 
 ## 1. What ships today (web)
 
-- [x] **எழுது (Write)** — research (web search) and write any content in Tamil, with sources; default mode
+- [x] **Sarvam AI** (`sarvam-105b`) powers every answer (switched from Anthropic)
+- [x] **தானியங்கு (Auto)**: automatic intent detection (heuristics, then a Sarvam classifier) picks research / write / translate / clean / grammar / formal / revise
+- [x] **ஆய்ந்தெழுது (Research)**: Tamil + English Wikipedia lookup, then Tamil writing with sources
 - [x] Chat layout with follow-ups, conversation saved in the browser, cobalt Yazhi theme
 - [x] **தூய தமிழ் (Clean Tamil)** — anything → clean Tamil
 - [x] **மொழிபெயர் (Translate)** — English → Tamil
@@ -14,17 +16,19 @@
 - [x] **எழுத்து நடை (Formal)** — colloquial → formal written Tamil
 - [x] **Tanglish → தமிழ்** — offline transliteration in the browser
 - [x] Streaming output, copy, text-to-speech, light/dark, mobile layout
-- [x] `/api/tamil` Pages Function on Claude, with server-side refusal fallback
+- [x] `/api/tamil` Pages Function on Sarvam AI
 
 ## 2. Before public launch
 
-1. **Set `ANTHROPIC_API_KEY`** as a GitHub secret (synced on deploy) or directly on the Pages project. See `docs/DEPLOY.md`.
+1. **Set `SARVAM_API_KEY`** as a GitHub secret (synced on deploy) or directly on the Pages project. See `docs/DEPLOY.md`.
 2. **Abuse protection for `/api/tamil`.** It is a public endpoint that spends API credit. Add Cloudflare rate limiting (WAF rule on `/api/*`) and/or Turnstile before announcing.
-3. **Quality pass.** Collect 50–100 real pasted samples (news, WhatsApp Tanglish, school essays, office letters) and review outputs with Tamil editors; tune the prompts in `web/server/tools.ts`.
+3. **Quality pass.** Collect 50–100 real samples (news, WhatsApp Tanglish, school essays, office letters, research questions) and review outputs and detected intents with Tamil editors. Tune `web/server/prompts.ts` and the heuristics in `web/server/intent.ts`.
 4. **Usage metrics.** Count requests per tool (no stored text) to see which tools earn their place.
 
 ## 3. Next tools for the box
 
+- Try Sarvam's dedicated translation model for the translate intent and compare quality
+- Broader research sources (news, government sites) behind a search API key
 - Summarise in Tamil (சுருக்கம்)
 - Export an answer as .docx / PDF
 - Tamil → English (for checking meaning)

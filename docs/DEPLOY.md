@@ -1,7 +1,8 @@
 # Deploying the Illakiya web app
 
 The web toolbox (`web/`) is a Vite/React SPA plus one Cloudflare Pages Function
-(`web/functions/api/tamil.ts`, `POST /api/tamil`) that calls Claude. It deploys
+(`web/functions/api/tamil.ts`, `POST /api/tamil`) that calls the Sarvam AI
+chat API (`sarvam-105b`) and looks topics up on Wikipedia for research. It deploys
 to **Cloudflare Pages** at **https://illakiya.yazhi.dev** via GitHub Actions
 (`.github/workflows/deploy.yml`).
 
@@ -12,7 +13,7 @@ On every push to `main` that touches `web/`, `data/`, or the workflow itself
 
 1. tests and builds the app — `cd web && npm ci && npm test && npm run build` → `web/dist`,
 2. ensures the Pages project `illakiya` exists,
-3. copies the `ANTHROPIC_API_KEY` GitHub secret onto the Pages project (if set),
+3. copies the `SARVAM_API_KEY` GitHub secret onto the Pages project (if set),
 4. deploys from `web/` — `dist` plus `functions/` — to Cloudflare Pages (production branch `main`).
 
 SPA routing is handled by `web/public/_redirects` (`/* /index.html 200`), which
@@ -35,15 +36,21 @@ In **GitHub → repo Settings → Secrets and variables → Actions**, add:
 | --- | --- |
 | `CLOUDFLARE_API_TOKEN` | the token from step 1 |
 | `CLOUDFLARE_ACCOUNT_ID` | your Cloudflare account ID |
-| `ANTHROPIC_API_KEY` | your Claude API key (powers `/api/tamil`) |
+| `SARVAM_API_KEY` | your Sarvam AI API subscription key (powers `/api/tamil`) |
 
-Instead of the `ANTHROPIC_API_KEY` GitHub secret you can set it once on the
-Pages project: **Workers & Pages → illakiya → Settings → Variables and Secrets →
-Add → Secret `ANTHROPIC_API_KEY`**. Without it `/api/tamil` answers 503 and only
-the offline Tanglish tool works.
+Get the key from the Sarvam AI dashboard (https://dashboard.sarvam.ai). Instead
+of the GitHub secret you can set it once on the Pages project: **Workers &
+Pages → illakiya → Settings → Variables and Secrets → Add → Secret
+`SARVAM_API_KEY`**. Without it `/api/tamil` answers 503 and only the offline
+Tanglish mode works.
 
-Optional: set `ANTHROPIC_BASE_URL` on the Pages project to route through a
-gateway such as Cloudflare AI Gateway.
+Optional variables on the Pages project:
+
+| Variable | Default | Use |
+| --- | --- | --- |
+| `SARVAM_MODEL` | `sarvam-105b` | Sarvam chat model |
+| `SARVAM_BASE_URL` | `https://api.sarvam.ai` | API host (e.g. a gateway) |
+| `WIKI_API_TEMPLATE` | `https://{lang}.wikipedia.org/w/api.php` | Research source |
 
 ### Protect the endpoint
 `/api/tamil` is public and spends API credit. Before announcing the site, add a

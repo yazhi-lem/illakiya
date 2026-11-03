@@ -278,6 +278,26 @@ a {
   }
 }
 
+.intent {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 10px 1px 8px;
+  border-radius: 999px;
+  background: var(--tint);
+  color: var(--cobalt-text);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.intent .icon {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+  stroke: none;
+}
+
 .searches {
   list-style: none;
   display: flex;
