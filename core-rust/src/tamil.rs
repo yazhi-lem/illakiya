@@ -70,10 +70,7 @@ pub fn ends_with_short_vowel(word: &str) -> bool {
     }
     // uyirmei without pulli has inherent short vowel
     let cp = last as u32;
-    if (0x0B95..=0x0BD7).contains(&cp) && !is_pulli(last) && !is_mei(last) {
-        return true;
-    }
-    false
+    (0x0B95..=0x0BD7).contains(&cp) && !is_pulli(last) && !is_mei(last)
 }
 
 /// Check if word ends with pulli (virama).
